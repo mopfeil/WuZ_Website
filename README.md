@@ -9,6 +9,9 @@ Kein Build-Schritt, keine Abhängigkeiten, keine externen Dienste: reines HTML, 
 index.html              Landing Page (Idee, Formate, Person, Werkzeuge, FAQ, Kontakt)
 hintergrund/            Vertiefung: Blog-Reihe "Geschichten von der Natur der Dinge", Script, Studien
 werkzeuge/              Übersicht der Web-Apps
+en/                     Englische Fassung (britisches Englisch): en/, en/background/, en/tools/,
+                        en/shop/, en/imprint/, en/privacy/ – jede Seite verweist per hreflang und
+                        Sprachumschalter (DE | EN im Kopf) auf ihr Gegenstück
 apps/ideomotor/         Ideomotor-Pendel (PWA, Kopie aus Code/Ideomotor_Pendel)
 apps/masken-tarot/      Die Masken des Tarot (Kopie aus Code/Kartenwahl, ohne Google Fonts)
 shop/                   Shop-Stub (noch ohne Bestellfunktion)
@@ -35,6 +38,22 @@ Alle Links sind wurzelrelativ (`/hintergrund/`). Die Site muss deshalb im **Doma
 
 3. **Shop:** Sobald ein Zahlungsanbieter angebunden wird, Datenschutzerklärung, AGB und
    Widerrufsbelehrung ergänzen.
+
+## Zwei Sprachen, zwei Domains
+
+- Deutsch liegt im Root (`/`), Englisch unter `/en/`. Der Umschalter DE | EN im Seitenkopf
+  führt immer zur entsprechenden Seite der anderen Sprache; `hreflang`-Links und die
+  Sitemap verknüpfen beide Fassungen für Suchmaschinen.
+- **wissenschaftundzauberkunst.com → Englisch:** Je nachdem, wie die .com-Domain bei Hostinger
+  eingerichtet ist:
+  - *Weiterleitung (Domain-Forward / Redirect)*: Als Ziel `https://www.wissenschaftundzauberkunst.de/en/`
+    eintragen (Typ 301). Dann landen .com-Besucher direkt in der englischen Fassung.
+  - *Alias- oder Parked-Domain auf dasselbe Verzeichnis*: Nichts weiter nötig, die `.htaccess`
+    erkennt den Host `.com` und leitet `/` nach `/en/` sowie deutsche Pfade auf ihre englischen
+    Gegenstücke um. Alle Aufrufe enden auf der .de-Domain, damit es nur eine kanonische Adresse gibt.
+- Die Sprachwahl bleibt jederzeit möglich; es wird keine Präferenz gespeichert.
+- Die Pendel-App unter `apps/ideomotor/` hat derzeit nur eine deutsche Oberfläche; die Tarot-App ist
+  zweisprachig.
 
 ## Deployment auf Hostinger (Git)
 

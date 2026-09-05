@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /impressum/
 Disallow: /datenschutz/
+Disallow: /en/imprint/
+Disallow: /en/privacy/
 
 Sitemap: https://www.wissenschaftundzauberkunst.de/sitemap.xml

@@ -1,9 +1,31 @@
 # Wissenschaft und Zauberkunst – Apache-Konfiguration für Hostinger
 ErrorDocument 404 /404.html
 
-# HTTPS erzwingen
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # --- Sprachweiche nach Domain -------------------------------------------
+  # Wird die Site direkt unter der .com-Domain ausgeliefert (Alias/Parked Domain
+  # auf dasselbe Verzeichnis), landen Besucher in der englischen Fassung.
+  # Bei einer reinen Weiterleitung (Domain-Forward) im Hostinger-Panel stattdessen
+  # als Ziel https://www.wissenschaftundzauberkunst.de/en/ eintragen.
+  RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
+  RewriteRule ^$ https://www.wissenschaftundzauberkunst.de/en/ [L,R=301]
+  RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
+  RewriteRule ^hintergrund/?$ https://www.wissenschaftundzauberkunst.de/en/background/ [L,R=301]
+  RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
+  RewriteRule ^werkzeuge/?$ https://www.wissenschaftundzauberkunst.de/en/tools/ [L,R=301]
+  RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
+  RewriteRule ^shop/?$ https://www.wissenschaftundzauberkunst.de/en/shop/ [L,R=301]
+  RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
+  RewriteRule ^impressum/?$ https://www.wissenschaftundzauberkunst.de/en/imprint/ [L,R=301]
+  RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
+  RewriteRule ^datenschutz/?$ https://www.wissenschaftundzauberkunst.de/en/privacy/ [L,R=301]
+  # Alles Übrige (englische Seiten, Apps, Assets) von .com auf .de umleiten
+  RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
+  RewriteRule ^(.*)$ https://www.wissenschaftundzauberkunst.de/$1 [L,R=301]
+
+  # --- HTTPS erzwingen -----------------------------------------------------
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>

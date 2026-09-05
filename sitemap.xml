@@ -1,9 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.wissenschaftundzauberkunst.de/</loc><lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.wissenschaftundzauberkunst.de/hintergrund/</loc><lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.wissenschaftundzauberkunst.de/werkzeuge/</loc><lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.wissenschaftundzauberkunst.de/shop/</loc><lastmod>2026-09-05</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/"/>
+    <lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/"/>
+    <lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/hintergrund/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/hintergrund/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/background/"/>
+    <lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/background/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/hintergrund/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/background/"/>
+    <lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/werkzeuge/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/werkzeuge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/tools/"/>
+    <lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/tools/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/werkzeuge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/tools/"/>
+    <lastmod>2026-09-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/shop/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/shop/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/shop/"/>
+    <lastmod>2026-09-05</lastmod><changefreq>weekly</changefreq><priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/shop/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/shop/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/shop/"/>
+    <lastmod>2026-09-05</lastmod><changefreq>weekly</changefreq><priority>0.5</priority>
+  </url>
   <url><loc>https://www.wissenschaftundzauberkunst.de/apps/ideomotor/</loc><lastmod>2026-09-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://www.wissenschaftundzauberkunst.de/apps/masken-tarot/</loc><lastmod>2026-09-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>

@@ -26,16 +26,12 @@ Alle Links sind wurzelrelativ (`/hintergrund/`). Die Site muss deshalb im **Doma
 
 ## Vor dem Livegang anpassen
 
-1. **Domain:** `https://www.wissenschaft-und-zauberkunst.de` ist ein Platzhalter. In allen
-   HTML-Dateien, in `robots.txt` und `sitemap.xml` durch die echte Domain ersetzen:
+1. **Domain:** Die Site ist auf `https://www.wissenschaftundzauberkunst.de` eingestellt (Canonical-Links,
+   Open Graph, `robots.txt`, `sitemap.xml`). Bei einem Domainwechsel alle Vorkommen per Suchen/Ersetzen anpassen.
 
-   ```bash
-   grep -rl "wissenschaft-und-zauberkunst.de" --include=*.html --include=*.xml --include=*.txt . \
-     | xargs sed -i 's#www.wissenschaft-und-zauberkunst.de#DEINE-DOMAIN.de#g'
-   ```
-
-2. **Impressum und Datenschutz:** Die mit `[…]` markierten Stellen (Anschrift, USt-IdNr.,
-   Server-Standort) ergänzen. Beide Texte vor Veröffentlichung juristisch prüfen lassen.
+2. **Impressum und Datenschutz:** Anschrift und USt-IdNr. sind eingetragen. Beide Texte vor
+   Veröffentlichung juristisch prüfen lassen; den Server-Standort ggf. im Hostinger-Konto nachsehen
+   und in Abschnitt 3 der Datenschutzerklärung konkretisieren.
 
 3. **Shop:** Sobald ein Zahlungsanbieter angebunden wird, Datenschutzerklärung, AGB und
    Widerrufsbelehrung ergänzen.

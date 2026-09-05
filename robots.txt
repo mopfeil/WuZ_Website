@@ -3,4 +3,4 @@ Allow: /
 Disallow: /impressum/
 Disallow: /datenschutz/
 
-Sitemap: https://www.wissenschaft-und-zauberkunst.de/sitemap.xml
+Sitemap: https://www.wissenschaftundzauberkunst.de/sitemap.xml

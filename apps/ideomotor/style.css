@@ -1,0 +1,131 @@
+:root{
+  --bg:#0b0f14;
+  --bg2:#111823;
+  --fg:#e8eef6;
+  --dim:#8b9bb0;
+  --acc:#4fd1c5;
+  --acc2:#f0b429;
+  --bad:#e2564c;
+  --line:#22303f;
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+html,body{
+  margin:0;padding:0;height:100%;
+  background:var(--bg);color:var(--fg);
+  font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  overscroll-behavior:none;touch-action:manipulation;
+  -webkit-user-select:none;user-select:none;
+}
+body{position:fixed;inset:0;overflow:hidden}
+
+.hidden{display:none !important}
+
+/* ---------------- Hauptbildschirm ---------------- */
+#app{position:absolute;inset:0;display:flex;flex-direction:column;
+     padding-top:var(--safe-t);padding-bottom:var(--safe-b)}
+
+#bar{display:flex;align-items:center;gap:10px;padding:8px 12px;
+     border-bottom:1px solid var(--line);background:var(--bg2)}
+#task{flex:1;text-align:center;font-weight:600;letter-spacing:.02em}
+#clock{font-variant-numeric:tabular-nums;color:var(--dim);min-width:64px;text-align:right}
+
+button.icon{background:none;border:0;color:var(--fg);font-size:22px;
+            padding:2px 8px;line-height:1;cursor:pointer}
+
+#stage{flex:1;position:relative;min-height:0}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* Resonanzanzeige: Ausschlag im Verhaeltnis zur echten Handbewegung */
+#reso{padding:10px 12px 0}
+.reso-head{display:flex;align-items:baseline;justify-content:space-between}
+.reso-lab{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
+.reso-val{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;
+          line-height:1.1;color:var(--acc)}
+.reso-bar{position:relative;height:9px;margin:5px 0 3px;border-radius:5px;
+          background:#182231;overflow:hidden}
+.reso-bar i{position:absolute;left:0;top:0;bottom:0;width:0%;border-radius:5px;
+            background:linear-gradient(90deg,#2a7f78,var(--acc));
+            transition:width .12s linear}
+.reso-bar i.off{background:linear-gradient(90deg,#7a5a16,var(--acc2))}
+.reso-foot{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+#r-note{color:#cbd7e5}
+
+#chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 10px 0}
+.chip{background:var(--bg2);border:1px solid var(--line);border-radius:10px;
+      padding:6px 4px;text-align:center;overflow:hidden}
+.chip .k{display:block;font-size:10px;text-transform:uppercase;
+         letter-spacing:.06em;color:var(--dim)}
+.chip .v{display:block;font-size:15px;font-weight:600;
+         font-variant-numeric:tabular-nums;white-space:nowrap}
+
+#ctrl{display:flex;gap:8px;padding:10px 10px 12px}
+#ctrl button{flex:1}
+
+/* ---------------- Buttons ---------------- */
+button{font:inherit;border-radius:12px;padding:12px 14px;border:1px solid var(--line);
+       background:var(--bg2);color:var(--fg);cursor:pointer}
+button.primary{background:var(--acc);border-color:var(--acc);color:#06231f;font-weight:700}
+button.danger{background:var(--bad);border-color:var(--bad);color:#fff;font-weight:700}
+button.ghost{background:transparent;color:var(--fg)}
+button.big{width:100%;padding:16px;font-size:18px;margin-top:14px}
+button:active{filter:brightness(.88)}
+
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.row button{flex:1;min-width:120px}
+
+/* ---------------- Overlays ---------------- */
+.overlay{position:absolute;inset:0;background:rgba(4,7,11,.92);
+         -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+         display:flex;align-items:flex-start;justify-content:center;
+         overflow-y:auto;-webkit-overflow-scrolling:touch;z-index:20}
+.sheet{width:min(560px,100%);padding:calc(var(--safe-t) + 22px) 20px calc(var(--safe-b) + 28px)}
+.sheet.center{text-align:center}
+
+h1{font-size:26px;margin:0 0 10px}
+h2{font-size:19px;margin:0 0 10px}
+.lead{color:#cbd7e5;margin:0 0 14px}
+.note{color:var(--dim);font-size:14px}
+.tiny{color:#5c6b7d;font-size:11px;margin-top:14px;word-break:break-all}
+.msg{min-height:20px;font-size:14px;color:var(--acc2)}
+.steps{margin:0 0 14px;padding-left:20px;color:#cbd7e5}
+.steps li{margin:6px 0}
+
+/* ---------------- Einstellungen ---------------- */
+.fld{display:block;margin:14px 0}
+.fld>span{display:block;font-size:14px;color:#cbd7e5;margin-bottom:6px}
+.fld b{color:var(--acc);font-variant-numeric:tabular-nums}
+.fld em{display:block;font-style:normal;font-size:12px;color:var(--dim)}
+input[type=range]{width:100%;accent-color:var(--acc)}
+.chk{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px;color:#cbd7e5}
+.chk input{width:20px;height:20px;accent-color:var(--acc)}
+
+/* ---------------- Ergebnis ---------------- */
+table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:15px}
+td{padding:7px 0;border-bottom:1px solid var(--line);vertical-align:baseline}
+td:first-child{color:var(--dim)}
+td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+td.hl:last-child{color:var(--acc);font-size:17px}
+
+#hist{max-height:190px;overflow-y:auto;border:1px solid var(--line);
+      border-radius:10px;padding:4px 10px}
+#hist table{margin:0;font-size:13px}
+#hist .none{color:var(--dim);font-size:14px;padding:8px 0}
+
+textarea{width:100%;height:220px;background:#060a0f;color:#b9c8d8;
+         border:1px solid var(--line);border-radius:10px;padding:10px;
+         font:12px/1.35 ui-monospace,Menlo,Consolas,monospace;
+         -webkit-user-select:text;user-select:text}
+
+/* ---------------- Kalibrier-Ring ---------------- */
+#calib-ring{position:relative;width:150px;height:150px;margin:26px auto 14px}
+#calib-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+#calib-ring circle{fill:none;stroke:var(--line);stroke-width:8}
+#calib-arc{stroke:var(--acc);stroke-linecap:round;
+           stroke-dasharray:327;stroke-dashoffset:327;transition:stroke-dashoffset .1s linear}
+#calib-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+           font-size:34px;font-weight:700;font-variant-numeric:tabular-nums}
+#calib-hint{color:var(--dim);min-height:44px}

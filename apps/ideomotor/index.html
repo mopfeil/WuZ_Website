@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ideomotor">
+  <meta name="theme-color" content="#0b0f14">
+  <title>Ideomotor-Pendel</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Hauptbildschirm                                                     -->
+<!-- ------------------------------------------------------------------ -->
+<div id="app">
+  <header id="bar">
+    <button id="btn-menu" class="icon" aria-label="Men&uuml;">&#9776;</button>
+    <div id="task">Bereit</div>
+    <div id="clock">0.0&nbsp;s</div>
+  </header>
+
+  <div id="stage"><canvas id="cv"></canvas></div>
+
+  <div id="reso">
+    <div class="reso-head">
+      <span class="reso-lab">Ausschlag &divide; Handbewegung</span>
+      <span class="reso-val" id="r-gain">&ndash;</span>
+    </div>
+    <div class="reso-bar"><i id="r-fill"></i></div>
+    <div class="reso-foot">
+      <span id="r-scale">0</span>
+      <span id="r-note">Ausbeute &ndash;</span>
+      <span id="r-max">max. &times;30</span>
+    </div>
+  </div>
+
+  <div id="chips">
+    <div class="chip"><span class="k">Bewegung</span><span class="v" id="m-trans">&ndash;</span></div>
+    <div class="chip"><span class="k">Neigung</span><span class="v" id="m-tilt">&ndash;</span></div>
+    <div class="chip"><span class="k">Ausschlag</span><span class="v" id="m-amp">&ndash;</span></div>
+    <div class="chip"><span class="k">Takt</span><span class="v" id="m-freq">&ndash;</span></div>
+  </div>
+
+  <div id="ctrl">
+    <button id="btn-ja"   class="primary">JA &nbsp;&#8596;</button>
+    <button id="btn-nein" class="primary">NEIN &nbsp;&#8597;</button>
+    <button id="btn-frei" class="ghost">Frei</button>
+    <button id="btn-stop" class="danger hidden">Stopp</button>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Startbildschirm / Sensorfreigabe                                    -->
+<!-- ------------------------------------------------------------------ -->
+<div id="intro" class="overlay">
+  <div class="sheet">
+    <h1>Ideomotor-Pendel</h1>
+    <p class="lead">Die Scheibe auf dem Bildschirm verh&auml;lt sich exakt wie ein
+      mathematisches Pendel, dessen Aufh&auml;ngepunkt das Telefon ist.
+      Sie schwingt in <i>x</i>- und <i>y</i>-Richtung.</p>
+
+    <ol class="steps">
+      <li>Telefon <b>waagerecht</b> auf der flachen Hand halten, Display nach oben.</li>
+      <li>Sensoren freigeben und <b>kalibrieren</b> (2&nbsp;s ruhig halten).</li>
+      <li>Aufgabe w&auml;hlen: <b>JA</b> = links&ndash;rechts, <b>NEIN</b> = vor&ndash;zur&uuml;ck.</li>
+      <li>Die Scheibe <b>nur durch Denken</b> in Schwingung bringen &ndash;
+        mit so wenig echter Bewegung wie m&ouml;glich.</li>
+    </ol>
+
+    <p class="note">Gemessen wird, wie viel Handbewegung (in Millimetern) und wie viel
+      Kippen (in Grad) tats&auml;chlich n&ouml;tig waren. Das ist das Ma&szlig; f&uuml;r
+      den ideomotorischen Effekt.</p>
+
+    <p id="intro-status" class="msg"></p>
+    <button id="btn-enable" class="primary big">Sensoren freigeben</button>
+    <button id="btn-nosensor" class="ghost">Ohne Sensor testen (Finger&nbsp;/&nbsp;Maus)</button>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Kalibrierung                                                        -->
+<!-- ------------------------------------------------------------------ -->
+<div id="calib" class="overlay hidden">
+  <div class="sheet center">
+    <h2>Kalibrierung</h2>
+    <div id="calib-ring">
+      <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52"/><circle id="calib-arc" cx="60" cy="60" r="52"/></svg>
+      <div id="calib-num">2.0</div>
+    </div>
+    <p id="calib-hint">Telefon flach und ruhig halten &hellip;</p>
+    <button id="btn-calib-cancel" class="ghost">Abbrechen</button>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Ergebnis                                                            -->
+<!-- ------------------------------------------------------------------ -->
+<div id="result" class="overlay hidden">
+  <div class="sheet">
+    <h2 id="res-title">Ergebnis</h2>
+    <p id="res-lead" class="lead"></p>
+    <table id="res-tab"></table>
+    <p id="res-interp" class="note"></p>
+    <div class="row">
+      <button id="btn-again" class="primary">Nochmal</button>
+      <button id="btn-res-close" class="ghost">Schlie&szlig;en</button>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Men&uuml; / Einstellungen                                                -->
+<!-- ------------------------------------------------------------------ -->
+<div id="menu" class="overlay hidden">
+  <div class="sheet">
+    <h2>Einstellungen</h2>
+
+    <label class="fld">
+      <span>Pendell&auml;nge <b id="v-L"></b>
+        <em>Periode <span id="v-T"></span></em></span>
+      <input type="range" id="s-L" min="0.15" max="1.50" step="0.05">
+    </label>
+
+    <label class="fld">
+      <span>G&uuml;te <i>Q</i> (Ged&auml;mpftheit) <b id="v-Q"></b>
+        <em>Aufbauzeit <span id="v-tau"></span></em></span>
+      <input type="range" id="s-Q" min="5" max="80" step="1">
+    </label>
+
+    <label class="fld">
+      <span>Vollausschlag <b id="v-th"></b></span>
+      <input type="range" id="s-th" min="4" max="30" step="1">
+    </label>
+
+    <label class="fld">
+      <span>Zielmarke <b id="v-tg"></b> vom Vollausschlag</span>
+      <input type="range" id="s-tg" min="0.2" max="0.95" step="0.05">
+    </label>
+
+    <label class="fld">
+      <span>Maximale Versuchsdauer <b id="v-mt"></b></span>
+      <input type="range" id="s-mt" min="20" max="240" step="10">
+    </label>
+
+    <label class="fld">
+      <span>Antriebs-Faktor <b id="v-gn"></b>
+        <em id="v-gn-warn">1.00 = physikalisch exakt</em></span>
+      <input type="range" id="s-gn" min="0.25" max="8" step="0.25">
+    </label>
+
+    <label class="chk"><input type="checkbox" id="s-dc">
+      <span>Langsame Neigungsdrift ausgleichen</span></label>
+    <label class="chk"><input type="checkbox" id="s-ind">
+      <span>Telefonbewegung im Bild anzeigen (&uuml;berh&ouml;ht)</span></label>
+    <label class="chk"><input type="checkbox" id="s-snd">
+      <span>Ton bei Zielerreichung</span></label>
+
+    <h2 style="margin-top:22px">Messreihe</h2>
+    <div id="hist"></div>
+    <div class="row">
+      <button id="btn-csv"  class="ghost">Versuche als CSV</button>
+      <button id="btn-raw"  class="ghost">Rohdaten (letzter Versuch)</button>
+      <button id="btn-clear" class="ghost">Messreihe l&ouml;schen</button>
+    </div>
+
+    <div class="row" style="margin-top:18px">
+      <button id="btn-recal" class="ghost">Neu kalibrieren</button>
+      <button id="btn-reset" class="ghost">Standardwerte</button>
+      <button id="btn-menu-close" class="primary">Fertig</button>
+    </div>
+    <p class="tiny" id="diag"></p>
+  </div>
+</div>
+
+<!-- Daten-Ausgabe (Kopieren, falls Download nicht geht) ----------------->
+<div id="dump" class="overlay hidden">
+  <div class="sheet">
+    <h2>Daten</h2>
+    <p class="note">Falls der Download nicht funktioniert: markieren und kopieren.</p>
+    <textarea id="dump-txt" readonly></textarea>
+    <div class="row">
+      <button id="btn-dump-dl" class="primary">Datei speichern</button>
+      <button id="btn-dump-close" class="ghost">Schlie&szlig;en</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

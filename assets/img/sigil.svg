@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Sigille Wissenschaft und Zauberkunst">
+  <g fill="none" stroke="#C89B14" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="200" cy="200" r="158" stroke-width="1.2" opacity=".55"/>
+    <circle cx="200" cy="200" r="150" stroke-width="5" stroke-dasharray="1.2 8.22" opacity=".6"/>
+    <circle cx="200" cy="200" r="140" stroke-width="2.4"/>
+    <polygon points="200,340 78.8,130 321.2,130" stroke-width="1.4"/>
+    <polygon points="200,60 78.8,270 321.2,270" stroke-width="3.6"/>
+    <circle cx="200" cy="60" r="6" stroke-width="2.4"/>
+    <circle cx="78.8" cy="270" r="6" stroke-width="2.4"/>
+    <circle cx="321.2" cy="270" r="6" stroke-width="2.4"/>
+    <circle cx="200" cy="340" r="4.5" stroke-width="1.4"/>
+    <circle cx="78.8" cy="130" r="4.5" stroke-width="1.4"/>
+    <circle cx="321.2" cy="130" r="4.5" stroke-width="1.4"/>
+    <path d="M140,200 C180,168 220,168 260,200 C220,232 180,232 140,200 Z" stroke-width="3.6"/>
+    <path d="M262,92 a20,20 0 1 1 0,40 a24,24 0 1 0 0,-40 z" stroke-width="2.4"/>
+  </g>
+  <g fill="#E8B73A">
+    <polygon points="200,168 207,193 232,200 207,207 200,232 193,207 168,200 193,193"/>
+    <circle cx="200" cy="130" r="4.5"/>
+    <path d="M138,92 a20,20 0 1 0 0,40 a24,24 0 1 1 0,-40 z" fill="#C89B14"/>
+    <path d="M182,270 A18,18 0 0 1 218,270 Z"/>
+  </g>
+</svg>

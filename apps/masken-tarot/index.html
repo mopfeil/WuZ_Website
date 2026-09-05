@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Die Masken des Tarot — Wissenschaft und Zauberkunst</title>
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+
+  :root{
+    --wz-bg:#ece3d0; --wz-panel:#f4eede; --wz-ink:#2c2620; --wz-faint:#7c7263;
+    --wz-rule:#cabd9f; --wz-accent:#7c3b32; --wz-accent2:#4a6a5f; --wz-btnText:#f4eede;
+  }
+  body[data-theme="cool"]{
+    --wz-bg:#e5e4d8; --wz-panel:#f1f0e7; --wz-ink:#282a26; --wz-faint:#6d6f64;
+    --wz-rule:#c2c3b4; --wz-accent:#3f665c; --wz-accent2:#8a6a3c; --wz-btnText:#f1f0e7;
+  }
+  body[data-theme="candle"]{
+    --wz-bg:#211b14; --wz-panel:#2c241b; --wz-ink:#eee2ca; --wz-faint:#a4906d;
+    --wz-rule:#4b3d2c; --wz-accent:#cf9a44; --wz-accent2:#c06a45; --wz-btnText:#211b14;
+  }
+
+  body{
+    background:var(--wz-bg); color:var(--wz-ink); min-height:100dvh;
+    font-family:'Alegreya Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    transition:background .4s ease,color .4s ease;
+    -webkit-text-size-adjust:100%;
+  }
+  a{color:var(--wz-accent);} a:hover{color:var(--wz-accent2);}
+
+  @keyframes riseIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+  .wrap{width:100%;max-width:600px;margin:0 auto;padding:30px 22px 60px;}
+  section[hidden]{display:none;}
+  section{animation:riseIn .38s ease both;}
+
+  /* ---- type ---- */
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--wz-accent);margin-bottom:20px;}
+  .steplabel{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--wz-accent);margin-bottom:16px;}
+  .steplabel span{color:var(--wz-faint);}
+  h1{font-weight:700;font-size:clamp(32px,7vw,50px);line-height:1.04;
+    letter-spacing:-.01em;margin:0 0 16px;color:var(--wz-ink);}
+  h2{font-weight:700;font-size:clamp(23px,4.6vw,30px);line-height:1.22;
+    margin:0 0 12px;color:var(--wz-ink);max-width:24ch;}
+  .lead{font-size:17px;line-height:1.62;color:var(--wz-faint);margin:0 0 26px;max-width:46ch;}
+  .sub{font-size:15px;line-height:1.5;color:var(--wz-faint);margin:0 0 24px;max-width:44ch;}
+  .fieldlabel{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--wz-faint);margin-bottom:11px;}
+
+  /* ---- buttons ---- */
+  .btn{font-family:'Alegreya Sans',sans-serif;font-weight:700;font-size:17px;border:none;
+    background:var(--wz-accent);color:var(--wz-btnText);padding:15px 30px;border-radius:8px;
+    cursor:pointer;letter-spacing:.01em;transition:transform .15s ease,filter .15s ease;}
+  .btn:hover{filter:brightness(1.08);transform:translateY(-1px);}
+  .btn:disabled{opacity:.35;cursor:default;transform:none;filter:none;}
+  .btn-ghost{font-family:'Alegreya Sans',sans-serif;font-weight:700;font-size:16px;
+    border:1px solid var(--wz-accent);background:transparent;color:var(--wz-accent);
+    padding:14px 26px;border-radius:8px;cursor:pointer;
+    transition:background .15s ease,color .15s ease;}
+  .btn-ghost:hover{background:var(--wz-accent);color:var(--wz-btnText);}
+  .btn-plain{font-family:'Alegreya Sans',sans-serif;font-size:14px;border:none;
+    background:transparent;color:var(--wz-faint);padding:8px 14px;cursor:pointer;
+    text-decoration:underline;text-underline-offset:3px;}
+
+  /* ---- chips ---- */
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:22px;}
+  .chip{font-family:'Alegreya Sans',sans-serif;font-size:13.5px;color:var(--wz-ink);
+    background:transparent;border:1px solid var(--wz-rule);border-radius:20px;
+    padding:7px 14px;cursor:pointer;display:flex;align-items:center;gap:8px;}
+  .chip[aria-pressed="true"]{background:var(--wz-panel);border:2px solid var(--wz-accent);padding:6px 13px;}
+  .chip .dot{flex:none;width:13px;height:13px;border-radius:50%;}
+
+  /* ---- progress ---- */
+  .track{height:4px;background:var(--wz-rule);border-radius:2px;overflow:hidden;margin-bottom:26px;}
+  .track > div{height:100%;background:var(--wz-accent);border-radius:2px;transition:width .4s ease;}
+
+  /* ---- card grid ---- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:9px;}
+  .card{position:relative;display:flex;flex-direction:column;align-items:flex-start;
+    gap:5px;text-align:left;font-family:'Alegreya Sans',sans-serif;
+    background:var(--wz-panel);border:1px solid var(--wz-rule);border-radius:9px;
+    padding:12px 13px 13px;cursor:pointer;color:var(--wz-ink);
+    transition:border-color .15s ease,transform .12s ease,opacity .2s ease;}
+  .card:hover:not(:disabled){border-color:var(--wz-accent);transform:translateY(-2px);}
+  .card[aria-pressed="true"]{border:2px solid var(--wz-accent);padding:11px 12px 12px;
+    box-shadow:inset 0 0 0 2px var(--wz-accent);}
+  .card:disabled{opacity:.3;cursor:default;}
+  .card .rn{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+    color:var(--wz-accent);}
+  .card .nm{font-size:15px;line-height:1.2;font-weight:500;}
+  .card .strike{position:absolute;inset:0;display:flex;align-items:center;
+    justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--wz-faint);}
+
+  /* ---- panel ---- */
+  .panel{border:1px solid var(--wz-rule);border-radius:10px;background:var(--wz-panel);
+    padding:26px 26px 22px;}
+  .panel h3{font-weight:700;font-size:19px;margin:0;color:var(--wz-ink);}
+  .panel-head{border-bottom:1px solid var(--wz-rule);padding-bottom:14px;margin-bottom:18px;}
+  .panel-head .s{font-size:14px;line-height:1.5;color:var(--wz-faint);margin-top:5px;}
+  .grouplabel{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--wz-accent);margin-bottom:8px;}
+  .row{border:1px solid var(--wz-rule);border-radius:7px;padding:11px 13px;
+    font-size:14.5px;line-height:1.5;color:var(--wz-ink);}
+  .row b{font-weight:700;}
+  .stack{display:flex;flex-direction:column;gap:7px;}
+  .block{margin-bottom:18px;}
+
+  /* ---- big mask reveal ---- */
+  .masklead{font-size:19px;color:var(--wz-faint);margin-bottom:14px;letter-spacing:.01em;}
+  .maskword{font-weight:700;font-size:clamp(38px,9vw,64px);line-height:1;
+    letter-spacing:-.015em;color:var(--wz-ink);margin:0 0 6px;}
+  .maskrn{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.24em;
+    color:var(--wz-accent);}
+
+  /* ---- code + key ---- */
+  .codeline{margin-top:22px;padding-top:14px;border-top:1px solid var(--wz-rule);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;
+    color:var(--wz-faint);}
+  .keybox{margin-top:16px;border:1px dashed var(--wz-accent2);border-radius:9px;
+    padding:14px 16px;background:transparent;}
+  .keybox .t{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--wz-accent2);margin-bottom:9px;}
+  .keyline{font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.55;
+    color:var(--wz-ink);}
+  .keyline em{font-style:normal;color:var(--wz-accent);font-weight:500;}
+
+  /* ---- hiding-places ladder ---- */
+  .ladderscroll{overflow-x:auto;margin-top:12px;padding-bottom:6px;}
+  .ladder{display:grid;grid-template-rows:auto auto auto;gap:0;min-width:640px;}
+  .ladder .lrow{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;}
+  .ladder .cell{border:1px solid var(--wz-rule);border-radius:5px;padding:5px 4px;
+    font-size:10.5px;line-height:1.2;text-align:center;color:var(--wz-ink);
+    background:var(--wz-panel);min-height:38px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2px;}
+  .ladder .cell .n{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--wz-faint);}
+  .ladder .cell.wrap{opacity:.4;border-style:dashed;}
+  .ladder .cell.isFav{border:2px solid var(--wz-accent);
+    box-shadow:inset 0 0 0 2px var(--wz-accent);font-weight:700;}
+  .ladder .cell.isHate{border:2px dashed var(--wz-accent2);color:var(--wz-accent2);font-weight:700;}
+  .ladder .links{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--wz-faint);
+    text-align:center;padding:3px 0;}
+  .laddercap{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--wz-faint);margin-top:8px;}
+
+  .center{text-align:center;}
+  .mt40{margin-top:40px;} .mt26{margin-top:26px;} .mt22{margin-top:22px;}
+</style>
+</head>
+<body data-theme="parchment">
+
+<div class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section id="scr-intro">
+    <div class="kicker" data-t="kicker"></div>
+    <h1><span data-t="titleA"></span><br><span data-t="titleB"></span></h1>
+    <p class="lead" data-t="intro"></p>
+
+    <div class="fieldlabel" data-t="langLabel"></div>
+    <div class="chips" id="langChips"></div>
+
+    <div class="fieldlabel" data-t="visualLabel"></div>
+    <div class="chips" id="themeChips"></div>
+
+    <div class="mt26">
+      <button class="btn" id="btnBegin" data-t="begin"></button>
+    </div>
+  </section>
+
+  <!-- ============ FAVOURITE ============ -->
+  <section id="scr-fav" hidden>
+    <div class="steplabel"><span data-t="stepWord"></span> 1 <span>/ 2</span></div>
+    <div class="track"><div style="width:0%"></div></div>
+    <h2 data-t="favTitle"></h2>
+    <p class="sub" data-t="favSub"></p>
+    <div class="grid" id="gridFav"></div>
+  </section>
+
+  <!-- ============ HATED ============ -->
+  <section id="scr-hate" hidden>
+    <div class="steplabel"><span data-t="stepWord"></span> 2 <span>/ 2</span></div>
+    <div class="track"><div style="width:50%"></div></div>
+    <h2 data-t="hateTitle"></h2>
+    <p class="sub" data-t="hateSub"></p>
+    <div class="grid" id="gridHate"></div>
+  </section>
+
+  <!-- ============ MASK REVEAL ============ -->
+  <section id="scr-mask" hidden>
+    <div class="kicker" data-t="maskKicker"></div>
+    <div class="masklead" data-t="maskLead"></div>
+    <div class="maskword" id="maskName"></div>
+    <div class="maskrn" id="maskRn"></div>
+    <p class="lead mt22" id="maskText"></p>
+    <div class="mt40">
+      <button class="btn-ghost" id="btnToReading" data-t="toReading"></button>
+    </div>
+  </section>
+
+  <!-- ============ READING (final page) ============ -->
+  <section id="scr-read" hidden>
+    <div class="kicker" id="readKicker" data-t="readKicker" title=""></div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3 id="readTitle"></h3>
+        <div class="s" data-t="readSub"></div>
+      </div>
+
+      <div class="block">
+        <div class="grouplabel" data-t="lblMask"></div>
+        <div class="stack"><div class="row" id="rowMask"></div></div>
+      </div>
+
+      <div class="block">
+        <div class="grouplabel" data-t="lblAgainst"></div>
+        <div class="stack"><div class="row" id="rowHate"></div></div>
+      </div>
+
+      <div class="block">
+        <div class="grouplabel" data-t="lblRelation"></div>
+        <div class="stack">
+          <div class="row" id="rowRelation"></div>
+          <div class="row" id="rowMirror"></div>
+        </div>
+      </div>
+
+      <div class="codeline" id="codeLine"></div>
+    </div>
+
+    <div class="keybox" id="keyBox" hidden>
+      <div class="t" data-t="keyTitle"></div>
+      <div class="stack" id="keyLines"></div>
+      <div class="ladderscroll">
+        <div class="ladder" id="ladder"></div>
+      </div>
+      <div class="laddercap" data-t="ladderCap"></div>
+    </div>
+
+    <div class="center mt26">
+      <button class="btn-plain" id="btnRestart" data-t="restart"></button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+"use strict";
+
+/* ------------------------------------------------------------------
+   HIDING PLACES — sequence reconstructed from hiding_places_sequence.pdf
+
+   Two closed chains of eleven, each returning to its own head:
+
+     A:  Magician > World > Wheel > Hierophant > Devil > Judgement >
+         Strength > Moon > Star > Justice > Emperor > (Magician)
+
+     B:  H.Priestess > Empress > Temperance > Lovers > Sun > Chariot >
+         Death > Fool > Hanged Man > Tower > Hermit > (H.Priestess)
+
+   The vertical rungs of the PDF pair the two chains mirror-wise:
+
+     A[i]  <->  B[(11 - i) mod 11]
+
+   Together the chains hold all 22 Major Arcana exactly once.
+   CARDS below is stored in hiding-places order, so the array index + 1
+   is the card's position number 1..22 (A = 1..11, B = 12..22).
+------------------------------------------------------------------ */
+
+var CARDS = [
+  /* --- chain A, indices 0..10 --- */
+  {ch:'A', i:0,  no:1,  rn:'I',    de:'Der Magier',            en:'The Magician'},
+  {ch:'A', i:1,  no:21, rn:'XXI',  de:'Die Welt',              en:'The World'},
+  {ch:'A', i:2,  no:10, rn:'X',    de:'Das Rad des Schicksals',en:'Wheel of Fortune'},
+  {ch:'A', i:3,  no:5,  rn:'V',    de:'Der Hierophant',        en:'The Hierophant'},
+  {ch:'A', i:4,  no:15, rn:'XV',   de:'Der Teufel',            en:'The Devil'},
+  {ch:'A', i:5,  no:20, rn:'XX',   de:'Das Gericht',           en:'Judgement'},
+  {ch:'A', i:6,  no:8,  rn:'VIII', de:'Die Kraft',             en:'Strength'},
+  {ch:'A', i:7,  no:18, rn:'XVIII',de:'Der Mond',              en:'The Moon'},
+  {ch:'A', i:8,  no:17, rn:'XVII', de:'Der Stern',             en:'The Star'},
+  {ch:'A', i:9,  no:11, rn:'XI',   de:'Die Gerechtigkeit',     en:'Justice'},
+  {ch:'A', i:10, no:4,  rn:'IV',   de:'Der Kaiser',            en:'The Emperor'},
+  /* --- chain B, indices 0..10 --- */
+  {ch:'B', i:0,  no:2,  rn:'II',   de:'Die Hohepriesterin',    en:'The High Priestess'},
+  {ch:'B', i:1,  no:3,  rn:'III',  de:'Die Herrscherin',       en:'The Empress'},
+  {ch:'B', i:2,  no:14, rn:'XIV',  de:'Die Mäßigkeit',en:'Temperance'},
+  {ch:'B', i:3,  no:6,  rn:'VI',   de:'Die Liebenden',         en:'The Lovers'},
+  {ch:'B', i:4,  no:19, rn:'XIX',  de:'Die Sonne',             en:'The Sun'},
+  {ch:'B', i:5,  no:7,  rn:'VII',  de:'Der Wagen',             en:'The Chariot'},
+  {ch:'B', i:6,  no:13, rn:'XIII', de:'Der Tod',               en:'Death'},
+  {ch:'B', i:7,  no:0,  rn:'0',    de:'Der Narr',              en:'The Fool'},
+  {ch:'B', i:8,  no:12, rn:'XII',  de:'Der Gehängte',     en:'The Hanged Man'},
+  {ch:'B', i:9,  no:16, rn:'XVI',  de:'Der Turm',              en:'The Tower'},
+  {ch:'B', i:10, no:9,  rn:'IX',   de:'Der Eremit',            en:'The Hermit'}
+];
+
+/* mirror rung: A[i] <-> B[(11-i) mod 11]  (positions 0..10 = A, 11..21 = B) */
+function mirrorPos(p){ return p < 11 ? 11 + ((11 - p) % 11) : ((11 - (p - 11)) % 11); }
+
+function relation(f, h){
+  var sameChain = (f < 11) === (h < 11);
+  var iF = f < 11 ? f : f - 11;
+  var iH = h < 11 ? h : h - 11;
+  if (h === mirrorPos(f)) return {kind:'mirror', d:0};
+  if (sameChain){
+    var d = (iH - iF + 11) % 11;              // forward steps along the ring
+    var near = Math.min(d, 11 - d);           // 1..5
+    if (near === 1) return {kind:'neighbour', d:d};
+    if (near >= 4)  return {kind:'sameFar',  d:d};
+    return {kind:'same', d:d};
+  }
+  var mi  = (11 - iF) % 11;                   // where the mask's rung lands in the other chain
+  var off = (iH - mi + 11) % 11;
+  var noff = Math.min(off, 11 - off);
+  if (noff === 1) return {kind:'crossNear', d:noff};
+  return {kind:'cross', d:noff};
+}
+
+/* ------------------------------------------------------------------ */
+
+var MASK_DE = [
+  "Du trittst mit vollen Händen auf: alles, was du brauchst, liegt bereits vor dir. Deine Maske ist die des Könnens, das nichts erklären muss.",
+  "Du zeigst dich als jemand, der angekommen ist. Deine Maske schließt den Kreis und lädt andere ein, hereinzutreten.",
+  "Du gibst dich dem Wechsel hin. Deine Maske ist die des Menschen, der die Drehung schon kennt, bevor sie einsetzt.",
+  "Du sprichst aus einer Ordnung heraus, die älter ist als du. Deine Maske ist die des Bewahrers, der weitergibt statt zu behalten.",
+  "Du zeigst offen, was andere verbergen. Deine Maske ist die der Lust und der Kette, die man selbst in der Hand hält.",
+  "Du rufst und wirst gerufen. Deine Maske ist die des Aufbruchs, der nichts hinter sich lässt, ohne es angesehen zu haben.",
+  "Du hältst, ohne zu drücken. Deine Maske ist die der ruhigen Hand im Nacken des Löwen.",
+  "Du gehst durch das Ungewisse, ohne Licht zu verlangen. Deine Maske ist die des Traums, der mehr weiß als der Tag.",
+  "Du gießt aus, was du hast, ohne zu rechnen. Deine Maske ist die der offenen Hoffnung nach dem Einsturz.",
+  "Du wiegst, bevor du sprichst. Deine Maske ist die des klaren Schnitts, der niemanden verletzen will und doch trennt.",
+  "Du setzt Grenzen und stehst dahinter. Deine Maske ist die der Form, die anderen Halt gibt.",
+  "Du weißt und schweigst. Deine Maske ist der Vorhang selbst — man ahnt, was dahinterliegt, und du entscheidest, wann.",
+  "Du lässt wachsen, was dir anvertraut wird. Deine Maske ist die der Fülle, die nichts erzwingt.",
+  "Du mischst, bis es stimmt. Deine Maske ist die des Übergangs zwischen zwei Gefäßen, der nie überläuft.",
+  "Du wählst, und die Wahl zeigt dich. Deine Maske ist die der Zuwendung, die sich nicht teilen lässt.",
+  "Du machst hell, wohin du siehst. Deine Maske ist die des unverstellten Tages, der nichts zu verbergen sucht.",
+  "Du hältst zwei Kräfte im Zug. Deine Maske ist die der Richtung, die man dir ansieht, bevor du sprichst.",
+  "Du lässt enden, was enden will. Deine Maske ist die der Schwelle, an der niemand vorbeikommt.",
+  "Du gehst weiter, wo andere stehenbleiben. Deine Maske ist die des ersten Schritts, der den Abgrund nicht leugnet.",
+  "Du hängst die Welt um, statt sie zu drehen. Deine Maske ist die des freiwilligen Wartens.",
+  "Du sagst, was einstürzen muss. Deine Maske ist der Blitz, der nicht fragt, ob es gerade passt.",
+  "Du gehst voran mit einer kleinen Lampe. Deine Maske ist die des Abstands, aus dem man am deutlichsten sieht."
+];
+
+var MASK_EN = [
+  "You arrive with full hands: everything you need is already in front of you. Your mask is skill that never has to explain itself.",
+  "You show yourself as someone who has arrived. Your mask closes the circle and invites others to step inside it.",
+  "You give yourself over to change. Your mask belongs to the one who knows the turn before it begins.",
+  "You speak out of an order older than you are. Your mask is the keeper's, who passes on rather than holds.",
+  "You show openly what others hide. Your mask is appetite, and the chain one holds in one's own hand.",
+  "You call and are called. Your mask is departure that leaves nothing behind unlooked at.",
+  "You hold without pressing. Your mask is the quiet hand at the lion's neck.",
+  "You walk through the uncertain without demanding light. Your mask is the dream that knows more than the day.",
+  "You pour out what you have without counting. Your mask is open hope after the collapse.",
+  "You weigh before you speak. Your mask is the clean cut that wounds no one and still divides.",
+  "You set limits and stand behind them. Your mask is the form that gives others something to lean on.",
+  "You know, and keep silent. Your mask is the veil itself — what lies behind it is sensed, and you decide when.",
+  "You let what is entrusted to you grow. Your mask is abundance that forces nothing.",
+  "You mix until it is right. Your mask is the passage between two vessels that never overflows.",
+  "You choose, and the choice shows you. Your mask is a devotion that cannot be divided.",
+  "You brighten wherever you look. Your mask is the undisguised day that seeks to hide nothing.",
+  "You hold two forces in harness. Your mask is a direction others read in you before you speak.",
+  "You let end what wants to end. Your mask is the threshold no one gets past.",
+  "You go on where others stop. Your mask is the first step that does not deny the drop.",
+  "You turn the world around instead of turning yourself. Your mask is a willing wait.",
+  "You say what has to fall. Your mask is the lightning that never asks whether the moment suits.",
+  "You go ahead with a small lamp. Your mask is the distance from which one sees most clearly."
+];
+
+var I18N = {
+  de: {
+    kicker: "Wissenschaft und Zauberkunst",
+    titleA: "Die Masken", titleB: "des Tarot",
+    intro: "Zwei Karten genügen. Eine, die du liebst, und eine, die du nicht ausstehen kannst — daraus entsteht ein Gesicht, das du nach außen trägst, und eine Linie, an der du dich reißst.",
+    langLabel: "Sprache / Language", visualLabel: "Anmutung",
+    begin: "Die Wahl beginnen  →",
+    stepWord: "Schritt",
+    favTitle: "Welche Große Arkana ist dir die liebste?",
+    favSub: "Wähle die Karte, zu der du zurückkehrst — nicht die richtige, sondern deine.",
+    hateTitle: "Und welche kannst du nicht ausstehen?",
+    hateSub: "Die Karte, bei der es dir eng wird. Deine Lieblingskarte ist bereits vergeben.",
+    taken: "gewählt",
+    maskKicker: "Deine Maske",
+    maskLead: "Du zeigst dich als",
+    toReading: "Die Lesung ansehen  →",
+    readKicker: "Die Lesung",
+    readTitle: "Maske und Widerstand",
+    readSub: "Was du gewählt hast, und wie die beiden Karten in der Kette zueinander stehen.",
+    lblMask: "Die Maske", lblAgainst: "Der Widerstand", lblRelation: "Die Lage",
+    mirrorLine: function(m){ return "Das Gegenstück deiner Maske — die Karte auf derselben Sprosse — ist " + m + "."; },
+    rel: {
+      mirror:    function(f,h,d){ return h + " steht deiner Maske genau gegenüber, auf derselben Sprosse der Leiter. Was du ablehnst, ist nicht das Fremde, sondern dein eigenes Gegenstück. Zwischen " + f + " und " + h + " gibt es keinen Umweg."; },
+      neighbour: function(f,h,d){ return h + " steht unmittelbar neben deiner Maske in derselben Kette. Der Widerwille gilt einem Nachbarn — dem, was gleich vor dir oder gleich nach dir kommt."; },
+      sameFar:   function(f,h,d){ return h + " liegt in deiner eigenen Kette, aber am fernsten Punkt des Rings — " + d + " Schritte weiter. Du lehnst ab, was aus demselben Stoff gemacht ist wie du."; },
+      same:      function(f,h,d){ return h + " liegt in derselben Kette wie deine Maske, " + d + " Schritte weiter. Ihr gehört zum selben Umlauf; das Abgelehnte kommt auf dich zu."; },
+      crossNear: function(f,h,d){ return h + " liegt in der anderen Kette, dicht neben dem Gegenstück deiner Maske. Beinahe ein Gegenüber — aber um einen Schritt verfehlt."; },
+      cross:     function(f,h,d){ return h + " liegt in der anderen Kette, " + d + " Schritte vom Gegenstück deiner Maske entfernt. Zwei Umläufe, die einander nur an einer Stelle berühren."; }
+    },
+    code: function(secs, code){ return "Du hast " + secs + "," + code + " Sekunden für die Wahl gebraucht."; },
+    keyTitle: "Schlüssel für den Vorführenden (vor dem Gast verborgen)",
+    legend1: "Lies die vier Ziffern nach dem Komma — die ersten beiden = Lieblingskarte (= Maske), die letzten beiden = gehasste Karte.",
+    legendFav: "Lieblingskarte / Maske", legendHate: "Gehasste Karte",
+    chainA: "Kette A  (01–11)", chainB: "Kette B  (12–22)",
+    ladderCap: "Sprossen: A[i] gegenüber B[(11−i) mod 11] — durchgezogen = Maske, gestrichelt = abgelehnt",
+    restart: "Für den nächsten Gast von vorn beginnen"
+  },
+  en: {
+    kicker: "Science and Conjuring",
+    titleA: "The Masks", titleB: "of the Tarot",
+    intro: "Two cards are enough. One you love, one you cannot stand — out of them comes a face you wear outward, and a line you chafe against.",
+    langLabel: "Language / Sprache", visualLabel: "Visual direction",
+    begin: "Begin the choice  →",
+    stepWord: "Step",
+    favTitle: "Which Major Arcanum is your favourite?",
+    favSub: "Choose the card you keep returning to — not the right one, yours.",
+    hateTitle: "And which one can you not stand?",
+    hateSub: "The card that tightens something in you. Your favourite is already spoken for.",
+    taken: "chosen",
+    maskKicker: "Your mask",
+    maskLead: "You show yourself as",
+    toReading: "See the reading  →",
+    readKicker: "The reading",
+    readTitle: "Mask and resistance",
+    readSub: "What you chose, and how the two cards stand to one another in the chain.",
+    lblMask: "The mask", lblAgainst: "The resistance", lblRelation: "The position",
+    mirrorLine: function(m){ return "Your mask's counterpart — the card on the same rung — is " + m + "."; },
+    rel: {
+      mirror:    function(f,h,d){ return h + " stands directly opposite your mask, on the same rung of the ladder. What you reject is not the stranger but your own counterpart. Between " + f + " and " + h + " there is no detour."; },
+      neighbour: function(f,h,d){ return h + " stands immediately beside your mask in the same chain. The aversion is aimed at a neighbour — at what comes just before or just after you."; },
+      sameFar:   function(f,h,d){ return h + " lies in your own chain, but at the ring's furthest point — " + d + " steps on. You reject what is made of the same material as you are."; },
+      same:      function(f,h,d){ return h + " lies in the same chain as your mask, " + d + " steps on. You share one revolution; what is rejected is coming towards you."; },
+      crossNear: function(f,h,d){ return h + " lies in the other chain, right next to your mask's counterpart. Almost an opposite — but missed by one step."; },
+      cross:     function(f,h,d){ return h + " lies in the other chain, " + d + " steps from your mask's counterpart. Two revolutions that touch at a single place."; }
+    },
+    code: function(secs, code){ return "You took " + secs + "." + code + " seconds to make the choice."; },
+    keyTitle: "Performer's key (hidden from guest)",
+    legend1: "Read the four digits after the point — first two = favourite card (= mask), last two = hated card.",
+    legendFav: "Favourite / mask", legendHate: "Hated card",
+    chainA: "Chain A  (01–11)", chainB: "Chain B  (12–22)",
+    ladderCap: "Rungs: A[i] opposite B[(11−i) mod 11] — solid = mask, dashed = rejected",
+    restart: "Begin again for the next guest"
+  }
+};
+
+var THEMES = [
+  {id:'parchment', de:'Pergament & Tinte', en:'Parchment & Ink', accent:'#7c3b32', rule:'#cabd9f', bg:'#ece3d0'},
+  {id:'cool',      de:'Kühles Manuskript', en:'Cool Manuscript', accent:'#3f665c', rule:'#c2c3b4', bg:'#e5e4d8'},
+  {id:'candle',    de:'Kerzenlicht',       en:'Candlelight',     accent:'#cf9a44', rule:'#4b3d2c', bg:'#211b14'}
+];
+
+/* ------------------------------------------------------------------ */
+
+var state = { lang:'de', theme:'parchment', fav:null, hate:null, t0:0, secs:0, key:false };
+
+function L(){ return I18N[state.lang]; }
+function name(p){ return CARDS[p][state.lang]; }
+function pad2(n){ return (n < 10 ? '0' : '') + n; }
+function $(id){ return document.getElementById(id); }
+
+function show(id){
+  ['scr-intro','scr-fav','scr-hate','scr-mask','scr-read'].forEach(function(s){
+    $(s).hidden = (s !== id);
+  });
+  window.scrollTo(0, 0);
+}
+
+function applyStatic(){
+  var S = L();
+  document.documentElement.lang = state.lang;
+  var nodes = document.querySelectorAll('[data-t]');
+  for (var i = 0; i < nodes.length; i++){
+    var k = nodes[i].getAttribute('data-t');
+    if (typeof S[k] === 'string') nodes[i].textContent = S[k];
+  }
+}
+
+function buildChips(){
+  var S = L();
+  var lc = $('langChips'); lc.innerHTML = '';
+  [{code:'de', name:'Deutsch'}, {code:'en', name:'English'}].forEach(function(l){
+    var b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button';
+    b.setAttribute('aria-pressed', String(l.code === state.lang));
+    b.textContent = l.name;
+    b.onclick = function(){ state.lang = l.code; render(); };
+    lc.appendChild(b);
+  });
+  var tc = $('themeChips'); tc.innerHTML = '';
+  THEMES.forEach(function(t){
+    var b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button';
+    b.setAttribute('aria-pressed', String(t.id === state.theme));
+    var dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.style.background = t.accent;
+    dot.style.border = '1px solid ' + t.rule;
+    dot.style.boxShadow = 'inset 0 0 0 3px ' + t.bg;
+    b.appendChild(dot);
+    b.appendChild(document.createTextNode(t[state.lang]));
+    b.onclick = function(){ state.theme = t.id; document.body.dataset.theme = t.id; render(); };
+    tc.appendChild(b);
+  });
+}
+
+/* card grid, shown in the conventional tarot order 0..XXI */
+var DISPLAY_ORDER = CARDS.map(function(c, p){ return p; })
+                         .sort(function(a, b){ return CARDS[a].no - CARDS[b].no; });
+
+function buildGrid(el, selected, disabled, onPick){
+  el.innerHTML = '';
+  DISPLAY_ORDER.forEach(function(p){
+    var b = document.createElement('button');
+    b.className = 'card'; b.type = 'button';
+    b.setAttribute('aria-pressed', String(p === selected));
+    if (p === disabled){
+      b.disabled = true;
+      var s = document.createElement('span');
+      s.className = 'strike'; s.textContent = L().taken;
+      b.appendChild(s);
+    }
+    var rn = document.createElement('span');
+    rn.className = 'rn'; rn.textContent = CARDS[p].rn;
+    var nm = document.createElement('span');
+    nm.className = 'nm'; nm.textContent = name(p);
+    b.appendChild(rn); b.appendChild(nm);
+    if (p !== disabled) b.onclick = function(){ onPick(p); };
+    el.appendChild(b);
+  });
+}
+
+function buildLadder(){
+  var S = L(), lad = $('ladder');
+  lad.innerHTML = '';
+  var top = document.createElement('div'); top.className = 'lrow';
+  var mid = document.createElement('div'); mid.className = 'links';
+  var bot = document.createElement('div'); bot.className = 'lrow';
+
+  for (var k = 0; k <= 11; k++){
+    var wrap = (k === 11);          // the PDF repeats the head to close the ring
+    var kk = k % 11;
+    var pa = kk;                    // A[kk]              -> position kk
+    var pb = 11 + ((11 - kk) % 11); // B[(11-kk) mod 11]  -> position 11+..
+
+    top.appendChild(cell(pa, wrap));
+    var m = document.createElement('div'); m.textContent = '↕'; mid.appendChild(m);
+    bot.appendChild(cell(pb, wrap));
+  }
+  lad.appendChild(top); lad.appendChild(mid); lad.appendChild(bot);
+
+  function cell(p, wrap){
+    var d = document.createElement('div');
+    d.className = 'cell' + (wrap ? ' wrap' : '')
+                + (p === state.fav ? ' isFav' : '')
+                + (p === state.hate ? ' isHate' : '');
+    var n = document.createElement('span');
+    n.className = 'n'; n.textContent = pad2(p + 1);
+    var t = document.createElement('span');
+    t.textContent = name(p);
+    d.appendChild(n); d.appendChild(t);
+    return d;
+  }
+}
+
+function renderReading(){
+  var S = L();
+  var f = state.fav, h = state.hate;
+  var fN = name(f), hN = name(h);
+
+  $('readTitle').textContent = S.readTitle;
+  $('rowMask').innerHTML = '<b>' + esc(fN) + '</b> — ' + esc(CARDS[f].rn)
+      + '. ' + esc((state.lang === 'de' ? MASK_DE : MASK_EN)[f]);
+  $('rowHate').innerHTML = '<b>' + esc(hN) + '</b> — ' + esc(CARDS[h].rn) + '.';
+
+  var r = relation(f, h);
+  $('rowRelation').textContent = S.rel[r.kind](fN, hN, r.d);
+  $('rowMirror').textContent = S.mirrorLine(name(mirrorPos(f)));
+
+  var code = pad2(f + 1) + pad2(h + 1);
+  $('codeLine').textContent = S.code(state.secs, code);
+
+  /* performer key */
+  var kl = $('keyLines'); kl.innerHTML = '';
+  addKey(S.legend1);
+  addKey(' ');
+  addKey(S.legendFav  + ':  <em>' + pad2(f + 1) + '</em>  ' + esc(fN), true);
+  addKey(S.legendHate + ':  <em>' + pad2(h + 1) + '</em>  ' + esc(hN), true);
+  addKey(' ');
+  addKey(S.chainA + ':  ' + esc(chainList(0)), true);
+  addKey(S.chainB + ':  ' + esc(chainList(11)), true);
+  buildLadder();
+
+  function addKey(txt, html){
+    var d = document.createElement('div');
+    d.className = 'keyline';
+    if (html) d.innerHTML = txt; else d.textContent = txt;
+    kl.appendChild(d);
+  }
+  function chainList(base){
+    var out = [];
+    for (var i = 0; i < 11; i++) out.push(pad2(base + i + 1) + ' ' + name(base + i));
+    return out.join('   ');
+  }
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
+  });
+}
+
+function render(){
+  applyStatic();
+  buildChips();
+  if (!$('scr-fav').hidden)  buildGrid($('gridFav'),  state.fav,  -1, pickFav);
+  if (!$('scr-hate').hidden) buildGrid($('gridHate'), state.hate, state.fav, pickHate);
+  if (!$('scr-mask').hidden && state.fav !== null){
+    $('maskName').textContent = name(state.fav);
+    $('maskRn').textContent   = CARDS[state.fav].rn;
+    $('maskText').textContent = (state.lang === 'de' ? MASK_DE : MASK_EN)[state.fav];
+  }
+  if (!$('scr-read').hidden && state.fav !== null && state.hate !== null) renderReading();
+  $('keyBox').hidden = !state.key;
+}
+
+/* ---- flow ---- */
+function pickFav(p){
+  state.fav = p;
+  buildGrid($('gridFav'), state.fav, -1, pickFav);
+  setTimeout(function(){ show('scr-hate'); render(); }, 190);
+}
+function pickHate(p){
+  if (p === state.fav) return;
+  state.hate = p;
+  buildGrid($('gridHate'), state.hate, state.fav, pickHate);
+  setTimeout(function(){ show('scr-mask'); render(); }, 190);
+}
+
+$('btnBegin').onclick = function(){
+  state.t0 = Date.now();
+  show('scr-fav'); render();
+};
+$('btnToReading').onclick = function(){
+  state.secs = Math.max(1, Math.round((Date.now() - state.t0) / 1000));
+  show('scr-read'); render();
+};
+$('btnRestart').onclick = function(){
+  state.fav = null; state.hate = null; state.secs = 0;
+  show('scr-intro'); render();
+};
+
+/* performer key: ?key / #key in the URL, or three taps on the reading kicker */
+if (/(^|[?&#])key\b/.test(location.search + location.hash)) state.key = true;
+(function(){
+  var n = 0, timer = null;
+  $('readKicker').addEventListener('click', function(){
+    n++;
+    clearTimeout(timer);
+    timer = setTimeout(function(){ n = 0; }, 1200);
+    if (n >= 3){ n = 0; state.key = !state.key; $('keyBox').hidden = !state.key; }
+  });
+})();
+
+document.body.dataset.theme = state.theme;
+render();
+</script>
+</body>
+</html>

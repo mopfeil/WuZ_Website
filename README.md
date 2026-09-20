@@ -14,6 +14,9 @@ en/                     Englische Fassung (britisches Englisch): en/, en/backgro
                         Sprachumschalter (DE | EN im Kopf) auf ihr Gegenstück
 apps/ideomotor/         Ideomotor-Pendel (PWA, Kopie aus Code/Ideomotor_Pendel)
 apps/masken-tarot/      Die Masken des Tarot (Kopie aus Code/Kartenwahl, ohne Google Fonts)
+apps/familienaufgaben/  Private Familien-App (PWA, Kopie aus Code/Familienaufgaben). Nirgends verlinkt,
+                        noindex; api/sync.php (PHP) legt verschlüsselte Sync-Daten in api/data/ ab
+                        (per .gitignore ausgenommen, entsteht nur auf dem Server)
 shop/                   Shop-Stub (noch ohne Bestellfunktion)
 impressum/              Impressum
 datenschutz/            Datenschutzerklärung

@@ -1,0 +1,9 @@
+# Familienaufgaben: Dateien immer frisch pruefen (offline uebernimmt der Service Worker).
+# Ohne diese Regel wuerden app.js/app.css durch die 7-Tage-Regel der Hauptseite Updates verzoegern.
+<IfModule mod_expires.c>
+  ExpiresActive Off
+</IfModule>
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-cache"
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>

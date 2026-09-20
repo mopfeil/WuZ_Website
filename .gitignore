@@ -2,3 +2,6 @@
 Thumbs.db
 .DS_Store
 *.log
+
+# Verschluesselte Sync-Daten der Familienaufgaben-App (entstehen auf dem Server)
+apps/familienaufgaben/api/data/

@@ -324,30 +324,23 @@ function isOccurrence(task, d) {
   }
 }
 
-// Laufende Nummer eines Termins – bestimmt bei mehreren Personen, wer an der Reihe ist.
-function occIndex(task, d) {
-  const n = Math.max(1, task.repeat.interval || 1);
-  switch (task.repeat.freq) {
-    case 'daily': return Math.floor(diffDays(task.date, d) / n);
-    case 'weekly': {
-      const days = WEEKDAYS.map(([wd]) => wd).filter((wd) => weekdaysOf(task).includes(wd));
-      const week = Math.floor(diffDays(weekStart(task.date), weekStart(d)) / 7 / n);
-      return week * days.length + days.indexOf(parseDate(d).getDay());
-    }
-    case 'monthly': return Math.floor(monthsBetween(parseDate(task.date), parseDate(d)) / n);
-    default: return 0;
-  }
+// Wer eine Aufgabe erledigen darf: die zugewiesenen Personen – ohne Zuweisung alle.
+// Bei mehreren gilt "wer sie erledigt, bekommt die Belohnung"; es wird nicht abgewechselt.
+const assignedTo = (task) => (task.assigneeIds || []).filter((id) => member(id));
+function eligibleFor(task) {
+  const ids = assignedTo(task);
+  return ids.length ? ids : live(S.data.members).map((m) => m.id);
 }
-
-function assigneeFor(task, d) {
-  const ids = (task.assigneeIds || []).filter((id) => member(id));
-  return ids.length ? ids[Math.max(0, occIndex(task, d)) % ids.length] : null;
-}
+const isAlways = (task) => task.repeat.freq === 'always';
+const doneToday = (task) => Object.values(S.data.completions).filter((c) => c.done && c.taskId === task.id && c.date === today()).length;
 
 function collectOccurrences() {
   const t = today(), horizon = addDays(t, UPCOMING_DAYS);
-  const overdue = [], open = [], upcoming = [];
+  const overdue = [], open = [], upcoming = [], always = [];
   for (const task of live(S.data.tasks)) {
+    const eligible = eligibleFor(task);
+    if (!eligible.length) continue;
+    if (isAlways(task)) { always.push({ task, date: t, deadline: t, eligible, always: true }); continue; }
     const grace = task.graceDays || 0;
     const once = task.repeat.freq === 'none';
     const dates = [];
@@ -357,16 +350,15 @@ function collectOccurrences() {
     for (const d of dates) {
       const c = S.data.completions[task.id + '|' + d];
       if (c && c.done) continue;
-      const memberId = assigneeFor(task, d);
-      if (!memberId) continue;
-      const occ = { task, date: d, deadline: addDays(d, grace), memberId };
+      const occ = { task, date: d, deadline: addDays(d, grace), eligible };
       if (d > t) { if (!hasUpcoming) upcoming.push(occ); hasUpcoming = true; }
       else if (occ.deadline < t) overdue.push(occ);
       else open.push(occ);
     }
   }
+  const byTitle = (a, b) => a.task.title.localeCompare(b.task.title, 'de');
   const byDeadline = (a, b) => (a.deadline + a.task.title).localeCompare(b.deadline + b.task.title);
-  return { overdue: overdue.sort(byDeadline), open: open.sort(byDeadline), upcoming: upcoming.sort((a, b) => (a.date + a.task.title).localeCompare(b.date + b.task.title)) };
+  return { overdue: overdue.sort(byDeadline), open: open.sort(byDeadline), always: always.sort(byTitle), upcoming: upcoming.sort((a, b) => (a.date + a.task.title).localeCompare(b.date + b.task.title)) };
 }
 
 function repeatLabel(task) {
@@ -377,7 +369,7 @@ function repeatLabel(task) {
     return (n === 1 ? 'wöchentlich ' : `alle ${n} Wochen `) + days;
   }
   if (r.freq === 'monthly') return (n === 1 ? 'monatlich' : `alle ${n} Monate`) + ` am ${parseDate(task.date).getDate()}.`;
-  return 'einmalig';
+  return r.freq === 'always' ? 'immer offen' : 'einmalig';
 }
 
 function balanceOf(memberId) {
@@ -397,11 +389,21 @@ function ledgerOf(memberId) {
 // ---------------------------------------------------------------- Aktionen
 async function completeOcc(occ, slipEl) {
   if (!me()) { toast('Bitte zuerst unter „Mehr“ festlegen, wem dieses iPhone gehört.'); return; }
-  if (occ.memberId !== S.me && !(await requireAdmin('Diese Aufgabe gehört jemand anderem.'))) return;
+  // Gutgeschrieben wird, wer abhakt. Im Elternmodus (oder wenn das Gerät nicht berechtigt ist)
+  // wird gefragt, wer es war.
+  let who = S.me;
+  if (!occ.eligible.includes(S.me)) {
+    if (!(await requireAdmin('Diese Aufgabe ist jemand anderem zugewiesen.'))) return;
+    who = occ.eligible.length === 1 ? occ.eligible[0] : await chooseMember(occ.eligible);
+  } else if (isAdmin() && occ.eligible.length > 1) {
+    who = await chooseMember(occ.eligible, S.me);
+  }
+  if (!who) return;
   if (slipEl) { slipEl.classList.add('stamped'); await new Promise((r) => setTimeout(r, 750)); }
-  const id = occ.task.id + '|' + occ.date;
+  // Immer offene Aufgaben können mehrmals am Tag anfallen -> jede Erledigung ist ein eigener Eintrag.
+  const id = occ.task.id + '|' + occ.date + (occ.always ? '|' + uid().slice(0, 8) : '');
   const rec = S.data.completions[id] || { id, taskId: occ.task.id, date: occ.date };
-  Object.assign(rec, { memberId: occ.memberId, title: occ.task.title, reward: occ.task.reward || 0, done: true, doneAt: Date.now(), doneBy: S.me, late: today() > occ.deadline });
+  Object.assign(rec, { memberId: who, title: occ.task.title, reward: occ.task.reward || 0, done: true, doneAt: Date.now(), doneBy: S.me, late: !occ.always && today() > occ.deadline });
   S.data.completions[id] = touch(rec);
   save();
 }
@@ -487,12 +489,12 @@ function taskForm(existing) {
   const d = existing ? JSON.parse(JSON.stringify(existing)) : { id: uid(), title: '', description: '', assigneeIds: [], reward: 50, date: today(), graceDays: 0, endDate: null, repeat: { freq: 'none', interval: 1, weekdays: [] } };
   let rewardText = centsToText(d.reward);
   let deadline = addDays(d.date, d.graceDays || 0);
-  let kind = d.repeat.freq === 'none' ? 'once' : 'repeat';
+  let kind = d.repeat.freq === 'none' ? 'once' : d.repeat.freq === 'always' ? 'always' : 'repeat';
 
   openSheet(existing ? 'Aufgabe bearbeiten' : 'Neue Aufgabe', (body, close) => {
     const draw = () => {
       const members = live(S.data.members);
-      const once = kind === 'once';
+      const once = kind === 'once', always = kind === 'always';
       const unit = { daily: ['Tag', 'Tage'], weekly: ['Woche', 'Wochen'], monthly: ['Monat', 'Monate'] }[d.repeat.freq] || ['', ''];
       body.replaceChildren(h('form', { class: 'form', onsubmit: (e) => { e.preventDefault(); submit(); } },
         field('Was ist zu tun?', h('input', { type: 'text', value: d.title, maxLength: 80, placeholder: 'z. B. Spülmaschine ausräumen', oninput: (e) => { d.title = e.target.value; } })),
@@ -502,19 +504,25 @@ function taskForm(existing) {
             d.assigneeIds = d.assigneeIds.includes(m.id) ? d.assigneeIds.filter((x) => x !== m.id) : [...d.assigneeIds, m.id];
             draw();
           }))),
-          d.assigneeIds.length > 1 && h('span', { class: 'hint' }, once ? 'Bei einmaligen Aufgaben ist die zuerst gewählte Person zuständig.' : 'Mehrere Personen wechseln sich reihum ab.')),
+          h('span', { class: 'hint' }, !d.assigneeIds.length ? 'Niemand ausgewählt: Jeder in der Familie kann die Aufgabe erledigen.'
+            : d.assigneeIds.length > 1 ? 'Eine der ausgewählten Personen erledigt sie – wer abhakt, bekommt die Belohnung.' : 'Nur diese Person kann die Aufgabe abhaken.')),
         field('Belohnung in Euro', h('input', { type: 'text', inputmode: 'decimal', value: rewardText, oninput: (e) => { rewardText = e.target.value; } })),
         h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'Art'),
-          segmented([['once', 'Einmalig'], ['repeat', 'Regelmäßig']], kind, (v) => { kind = v; d.repeat.freq = v === 'once' ? 'none' : (d.repeat.freq === 'none' ? 'weekly' : d.repeat.freq); draw(); })),
-        h('div', { class: 'row' },
+          segmented([['once', 'Einmalig'], ['repeat', 'Regelmäßig'], ['always', 'Immer offen']], kind, (v) => {
+            kind = v;
+            d.repeat.freq = v === 'once' ? 'none' : v === 'always' ? 'always' : (['daily', 'weekly', 'monthly'].includes(d.repeat.freq) ? d.repeat.freq : 'weekly');
+            draw();
+          }),
+          always && h('span', { class: 'hint' }, 'Steht dauerhaft in der Liste und kann beliebig oft abgehakt werden – jedes Mal gibt es die Belohnung. Ideal für Spülmaschine, Müll & Co.')),
+        !always && h('div', { class: 'row' },
           field(once ? 'Datum' : 'Erster Termin', h('input', { type: 'date', value: d.date, required: true, oninput: (e) => { if (e.target.value) { d.date = e.target.value; if (deadline < d.date) { deadline = d.date; draw(); } } } })),
           once
             ? field('Frist bis', h('input', { type: 'date', value: deadline, min: d.date, oninput: (e) => { if (e.target.value) deadline = e.target.value; } }))
             : field('Frist', h('select', { onchange: (e) => { d.graceDays = Number(e.target.value); } },
               [0, 1, 2, 3, 5, 7, 14].map((n) => h('option', { value: String(n), selected: (d.graceDays || 0) === n }, n === 0 ? 'am selben Tag' : n === 1 ? 'bis zum Folgetag' : `${n} Tage Zeit`))))),
-        !once && h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'Wiederholung'),
+        kind === 'repeat' && h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'Wiederholung'),
           segmented([['daily', 'Täglich'], ['weekly', 'Wöchentlich'], ['monthly', 'Monatlich']], d.repeat.freq, (v) => { d.repeat.freq = v; draw(); })),
-        !once && d.repeat.freq === 'weekly' && h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'An diesen Tagen'),
+        kind === 'repeat' && d.repeat.freq === 'weekly' && h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'An diesen Tagen'),
           h('div', { class: 'chips' }, WEEKDAYS.map(([wd, label]) => {
             const on = weekdaysOf(d).includes(wd);
             return h('button', { type: 'button', class: 'chip day' + (on ? ' on' : ''), 'aria-pressed': String(on), onclick: () => {
@@ -523,7 +531,7 @@ function taskForm(existing) {
               draw();
             } }, label);
           }))),
-        !once && h('div', { class: 'row' },
+        kind === 'repeat' && h('div', { class: 'row' },
           field('Abstand', h('select', { onchange: (e) => { d.repeat.interval = Number(e.target.value); } },
             [1, 2, 3, 4, 6].map((n) => h('option', { value: String(n), selected: (d.repeat.interval || 1) === n }, n === 1 ? `jede(n) ${unit[0]}` : `alle ${n} ${unit[1]}`)))),
           field('Endet am (optional)', h('input', { type: 'date', value: d.endDate || '', min: d.date, oninput: (e) => { d.endDate = e.target.value || null; } }))),
@@ -542,13 +550,16 @@ function taskForm(existing) {
       d.title = d.title.trim();
       d.description = (d.description || '').trim();
       if (!d.title) return toast('Bitte einen Titel eingeben.');
-      if (!d.assigneeIds.length) return toast('Bitte mindestens eine Person auswählen.');
       const cents = parseMoney(rewardText);
       if (cents == null || cents < 0) return toast('Bitte eine gültige Belohnung eingeben.');
       d.reward = cents;
       if (kind === 'once') {
         d.repeat = { freq: 'none', interval: 1, weekdays: [] };
         d.graceDays = Math.max(0, diffDays(d.date, deadline));
+        d.endDate = null;
+      } else if (kind === 'always') {
+        d.repeat = { freq: 'always', interval: 1, weekdays: [] };
+        d.graceDays = 0;
         d.endDate = null;
       } else if (d.repeat.freq === 'weekly') {
         d.repeat.weekdays = weekdaysOf(d);
@@ -663,6 +674,17 @@ function pinForm() {
   });
 }
 
+function chooseMember(ids, preferred) {
+  return new Promise((resolve) => {
+    openSheet('Wer hat es erledigt?', (body, close) => {
+      body.append(h('div', { class: 'form' },
+        h('p', { class: 'hint' }, 'Die Belohnung wird dieser Person gutgeschrieben.'),
+        h('div', { class: 'who-list' }, ids.map(member).filter(Boolean).map((m) => h('button', { type: 'button', class: 'who' + (m.id === preferred ? ' on' : ''), style: '--c:' + m.color, onclick: () => close(m.id) },
+          h('span', { class: 'avatar big' }, m.emoji), h('span', null, m.name))))));
+    }, { onClose: (id) => resolve(id || null) });
+  });
+}
+
 function identitySheet(afterJoin) {
   openSheet('Wem gehört dieses iPhone?', (body, close) => {
     const members = live(S.data.members);
@@ -680,15 +702,23 @@ function identitySheet(afterJoin) {
 }
 
 // ---------------------------------------------------------------- Ansichten
+function whoLine(task) {
+  const who = assignedTo(task).map(member);
+  if (!who.length) return h('div', { class: 'slip-who' }, h('span', { class: 'for-all' }, 'Für alle'), isAlways(task) ? 'wer es gerade erledigt' : 'wer zuerst abhakt');
+  return h('div', { class: 'slip-who' }, h('span', { class: 'avatars' }, who.map((m) => h('span', { class: 'avatar', style: '--c:' + m.color }, m.emoji))),
+    who.map((m) => m.name).join(who.length > 2 ? ', ' : ' oder '));
+}
+
 function slip(occ, state) {
-  const m = member(occ.memberId), task = occ.task;
-  const el = h('article', { class: 'slip ' + state, style: '--c:' + (m ? m.color : '#888') },
+  const task = occ.task, who = assignedTo(task);
+  const count = occ.always ? doneToday(task) : 0;
+  const el = h('article', { class: 'slip ' + state, style: '--c:' + (who.length === 1 ? member(who[0]).color : 'var(--ink)') },
     h('div', { class: 'slip-main' },
-      h('div', { class: 'slip-who' }, h('span', { class: 'avatar' }, m ? m.emoji : '?'), m ? m.name : 'Niemand'),
+      whoLine(task),
       h('h3', null, task.title),
       task.description && h('p', { class: 'slip-desc' }, task.description),
       h('div', { class: 'slip-meta' },
-        h('span', { class: 'due' }, state === 'upcoming' ? 'ab ' + fmtDay(occ.date) : state === 'overdue' ? 'Frist war ' + fmtDay(occ.deadline) : 'bis ' + fmtDay(occ.deadline)),
+        h('span', { class: 'due' }, occ.always ? (count ? `heute ${count}× erledigt` : 'jederzeit') : state === 'upcoming' ? 'ab ' + fmtDay(occ.date) : state === 'overdue' ? 'Frist war ' + fmtDay(occ.deadline) : 'bis ' + fmtDay(occ.deadline)),
         task.repeat.freq !== 'none' && h('span', { class: 'rep' }, icon('repeat'), repeatLabel(task)))),
     h('div', { class: 'slip-stub' },
       h('span', { class: 'reward' }, euro(task.reward)),
@@ -718,10 +748,11 @@ function viewTasks() {
   const filterId = ui.filter === 'me' ? S.me : ui.filter === 'all' ? null : ui.filter;
   const match = (id) => !filterId || id === filterId;
 
-  const { overdue, open, upcoming } = collectOccurrences();
+  const { overdue, open, always, upcoming } = collectOccurrences();
+  const mine = (o) => !filterId || o.eligible.includes(filterId);
   const since = Date.now() - DONE_DAYS * 864e5;
   const done = Object.values(S.data.completions).filter((c) => c.done && c.doneAt >= since && match(c.memberId)).sort((a, b) => b.doneAt - a.doneAt);
-  const lists = { overdue: overdue.filter((o) => match(o.memberId)), open: open.filter((o) => match(o.memberId)), upcoming: upcoming.filter((o) => match(o.memberId)) };
+  const lists = { overdue: overdue.filter(mine), open: open.filter(mine), always: always.filter(mine), upcoming: upcoming.filter(mine) };
   const nothing = !lists.overdue.length && !lists.open.length;
 
   return [
@@ -734,6 +765,7 @@ function viewTasks() {
     lists.open.map((o) => slip(o, 'open')),
     nothing && h('div', { class: 'empty big' }, h('span', { class: 'empty-mark' }, '✓'),
       live(S.data.tasks).length ? 'Alles erledigt. Füße hoch!' : 'Noch keine Aufgaben. Ein Elternteil legt sie unter „Verwalten“ an.'),
+    lists.always.length > 0 && [sectionHead('Immer offen'), lists.always.map((o) => slip(o, 'always'))],
     lists.upcoming.length > 0 && [sectionHead('Demnächst'), lists.upcoming.map((o) => slip(o, 'upcoming'))],
     done.length > 0 && [sectionHead('Erledigt', done.length), done.map(doneSlip)],
   ];
@@ -769,11 +801,11 @@ function viewManage() {
     sectionHead('Aufgaben', tasks.length || null),
     h('button', { class: 'btn primary add', type: 'button', onclick: () => (members.length ? taskForm() : toast('Bitte zuerst ein Familienmitglied anlegen.')) }, icon('plus'), 'Neue Aufgabe'),
     h('ul', { class: 'manage-list' }, tasks.map((t) => {
-      const who = (t.assigneeIds || []).map(member).filter(Boolean);
-      const ended = t.repeat.freq === 'none' ? S.data.completions[t.id + '|' + t.date]?.done : t.endDate && t.endDate < today();
+      const who = assignedTo(t).map(member);
+      const ended = isAlways(t) ? false : t.repeat.freq === 'none' ? S.data.completions[t.id + '|' + t.date]?.done : t.endDate && t.endDate < today();
       return h('li', null, h('button', { type: 'button', class: ended ? 'ended' : '', onclick: () => taskForm(t) },
         h('span', { class: 'manage-main' }, h('strong', null, t.title),
-          h('small', null, (who.length ? who.map((m) => m.emoji + ' ' + m.name).join(' ↔ ') : 'niemand zugewiesen') + ' · ' + (t.repeat.freq === 'none' ? fmtDay(t.date) : repeatLabel(t)) + (ended ? ' · abgeschlossen' : ''))),
+          h('small', null, (who.length ? who.map((m) => m.emoji + ' ' + m.name).join(', ') : 'für alle') + ' · ' + (t.repeat.freq === 'none' ? fmtDay(t.date) : repeatLabel(t)) + (ended ? ' · abgeschlossen' : ''))),
         h('span', { class: 'reward' }, euro(t.reward)), icon('edit', 'chev')));
     })),
     sectionHead('Familie', members.length || null),
@@ -934,7 +966,7 @@ function render() {
   const root = $('#app');
   if (!S || !S.family) return;
   const admin = isAdmin();
-  const myOpen = (() => { const o = collectOccurrences(); return [...o.overdue, ...o.open].filter((x) => x.memberId === S.me).length; })();
+  const myOpen = (() => { const o = collectOccurrences(); return [...o.overdue, ...o.open].filter((x) => x.eligible.includes(S.me)).length; })();
   let main = $('#view');
   if (!main) {
     root.replaceChildren(h('header', { class: 'topbar', id: 'topbar' }), h('main', { id: 'view' }), h('nav', { class: 'tabbar', id: 'tabbar', 'aria-label': 'Hauptnavigation' }));

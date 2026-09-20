@@ -348,3 +348,10 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--i
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
 }
+
+/* ------------------------------------------------ Zuweisung & immer offene Aufgaben */
+.avatars { display: inline-flex; }
+.avatars .avatar + .avatar { margin-left: -5px; }
+.for-all { padding: 2px 8px; border-radius: 99px; background: var(--ink); color: var(--paper); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; }
+.slip.always::before { background: repeating-linear-gradient(var(--c) 0 8px, var(--gold) 8px 16px); }
+.slip.always .due { color: var(--green); }

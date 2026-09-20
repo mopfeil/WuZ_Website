@@ -14,6 +14,9 @@ en/                     Englische Fassung (britisches Englisch): en/, en/backgro
                         Sprachumschalter (DE | EN im Kopf) auf ihr Gegenstück
 apps/ideomotor/         Ideomotor-Pendel (PWA, Kopie aus Code/Ideomotor_Pendel)
 apps/masken-tarot/      Die Masken des Tarot (Kopie aus Code/Kartenwahl, ohne Google Fonts)
+apps/abstimmung/        ArUco-Abstimmung (PWA, Kopie aus Code/webapp; 250er-Markerset, Antworten A–H)
+apps/abstimmung-75/     ArUco-Abstimmung 75 (PWA, Kopie aus Code/WebApp75; 7,5-cm-Karten, 7er-Skala,
+                        Querformat = Ergebnisanzeige). Beide bisher nicht auf der Werkzeuge-Seite verlinkt.
 apps/familienaufgaben/  Private Familien-App (PWA, Kopie aus Code/Familienaufgaben). Nirgends verlinkt,
                         noindex; api/sync.php (PHP) legt verschlüsselte Sync-Daten in api/data/ ab
                         (per .gitignore ausgenommen, entsteht nur auf dem Server)
@@ -92,7 +95,8 @@ Pendel-App läuft dort im Mausmodus.
 
 ## Apps aktualisieren
 
-Die Apps sind Kopien aus `Code/Ideomotor_Pendel` und `Code/Kartenwahl`. Nach Änderungen dort
+Die Apps sind Kopien aus `Code/Ideomotor_Pendel`, `Code/Kartenwahl`, `Code/webapp` (→ `apps/abstimmung/`),
+`Code/WebApp75` (→ `apps/abstimmung-75/`) und `Code/Familienaufgaben`. Nach Änderungen dort
 die Dateien erneut nach `apps/` kopieren; in `apps/ideomotor/sw.js` die `CACHE_VERSION`
 erhöhen, damit installierte PWAs die neue Fassung laden. In der Tarot-Kopie wurden die
 Google-Fonts-Links entfernt (DSGVO); die App nutzt die im CSS hinterlegten Fallback-Schriften.

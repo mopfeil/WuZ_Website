@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Abstimmung">
+  <meta name="theme-color" content="#0f2a30">
+  <title>ArUco Abstimmung</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Startbildschirm -->
+  <div id="screen-start" class="screen">
+    <h1>ArUco Abstimmung</h1>
+    <p id="start-info">Halte das iPhone auf die Teilnehmer. Die App erkennt
+      die Marker und ihre Drehung als Antwort.</p>
+    <p id="start-status" class="msg"></p>
+    <button id="btn-start" class="primary big" style="margin-top:16px">Kamera starten</button>
+    <button id="btn-start-menu" class="ghost" style="margin-top:10px">Konfiguration &amp; Marker</button>
+  </div>
+
+  <!-- Scan-Bildschirm -->
+  <div id="screen-scan" class="screen hidden">
+    <div id="topbar" class="bar">
+      <div class="q-head">
+        <span class="q-num" id="q-num">Frage 1/1</span>
+        <span class="q-text" id="q-text">-</span>
+      </div>
+      <div class="q-opts" id="q-opts"></div>
+    </div>
+
+    <div id="camwrap"><canvas id="cv"></canvas></div>
+
+    <button id="btn-menu" class="iconbtn">&#9776;</button>
+
+    <div id="bottombar" class="bar">
+      <div class="status-row">
+        <div class="count-big">
+          <span class="scanned" id="cnt-scanned">0</span>
+          <span style="color:#6b7c7c">/</span>
+          <span id="cnt-total">0</span>
+        </div>
+        <div class="legend" id="legend">gescannt &middot; <span id="cnt-missing">0</span> fehlen</div>
+        <button id="btn-missing" class="ghost" style="flex:0 0 auto">Fehlende</button>
+      </div>
+      <div class="btn-row">
+        <button id="btn-reset" class="ghost">Zur&uuml;cksetzen</button>
+        <button id="btn-skip" class="ghost">&Uuml;berspringen</button>
+        <button id="btn-next" class="primary">Speichern &amp; weiter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Abschluss-Bildschirm -->
+  <div id="screen-done" class="screen hidden" style="flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center">
+    <h1>Alle Fragen erfasst</h1>
+    <p id="done-info" class="msg ok"></p>
+    <button id="btn-export-done" class="primary big" style="margin-top:16px">Ergebnisse als CSV exportieren</button>
+    <button id="btn-restart" class="ghost danger" style="margin-top:10px">Neue Sitzung starten</button>
+  </div>
+
+  <!-- Sheet: Fehlende/Gescannte Marker -->
+  <div id="sheet-missing" class="sheet hidden">
+    <h2>Teilnehmer-&Uuml;bersicht</h2>
+    <div class="scroll">
+      <div class="subhead">Fehlt noch (<span id="miss-count">0</span>)</div>
+      <div class="chips" id="miss-chips"></div>
+      <div class="subhead">Bereits gescannt (<span id="scan-count">0</span>)</div>
+      <div class="chips" id="scan-chips"></div>
+    </div>
+    <div class="sheet-actions">
+      <button class="close-sheet primary">Schlie&szlig;en</button>
+    </div>
+  </div>
+
+  <!-- Sheet: Menü -->
+  <div id="sheet-menu" class="sheet hidden">
+    <h2>Men&uuml;</h2>
+    <div class="scroll">
+      <ul class="menu">
+        <li id="m-test">Marker-Test (Drehung pr&uuml;fen)</li>
+        <li id="m-config">Konfiguration (Fragen &amp; Teilnehmer)</li>
+        <li id="m-export">Ergebnisse als CSV exportieren</li>
+        <li id="m-markers">Marker drucken</li>
+        <li id="m-restart">Sitzung neu starten</li>
+      </ul>
+    </div>
+    <div class="sheet-actions">
+      <button class="close-sheet primary">Schlie&szlig;en</button>
+    </div>
+  </div>
+
+  <!-- Sheet: Konfiguration -->
+  <div id="sheet-config" class="sheet hidden">
+    <h2>Konfiguration</h2>
+    <p style="font-size:0.8rem;color:#9fb0b0;margin:0 0 8px">
+      Fragen, Antwortoptionen und Teilnehmer als JSON. Wird auf dem Ger&auml;t
+      gespeichert.</p>
+    <div class="scroll"><textarea id="config-text" spellcheck="false"></textarea></div>
+    <p id="config-msg" class="msg"></p>
+    <div class="sheet-actions">
+      <button id="config-default" class="ghost">Standard</button>
+      <button id="config-save" class="primary">Speichern</button>
+      <button class="close-sheet ghost">Schlie&szlig;en</button>
+    </div>
+  </div>
+
+  <!-- Sheet: Marker-Test -->
+  <div id="sheet-test" class="sheet hidden">
+    <h2>Marker-Test</h2>
+    <p style="font-size:0.8rem;color:#9fb0b0;margin:0 0 8px">
+      Live erkannte Marker mit gemessener Drehung. Damit l&auml;sst sich vor
+      dem Experiment pr&uuml;fen, ob alle Stufen sauber erkannt werden.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Marker</th><th>Winkel</th><th>Stufe</th><th>Antwort</th></tr></thead>
+        <tbody id="test-rows"></tbody>
+      </table>
+    </div>
+    <div class="sheet-actions">
+      <button class="close-sheet primary">Schlie&szlig;en</button>
+    </div>
+  </div>
+
+  <script src="lib/cv.js"></script>
+  <script src="lib/aruco.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

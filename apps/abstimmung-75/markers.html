@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marker drucken - ArUco Abstimmung 75</title>
+  <style>
+    body { margin: 0; font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+           background: #0f2a30; color: #eef3f3; }
+    #controls { padding: 14px; background: #08161a; display: flex; flex-wrap: wrap;
+                gap: 10px; align-items: flex-end; position: sticky; top: 0; z-index: 2; }
+    #controls label { font-size: 0.8rem; display: flex; flex-direction: column; gap: 3px; }
+    #controls input { width: 5rem; padding: 6px; border-radius: 6px; border: 1px solid #2d6068;
+                      background: #06181c; color: #eef3f3; font: inherit; }
+    #controls button { padding: 9px 14px; border-radius: 8px; border: 1px solid #36d1c4;
+                       background: #36d1c4; color: #06262b; font-weight: 700; cursor: pointer; }
+    #controls button.ghost { background: transparent; color: #eef3f3; }
+    #controls a { color: #36d1c4; font-size: 0.85rem; }
+    #info { padding: 8px 14px; font-size: 0.82rem; color: #9fb0b0; max-width: 60rem; }
+
+    /* ---- A4-Seiten: 6 Karten (7,5 cm) pro Seite, 2 x 3 ----
+       Seitenfolge: Vorderseite 1, Rueckseite 1, Vorderseite 2, ...
+       -> Drucker: "Beidseitig drucken, an langer Kante spiegeln".
+       Auf der Rueckseite sind die Spalten vertauscht, damit jede
+       Rueckseite exakt hinter ihrer Vorderseite landet. */
+    .page {
+      width: 210mm; height: 297mm; background: #fff; color: #000;
+      position: relative; margin: 6mm auto; box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+      page-break-after: always; break-after: page; overflow: hidden;
+    }
+    .pagelabel { position: absolute; left: 4mm; top: 2mm; font-size: 3mm; color: #999; }
+
+    .cardpos { position: absolute; width: 75mm; height: 75mm; }
+    /* Spalten: links 17mm, rechts 118mm; Zeilen: 16 / 111 / 206 mm */
+    .c0 { left: 17mm; }  .c1 { left: 118mm; }
+    .r0 { top: 16mm; }   .r1 { top: 111mm; } .r2 { top: 206mm; }
+
+    .card {
+      position: absolute; inset: 0; border: 0.3mm dashed #bbb;
+      background: #fff; overflow: hidden;
+    }
+
+    /* Vorderseite: NUR der Marker (78 % = grosse Zellen, Rand = Ruhezone) */
+    .card .marker { position: absolute; left: 11%; top: 11%; width: 78%; height: 78%; }
+    .card .marker svg { width: 100%; height: 100%; display: block; }
+
+    /* Rueckseite: Ziffernkranz + Studientext in der Mitte */
+    .card .num {
+      position: absolute; font-weight: 800; line-height: 1;
+      transform-origin: 50% 50%; font-size: 6.5mm;
+    }
+    .card .cardid {
+      position: absolute; left: 2mm; bottom: 1.5mm; font-size: 2.6mm; color: #777;
+    }
+    .card .textbox {
+      position: absolute; left: 13%; top: 13%; width: 74%; height: 74%;
+      border: 0.25mm solid #ccc; border-radius: 7mm; background: #fbfbf7;
+      padding: 2.5mm 3mm; box-sizing: border-box; overflow: hidden;
+    }
+    .card .author { font-weight: 800; margin-bottom: 1.2mm; }
+    .card .stimulus { white-space: pre-line; line-height: 1.32; }
+    .card .boxhint {
+      margin-top: 1.4mm; text-align: center; font-weight: 800;
+      color: #111;
+    }
+
+    @media print {
+      #controls, #info { display: none; }
+      body { background: #fff; }
+      .page { margin: 0; box-shadow: none; }
+      .pagelabel { display: none; }
+      @page { size: A4 portrait; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <label>von Marker-Nr.<input id="from" type="number" min="0" value="0"></label>
+    <label>bis Marker-Nr.<input id="to" type="number" min="0" value="19"></label>
+    <button id="gen">Erzeugen</button>
+    <button id="print" class="ghost">Drucken</button>
+    <a href="index.html">&larr; zur&uuml;ck zur App</a>
+  </div>
+  <div id="info">
+    <b>Duplex-Karten (7,5 &times; 7,5 cm), 6 pro A4-Seite.</b>
+    Vorderseite: nur der Marker. R&uuml;ckseite: Antwortziffern 1&ndash;7
+    (die nach oben gedrehte Ziffer ist die Antwort; zwischen 7 und 1 ist eine
+    L&uuml;cke) und in der Mitte der Studientext &mdash; je nach Marker-Nummer
+    eine der 4 Gruppenversionen (Autor wechselt, Marker-Nr. % 4).
+    <b>Drucken:</b> Beidseitig, <i>an langer Kante spiegeln</i>, Gr&ouml;&szlig;e
+    100&nbsp;% (keine Anpassung), R&auml;nder: Keine. Danach an den gestrichelten
+    Linien ausschneiden.
+    <span id="fitinfo"></span>
+  </div>
+  <div id="sheet"></div>
+
+  <script src="lib/cv.js"></script>
+  <script src="lib/aruco.js"></script>
+  <script src="lib/dict_wuz16.js"></script>
+  <script src="markers.js"></script>
+</body>
+</html>

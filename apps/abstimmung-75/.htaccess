@@ -1,0 +1,8 @@
+# Dateien immer frisch pruefen (offline uebernimmt der Service Worker). Ohne diese Regel
+# wuerde die 7-Tage-Regel der Hauptseite Updates trotz erhoehter CACHE_VERSION verzoegern.
+<IfModule mod_expires.c>
+  ExpiresActive Off
+</IfModule>
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-cache"
+</IfModule>

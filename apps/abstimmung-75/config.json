@@ -1,0 +1,127 @@
+{
+  "settings": {
+    "stable_frames": 8,
+    "process_width": 1280,
+    "marker_dictionary": "WUZ_16h5_20",
+    "max_hamming_distance": 2
+  },
+  "orientation_map": {
+    "0": "1",
+    "45": "2",
+    "90": "3",
+    "135": "4",
+    "180": "5",
+    "225": "6",
+    "270": "7",
+    "315": "E"
+  },
+  "participants": [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+  ],
+  "questions": [
+    {
+      "id": "Q2_1",
+      "text": "Ich bin gerade erstaunt.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      }
+    },
+    {
+      "id": "Q2_2",
+      "text": "Das war unerwartet für mich.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      }
+    },
+    {
+      "id": "Q2_3",
+      "text": "Ich frage mich, wie das möglich war.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      }
+    },
+    {
+      "id": "Q2_4",
+      "text": "Ich bin neugierig und offen.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      }
+    },
+    {
+      "id": "Q3_1a",
+      "text": "Die Untersuchung ist überzeugend gemacht.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      }
+    },
+    {
+      "id": "Q3_1b",
+      "text": "Die Schlussfolgerung passt zu den Ergebnissen.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      }
+    },
+    {
+      "id": "Q3_2a",
+      "text": "Ich glaube, diese Person ist gut in Naturwissenschaften.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      }
+    },
+    {
+      "id": "Q3_2b",
+      "text": "Diese Person könnte später gute Forschung machen.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      }
+    }
+  ]
+}

@@ -50,4 +50,172 @@
   </url>
   <url><loc>https://www.wissenschaftundzauberkunst.de/apps/ideomotor/</loc><lastmod>2026-09-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
   <url><loc>https://www.wissenschaftundzauberkunst.de/apps/masken-tarot/</loc><lastmod>2026-09-05</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/"/>
+    <lastmod>2026-09-23</lastmod><changefreq>monthly</changefreq><priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/"/>
+    <lastmod>2026-09-23</lastmod><changefreq>monthly</changefreq><priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/vom-nutzen-der-dinge/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/vom-nutzen-der-dinge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/on-the-use-of-things/"/>
+    <lastmod>2025-05-16</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/on-the-use-of-things/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/vom-nutzen-der-dinge/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/on-the-use-of-things/"/>
+    <lastmod>2025-05-16</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/wissenschaft-und-zauberkunst/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/wissenschaft-und-zauberkunst/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/science-and-magic/"/>
+    <lastmod>2024-06-04</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/science-and-magic/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/wissenschaft-und-zauberkunst/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/science-and-magic/"/>
+    <lastmod>2024-06-04</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/der-winter-und-seine-folgen/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/der-winter-und-seine-folgen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/winter-and-its-consequences/"/>
+    <lastmod>2022-02-01</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/winter-and-its-consequences/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/der-winter-und-seine-folgen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/winter-and-its-consequences/"/>
+    <lastmod>2022-02-01</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/der-stand-der-dinge-zum-thema-solarladen-vor-dem-advent/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/der-stand-der-dinge-zum-thema-solarladen-vor-dem-advent/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/solar-charging-status-before-advent/"/>
+    <lastmod>2021-11-11</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/solar-charging-status-before-advent/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/der-stand-der-dinge-zum-thema-solarladen-vor-dem-advent/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/solar-charging-status-before-advent/"/>
+    <lastmod>2021-11-11</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/hexapawn-pocketmod/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/hexapawn-pocketmod/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/hexapawn-pocketmod/"/>
+    <lastmod>2023-11-19</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/hexapawn-pocketmod/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/hexapawn-pocketmod/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/hexapawn-pocketmod/"/>
+    <lastmod>2023-11-19</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/challenges-und-freiheit/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/challenges-und-freiheit/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/challenges-and-freedom/"/>
+    <lastmod>2021-05-12</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/challenges-and-freedom/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/challenges-und-freiheit/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/challenges-and-freedom/"/>
+    <lastmod>2021-05-12</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/mehr-sonne-und-mehr-bildschirmzeit/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/mehr-sonne-und-mehr-bildschirmzeit/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/more-sun-more-screen-time/"/>
+    <lastmod>2021-02-22</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/more-sun-more-screen-time/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/mehr-sonne-und-mehr-bildschirmzeit/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/more-sun-more-screen-time/"/>
+    <lastmod>2021-02-22</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/und-dann-ging-die-sonne-auf/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/und-dann-ging-die-sonne-auf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/and-then-the-sun-came-out/"/>
+    <lastmod>2021-02-12</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/and-then-the-sun-came-out/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/und-dann-ging-die-sonne-auf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/and-then-the-sun-came-out/"/>
+    <lastmod>2021-02-12</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/eine-woche-spater-kein-advent-mehr/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/eine-woche-spater-kein-advent-mehr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/one-week-later-no-more-advent/"/>
+    <lastmod>2021-02-10</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/one-week-later-no-more-advent/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/eine-woche-spater-kein-advent-mehr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/one-week-later-no-more-advent/"/>
+    <lastmod>2021-02-10</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/nach-dem-ersten-wochenende/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/nach-dem-ersten-wochenende/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/after-the-first-weekend/"/>
+    <lastmod>2021-02-10</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/after-the-first-weekend/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/nach-dem-ersten-wochenende/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/after-the-first-weekend/"/>
+    <lastmod>2021-02-10</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/tag-2-die-effizienz/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/tag-2-die-effizienz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/day-2-efficiency/"/>
+    <lastmod>2021-02-10</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/day-2-efficiency/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/tag-2-die-effizienz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/day-2-efficiency/"/>
+    <lastmod>2021-02-10</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/tag-1/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/tag-1/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/day-1/"/>
+    <lastmod>2021-02-10</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/day-1/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/tag-1/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/day-1/"/>
+    <lastmod>2021-02-10</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/blog/der-smartphone-challenge-der-anfang/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/der-smartphone-challenge-der-anfang/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/the-smartphone-challenge-a-beginning/"/>
+    <lastmod>2021-02-01</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.wissenschaftundzauberkunst.de/en/blog/the-smartphone-challenge-a-beginning/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.wissenschaftundzauberkunst.de/blog/der-smartphone-challenge-der-anfang/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.wissenschaftundzauberkunst.de/en/blog/the-smartphone-challenge-a-beginning/"/>
+    <lastmod>2021-02-01</lastmod><changefreq>monthly</changefreq><priority>0.4</priority>
+  </url>
 </urlset>

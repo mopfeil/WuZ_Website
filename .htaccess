@@ -16,6 +16,8 @@ ErrorDocument 404 /404.html
   RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
   RewriteRule ^werkzeuge/?$ https://www.wissenschaftundzauberkunst.de/en/tools/ [L,R=301]
   RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
+  RewriteRule ^blog/?$ https://www.wissenschaftundzauberkunst.de/en/blog/ [L,R=301]
+  RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
   RewriteRule ^shop/?$ https://www.wissenschaftundzauberkunst.de/en/shop/ [L,R=301]
   RewriteCond %{HTTP_HOST} ^(www\.)?wissenschaftundzauberkunst\.com$ [NC]
   RewriteRule ^impressum/?$ https://www.wissenschaftundzauberkunst.de/en/imprint/ [L,R=301]

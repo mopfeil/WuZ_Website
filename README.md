@@ -9,6 +9,8 @@ Kein Build-Schritt, keine Abhängigkeiten, keine externen Dienste: reines HTML, 
 index.html              Landing Page (Idee, Formate, Person, Werkzeuge, FAQ, Kontakt)
 hintergrund/            Vertiefung: Blog-Reihe "Geschichten von der Natur der Dinge", Script, Studien
 werkzeuge/              Übersicht der Web-Apps
+blog/                   "Der Pfeil Blog": Archiv des alten Blogs derpfeil.me (13 Beiträge, deutsch);
+                        englische Übersetzungen unter en/blog/ (andere Slugs, hreflang-verknüpft)
 en/                     Englische Fassung (britisches Englisch): en/, en/background/, en/tools/,
                         en/shop/, en/imprint/, en/privacy/ – jede Seite verweist per hreflang und
                         Sprachumschalter (DE | EN im Kopf) auf ihr Gegenstück

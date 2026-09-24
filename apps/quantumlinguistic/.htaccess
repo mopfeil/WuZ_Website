@@ -1,0 +1,27 @@
+# Quantenlinguistik: Ordnerschutz.
+# JEDE Anfrage unterhalb dieses Ordners laeuft ueber gate.php. Ohne gueltige Anmeldung wird kein
+# Inhalt ausgeliefert; die Anwendungsdateien in private/ werden nur von gate.php gelesen.
+Options -Indexes
+DirectoryIndex gate.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Diese .htaccess ersetzt die Regeln der Hauptseite fuer diesen Ordner -> HTTPS hier erneut erzwingen
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  # alles ausser gate.php selbst durch das Gate
+  RewriteCond %{REQUEST_URI} !^/apps/quantumlinguistic/gate\.php$
+  RewriteRule ^ /apps/quantumlinguistic/gate.php [L]
+</IfModule>
+
+# Zusaetzliche Sicherung, falls mod_rewrite ausfaellt: Nutzdaten und Konfiguration nie direkt ausliefern
+<FilesMatch "^(config\.php|keyring\.json|\.htpasswd)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_expires.c>
+  ExpiresActive Off
+</IfModule>
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow, noarchive"
+</IfModule>

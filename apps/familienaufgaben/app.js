@@ -10,7 +10,6 @@ const PROFILE = new URLSearchParams(location.search).get('profile') || ''; // nu
 const DB_NAME = 'familienaufgaben' + (PROFILE ? '-' + PROFILE : '');
 const API_URL = 'api/sync.php';
 const ADMIN_MINUTES = 5;      // so lange bleibt der Elternmodus nach PIN-Eingabe offen
-const EXPIRE_DAYS = 3;        // verpasste wiederkehrende Termine verfallen so viele Tage nach Fristende
 const UPCOMING_DAYS = 7;
 const DONE_DAYS = 7;
 const SYNC_INTERVAL_MS = 30000;
@@ -336,7 +335,7 @@ const doneToday = (task) => Object.values(S.data.completions).filter((c) => c.do
 
 function collectOccurrences() {
   const t = today(), horizon = addDays(t, UPCOMING_DAYS);
-  const overdue = [], open = [], upcoming = [], always = [];
+  const open = [], upcoming = [], always = [];
   for (const task of live(S.data.tasks)) {
     const eligible = eligibleFor(task);
     if (!eligible.length) continue;
@@ -345,20 +344,19 @@ function collectOccurrences() {
     const once = task.repeat.freq === 'none';
     const dates = [];
     if (once) { if (task.date <= horizon) dates.push(task.date); }
-    else for (let d = maxStr(task.date, addDays(t, -(grace + EXPIRE_DAYS))); d <= horizon; d = addDays(d, 1)) if (isOccurrence(task, d)) dates.push(d);
+    else for (let d = maxStr(task.date, addDays(t, -grace)); d <= horizon; d = addDays(d, 1)) if (isOccurrence(task, d)) dates.push(d);
     let hasUpcoming = false;
     for (const d of dates) {
       const c = S.data.completions[task.id + '|' + d];
       if (c && c.done) continue;
       const occ = { task, date: d, deadline: addDays(d, grace), eligible };
       if (d > t) { if (!hasUpcoming) upcoming.push(occ); hasUpcoming = true; }
-      else if (occ.deadline < t) overdue.push(occ);
-      else open.push(occ);
+      else if (occ.deadline >= t) open.push(occ); // nach der Frist verfaellt der Termin einfach
     }
   }
   const byTitle = (a, b) => a.task.title.localeCompare(b.task.title, 'de');
   const byDeadline = (a, b) => (a.deadline + a.task.title).localeCompare(b.deadline + b.task.title);
-  return { overdue: overdue.sort(byDeadline), open: open.sort(byDeadline), always: always.sort(byTitle), upcoming: upcoming.sort((a, b) => (a.date + a.task.title).localeCompare(b.date + b.task.title)) };
+  return { open: open.sort(byDeadline), always: always.sort(byTitle), upcoming: upcoming.sort((a, b) => (a.date + a.task.title).localeCompare(b.date + b.task.title)) };
 }
 
 function repeatLabel(task) {
@@ -381,7 +379,7 @@ function balanceOf(memberId) {
 
 function ledgerOf(memberId) {
   const rows = [];
-  for (const c of Object.values(S.data.completions)) if (c.done && c.memberId === memberId) rows.push({ ts: c.doneAt, title: c.title, amount: c.reward || 0, late: c.late });
+  for (const c of Object.values(S.data.completions)) if (c.done && c.memberId === memberId) rows.push({ ts: c.doneAt, title: c.title, amount: c.reward || 0, late: c.late, c });
   for (const x of live(S.data.transactions)) if (x.memberId === memberId) rows.push({ ts: x.ts, title: x.note, amount: x.amount, tx: x });
   return rows.sort((a, b) => b.ts - a.ts);
 }
@@ -408,13 +406,21 @@ async function completeOcc(occ, slipEl) {
   save();
 }
 
-async function undoCompletion(c) {
-  const own = c.doneBy === S.me && dateStr(new Date(c.doneAt)) === today();
-  if (!own && !(await requireAdmin('Ältere oder fremde Einträge kann nur ein Elternteil zurücknehmen.'))) return;
+// Aus der Erledigt-Liste ausblenden – die Belohnung bleibt gutgeschrieben.
+function hideCompletion(c) {
+  c.hidden = true;
+  touch(c);
+  save();
+}
+
+// Erledigung zurücknehmen (nur Eltern, im Sparbuch): Belohnung wird wieder abgezogen.
+async function revokeCompletion(c) {
+  if (!(await requireAdmin('Eine Gutschrift nimmt nur ein Elternteil zurück.'))) return;
+  if (!confirm(`„${c.title}“ zurücknehmen? ${euro(c.reward)} werden wieder abgezogen.`)) return;
   c.done = false;
   touch(c);
   save();
-  toast('Zurückgenommen – die Belohnung wurde wieder abgezogen.');
+  toast('Zurückgenommen – die Belohnung wurde abgezogen.');
 }
 
 // ---------------------------------------------------------------- Dialoge
@@ -517,7 +523,7 @@ function taskForm(existing) {
         !always && h('div', { class: 'row' },
           field(once ? 'Datum' : 'Erster Termin', h('input', { type: 'date', value: d.date, required: true, oninput: (e) => { if (e.target.value) { d.date = e.target.value; if (deadline < d.date) { deadline = d.date; draw(); } } } })),
           once
-            ? field('Frist bis', h('input', { type: 'date', value: deadline, min: d.date, oninput: (e) => { if (e.target.value) deadline = e.target.value; } }))
+            ? field('Frist bis', h('input', { type: 'date', value: deadline, oninput: (e) => { if (e.target.value) deadline = e.target.value; } }))
             : field('Frist', h('select', { onchange: (e) => { d.graceDays = Number(e.target.value); } },
               [0, 1, 2, 3, 5, 7, 14].map((n) => h('option', { value: String(n), selected: (d.graceDays || 0) === n }, n === 0 ? 'am selben Tag' : n === 1 ? 'bis zum Folgetag' : `${n} Tage Zeit`))))),
         kind === 'repeat' && h('div', { class: 'field' }, h('span', { class: 'field-label' }, 'Wiederholung'),
@@ -534,7 +540,7 @@ function taskForm(existing) {
         kind === 'repeat' && h('div', { class: 'row' },
           field('Abstand', h('select', { onchange: (e) => { d.repeat.interval = Number(e.target.value); } },
             [1, 2, 3, 4, 6].map((n) => h('option', { value: String(n), selected: (d.repeat.interval || 1) === n }, n === 1 ? `jede(n) ${unit[0]}` : `alle ${n} ${unit[1]}`)))),
-          field('Endet am (optional)', h('input', { type: 'date', value: d.endDate || '', min: d.date, oninput: (e) => { d.endDate = e.target.value || null; } }))),
+          field('Endet am (optional)', h('input', { type: 'date', value: d.endDate || '', oninput: (e) => { d.endDate = e.target.value || null; } }))),
         h('button', { class: 'btn primary', type: 'submit' }, existing ? 'Änderungen speichern' : 'Aufgabe anlegen'),
         existing && h('button', { class: 'btn danger', type: 'button', onclick: () => {
           if (!confirm(`„${existing.title}“ wirklich löschen? Bereits verdiente Belohnungen bleiben erhalten.`)) return;
@@ -561,8 +567,9 @@ function taskForm(existing) {
         d.repeat = { freq: 'always', interval: 1, weekdays: [] };
         d.graceDays = 0;
         d.endDate = null;
-      } else if (d.repeat.freq === 'weekly') {
-        d.repeat.weekdays = weekdaysOf(d);
+      } else {
+        if (d.endDate && d.endDate < d.date) d.endDate = null;
+        if (d.repeat.freq === 'weekly') d.repeat.weekdays = weekdaysOf(d);
       }
       S.data.tasks[d.id] = touch(d);
       save();
@@ -643,11 +650,15 @@ function ledgerSheet(m) {
             h('span', { class: 'ledger-date' }, fmtStamp(r.ts)),
             h('span', { class: 'ledger-title' }, r.title, r.late && h('em', null, ' · verspätet')),
             h('span', { class: 'ledger-amount ' + (r.amount < 0 ? 'neg' : 'pos') }, (r.amount > 0 ? '+' : '') + euro(r.amount)),
-            r.tx && isAdmin() && h('button', { class: 'icon-btn tiny', type: 'button', 'aria-label': 'Buchung löschen', onclick: () => {
-              if (!confirm('Diese Buchung löschen?')) return;
-              r.tx.deleted = true;
-              touch(r.tx);
-              save();
+            isAdmin() && h('button', { class: 'icon-btn tiny', type: 'button', 'aria-label': r.tx ? 'Buchung löschen' : 'Gutschrift zurücknehmen', onclick: async () => {
+              if (r.tx) {
+                if (!confirm('Diese Buchung löschen?')) return;
+                r.tx.deleted = true;
+                touch(r.tx);
+                save();
+              } else {
+                await revokeCompletion(r.c);
+              }
               draw();
             } }, icon('close')))))
           : h('p', { class: 'empty' }, 'Noch keine Einträge. Die erste erledigte Aufgabe landet hier.'));
@@ -718,7 +729,7 @@ function slip(occ, state) {
       h('h3', null, task.title),
       task.description && h('p', { class: 'slip-desc' }, task.description),
       h('div', { class: 'slip-meta' },
-        h('span', { class: 'due' }, occ.always ? (count ? `heute ${count}× erledigt` : 'jederzeit') : state === 'upcoming' ? 'ab ' + fmtDay(occ.date) : state === 'overdue' ? 'Frist war ' + fmtDay(occ.deadline) : 'bis ' + fmtDay(occ.deadline)),
+        h('span', { class: 'due' }, occ.always ? (count ? `heute ${count}× erledigt` : 'jederzeit') : state === 'upcoming' ? 'ab ' + fmtDay(occ.date) : 'bis ' + fmtDay(occ.deadline)),
         task.repeat.freq !== 'none' && h('span', { class: 'rep' }, icon('repeat'), repeatLabel(task)))),
     h('div', { class: 'slip-stub' },
       h('span', { class: 'reward' }, euro(task.reward)),
@@ -736,7 +747,7 @@ function doneSlip(c) {
       h('div', { class: 'slip-meta' }, h('span', null, 'erledigt ' + fmtDay(dateStr(new Date(c.doneAt)))), c.late && h('span', { class: 'late' }, 'verspätet'))),
     h('div', { class: 'slip-stub' },
       h('span', { class: 'reward' }, '+' + euro(c.reward)),
-      h('button', { class: 'check undo', type: 'button', 'aria-label': 'Zurücknehmen', onclick: () => undoCompletion(c) }, icon('undo'))));
+      h('button', { class: 'check undo', type: 'button', 'aria-label': 'Aus der Liste entfernen', onclick: () => hideCompletion(c) }, icon('close'))));
 }
 
 const sectionHead = (title, count, cls = '') => h('h2', { class: 'section-head ' + cls }, h('span', null, title), count != null && h('span', { class: 'count' }, count));
@@ -748,19 +759,18 @@ function viewTasks() {
   const filterId = ui.filter === 'me' ? S.me : ui.filter === 'all' ? null : ui.filter;
   const match = (id) => !filterId || id === filterId;
 
-  const { overdue, open, always, upcoming } = collectOccurrences();
+  const { open, always, upcoming } = collectOccurrences();
   const mine = (o) => !filterId || o.eligible.includes(filterId);
   const since = Date.now() - DONE_DAYS * 864e5;
-  const done = Object.values(S.data.completions).filter((c) => c.done && c.doneAt >= since && match(c.memberId)).sort((a, b) => b.doneAt - a.doneAt);
-  const lists = { overdue: overdue.filter(mine), open: open.filter(mine), always: always.filter(mine), upcoming: upcoming.filter(mine) };
-  const nothing = !lists.overdue.length && !lists.open.length;
+  const done = Object.values(S.data.completions).filter((c) => c.done && !c.hidden && c.doneAt >= since && match(c.memberId)).sort((a, b) => b.doneAt - a.doneAt);
+  const lists = { open: open.filter(mine), always: always.filter(mine), upcoming: upcoming.filter(mine) };
+  const nothing = !lists.open.length;
 
   return [
     h('nav', { class: 'filters', 'aria-label': 'Personenfilter' },
       me() && h('button', { class: 'chip' + (ui.filter === 'me' ? ' on' : ''), type: 'button', onclick: () => { ui.filter = 'me'; render(); } }, 'Ich'),
       h('button', { class: 'chip' + (ui.filter === 'all' ? ' on' : ''), type: 'button', onclick: () => { ui.filter = 'all'; render(); } }, 'Alle'),
       members.filter((m) => m.id !== S.me).map((m) => memberChip(m, ui.filter === m.id, () => { ui.filter = m.id; render(); }))),
-    lists.overdue.length > 0 && [sectionHead('Überfällig', lists.overdue.length, 'warn'), lists.overdue.map((o) => slip(o, 'overdue'))],
     sectionHead('Jetzt dran', lists.open.length || null),
     lists.open.map((o) => slip(o, 'open')),
     nothing && h('div', { class: 'empty big' }, h('span', { class: 'empty-mark' }, '✓'),
@@ -802,10 +812,11 @@ function viewManage() {
     h('button', { class: 'btn primary add', type: 'button', onclick: () => (members.length ? taskForm() : toast('Bitte zuerst ein Familienmitglied anlegen.')) }, icon('plus'), 'Neue Aufgabe'),
     h('ul', { class: 'manage-list' }, tasks.map((t) => {
       const who = assignedTo(t).map(member);
-      const ended = isAlways(t) ? false : t.repeat.freq === 'none' ? S.data.completions[t.id + '|' + t.date]?.done : t.endDate && t.endDate < today();
+      const once = t.repeat.freq === 'none';
+      const ended = isAlways(t) ? '' : once ? (S.data.completions[t.id + '|' + t.date]?.done ? 'abgeschlossen' : addDays(t.date, t.graceDays || 0) < today() ? 'verfallen' : '') : (t.endDate && t.endDate < today() ? 'abgeschlossen' : '');
       return h('li', null, h('button', { type: 'button', class: ended ? 'ended' : '', onclick: () => taskForm(t) },
         h('span', { class: 'manage-main' }, h('strong', null, t.title),
-          h('small', null, (who.length ? who.map((m) => m.emoji + ' ' + m.name).join(', ') : 'für alle') + ' · ' + (t.repeat.freq === 'none' ? fmtDay(t.date) : repeatLabel(t)) + (ended ? ' · abgeschlossen' : ''))),
+          h('small', null, (who.length ? who.map((m) => m.emoji + ' ' + m.name).join(', ') : 'für alle') + ' · ' + (t.repeat.freq === 'none' ? fmtDay(t.date) : repeatLabel(t)) + (ended ? ' · ' + ended : ''))),
         h('span', { class: 'reward' }, euro(t.reward)), icon('edit', 'chev')));
     })),
     sectionHead('Familie', members.length || null),
@@ -966,7 +977,7 @@ function render() {
   const root = $('#app');
   if (!S || !S.family) return;
   const admin = isAdmin();
-  const myOpen = (() => { const o = collectOccurrences(); return [...o.overdue, ...o.open].filter((x) => x.eligible.includes(S.me)).length; })();
+  const myOpen = (() => { const o = collectOccurrences(); return o.open.filter((x) => x.eligible.includes(S.me)).length; })();
   let main = $('#view');
   if (!main) {
     root.replaceChildren(h('header', { class: 'topbar', id: 'topbar' }), h('main', { id: 'view' }), h('nav', { class: 'tabbar', id: 'tabbar', 'aria-label': 'Hauptnavigation' }));

@@ -2,7 +2,7 @@
 // Strategie: Netz zuerst (damit Updates sofort ankommen), nach 3 s oder ohne Netz aus dem Cache.
 // Die Sync-Schnittstelle (api/) wird nie gecacht.
 
-const CACHE = 'familienaufgaben-v2';
+const CACHE = 'familienaufgaben-v3';
 const SHELL = [
   './',
   'index.html',

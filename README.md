@@ -16,6 +16,9 @@ en/                     Englische Fassung (britisches Englisch): en/, en/backgro
                         Sprachumschalter (DE | EN im Kopf) auf ihr Gegenstück
 apps/ideomotor/         Ideomotor-Pendel (PWA, Kopie aus Code/Ideomotor_Pendel)
 apps/masken-tarot/      Die Masken des Tarot (Kopie aus Code/Kartenwahl, ohne Google Fonts)
+apps/wuerfel/           Würfel (PWA, eigenständig entwickelt direkt in diesem Repo, kein Code/-Master):
+                        Sechserwürfel mit vorab abschaltbaren Augenzahlen für Kunststücke/Experimente
+                        wie NIM oder Schere-Stein-Papier
 apps/abstimmung/        ArUco-Abstimmung (PWA, Kopie aus Code/webapp; 250er-Markerset, Antworten A–H)
 apps/abstimmung-75/     ArUco-Abstimmung 75 (PWA, Kopie aus Code/WebApp75; 7,5-cm-Karten, 7er-Skala,
                         Querformat = Ergebnisanzeige). Beide bisher nicht auf der Werkzeuge-Seite verlinkt.

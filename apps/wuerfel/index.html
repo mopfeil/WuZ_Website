@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Würfel">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Würfel · Wissenschaft und Zauberkunst</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+  <header id="bar">
+    <a class="icon" href="/werkzeuge/" aria-label="Zurück zu Werkzeuge">&#8592;</a>
+    <h1>Würfel</h1>
+    <button id="btn-reset" class="icon" type="button" aria-label="Alle Augenzahlen aktivieren" title="Alle Augenzahlen aktivieren">&#8635;</button>
+  </header>
+
+  <p class="lead">Augenzahlen antippen, um sie ein- oder auszuschalten. Gewürfelt wird nur unter den
+    aktivierten Zahlen &ndash; kein Nachwürfeln mehr nötig, wenn eine Zahl gerade nicht gebraucht wird.</p>
+
+  <div id="select-grid" role="group" aria-label="Erlaubte Augenzahlen">
+    <button type="button" class="face-btn" data-face="1"><span class="pip">&#9856;</span><span class="num">1</span></button>
+    <button type="button" class="face-btn" data-face="2"><span class="pip">&#9857;</span><span class="num">2</span></button>
+    <button type="button" class="face-btn" data-face="3"><span class="pip">&#9858;</span><span class="num">3</span></button>
+    <button type="button" class="face-btn" data-face="4"><span class="pip">&#9859;</span><span class="num">4</span></button>
+    <button type="button" class="face-btn" data-face="5"><span class="pip">&#9860;</span><span class="num">5</span></button>
+    <button type="button" class="face-btn" data-face="6"><span class="pip">&#9861;</span><span class="num">6</span></button>
+  </div>
+
+  <div id="presets" role="group" aria-label="Schnellauswahl">
+    <button type="button" data-preset="all">Alle</button>
+    <button type="button" data-preset="none">Keine</button>
+    <button type="button" data-preset="low">1&ndash;3</button>
+    <button type="button" data-preset="high">4&ndash;6</button>
+    <button type="button" data-preset="even">Gerade</button>
+    <button type="button" data-preset="odd">Ungerade</button>
+  </div>
+
+  <div id="stage">
+    <div id="result-face" class="pip">&#9856;</div>
+    <p id="result-hint" class="hint">Bereit</p>
+  </div>
+
+  <button type="button" id="btn-roll" class="roll-btn">Würfeln</button>
+
+  <div id="history-wrap">
+    <span class="history-lab">Verlauf</span>
+    <div id="history" aria-label="Letzte Ergebnisse"></div>
+  </div>
+
+  <p id="live" class="sr-only" role="status" aria-live="polite"></p>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

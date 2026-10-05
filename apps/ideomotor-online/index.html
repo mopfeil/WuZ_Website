@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pendel-Duell">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ideomotor-Pendel online</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Spielbildschirm                                                     -->
+<!-- ------------------------------------------------------------------ -->
+<div id="app">
+  <header id="bar">
+    <span id="room-chip" class="chip-code">----</span>
+    <div id="task">Bereit</div>
+    <div id="clock">&ndash;</div>
+  </header>
+
+  <div id="stage"><canvas id="cv"></canvas></div>
+
+  <div id="reso">
+    <div class="reso-head">
+      <span class="reso-lab" id="r-lab">Ausschlag &divide; Handbewegung</span>
+      <span class="reso-val" id="r-gain">&ndash;</span>
+    </div>
+    <div class="reso-bar"><i id="r-fill"></i></div>
+    <div class="reso-foot">
+      <span id="r-scale">0</span>
+      <span id="r-note">&ndash;</span>
+      <span id="r-max">max. &times;30</span>
+    </div>
+  </div>
+
+  <div id="chips">
+    <div class="chip"><span class="k">Punkte</span><span class="v" id="m-pts">&ndash;</span></div>
+    <div class="chip"><span class="k">Bewegung</span><span class="v" id="m-trans">&ndash;</span></div>
+    <div class="chip"><span class="k">Ausschlag</span><span class="v" id="m-amp">&ndash;</span></div>
+    <div class="chip"><span class="k">Platz</span><span class="v" id="m-rank">&ndash;</span></div>
+  </div>
+
+  <div id="mini"></div>
+
+  <div id="ctrl">
+    <button id="btn-recal" class="ghost">Neu kalibrieren</button>
+    <button id="btn-leave" class="ghost">Raum verlassen</button>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Start: beitreten oder Raum eroeffnen                                -->
+<!-- ------------------------------------------------------------------ -->
+<div id="start" class="overlay">
+  <div class="sheet">
+    <h1>Ideomotor-Pendel <span class="tag">online</span></h1>
+    <p class="lead">Wer bringt die Scheibe am weitesten zum Schwingen &ndash; und bewegt
+      sich dabei am wenigsten? Alle spielen gleichzeitig auf dem eigenen Telefon,
+      die Rangliste l&auml;uft live mit.</p>
+
+    <div class="card">
+      <h2>Mitspielen</h2>
+      <label class="fld"><span>Raumcode</span>
+        <input id="in-code" class="code" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD"></label>
+      <label class="fld"><span>Dein Name</span>
+        <input id="in-nick" maxlength="20" autocomplete="nickname" spellcheck="false" placeholder="z.&nbsp;B. Anna"></label>
+      <p id="join-msg" class="msg"></p>
+      <button id="btn-join" class="primary big">Beitreten</button>
+    </div>
+
+    <details class="card" id="host-card">
+      <summary><h2>Raum er&ouml;ffnen (Spielleitung)</h2></summary>
+      <p class="note">Die Spielleitung sieht die Anzeigetafel mit Raumcode und Rangliste &ndash;
+        ideal f&uuml;r den Beamer. Mitspielen geht zus&auml;tzlich auf dem eigenen Telefon.</p>
+      <label class="fld"><span>Titel (optional)</span>
+        <input id="in-title" maxlength="60" placeholder="z.&nbsp;B. Vorlesung 14. Oktober"></label>
+      <div id="host-settings"></div>
+      <p id="host-msg" class="msg"></p>
+      <button id="btn-create" class="primary big">Raum er&ouml;ffnen</button>
+    </details>
+
+    <p class="note">Die Einzelfassung zum Messen ohne Wettbewerb gibt es unter
+      <a href="../ideomotor/">Ideomotor-Pendel</a>.</p>
+  </div>
+</div>
+
+<!-- Vorlage fuer die Rundeneinstellungen (Start und Anzeigetafel) -->
+<template id="tpl-settings">
+  <label class="fld"><span>Rundendauer <b data-v="duration"></b></span>
+    <input type="range" data-s="duration" min="20" max="180" step="5"></label>
+  <label class="fld"><span>G&uuml;te <i>Q</i> <b data-v="Q"></b>
+      <em data-v="Qnote"></em></span>
+    <input type="range" data-s="Q" min="10" max="60" step="1"></label>
+  <label class="fld"><span>Zielmarke <b data-v="targetFrac"></b>
+      <em>Erst wer sie einmal erreicht, bekommt die volle Punktzahl.</em></span>
+    <input type="range" data-s="targetFrac" min="0.2" max="0.9" step="0.05"></label>
+</template>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Sensorfreigabe                                                      -->
+<!-- ------------------------------------------------------------------ -->
+<div id="intro" class="overlay hidden">
+  <div class="sheet">
+    <h1>Hallo <span id="intro-nick"></span></h1>
+    <ol class="steps">
+      <li>Telefon <b>waagerecht</b> auf der flachen Hand halten, Display nach oben.</li>
+      <li>Sensoren freigeben und <b>kalibrieren</b> (2&nbsp;s ruhig halten).</li>
+      <li>Bis zum Start frei &uuml;ben. Wenn die Runde l&auml;uft, z&auml;hlt jede Bewegung.</li>
+      <li>Ziel: die Scheibe <b>weit</b> ausschlagen lassen &ndash; mit <b>m&ouml;glichst
+        wenig</b> echter Bewegung von Hand und Telefon.</li>
+    </ol>
+    <p id="intro-status" class="msg"></p>
+    <button id="btn-enable" class="primary big">Sensoren freigeben</button>
+    <button id="btn-nosensor" class="ghost">Ohne Sensor (Finger&nbsp;/&nbsp;Maus, nur zum Ausprobieren)</button>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Kalibrierung                                                        -->
+<!-- ------------------------------------------------------------------ -->
+<div id="calib" class="overlay hidden">
+  <div class="sheet center">
+    <h2>Kalibrierung</h2>
+    <div id="calib-ring">
+      <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52"/><circle id="calib-arc" cx="60" cy="60" r="52"/></svg>
+      <div id="calib-num">2.0</div>
+    </div>
+    <p id="calib-hint">Telefon flach und ruhig halten &hellip;</p>
+    <button id="btn-calib-cancel" class="ghost">Abbrechen</button>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Rundenergebnis (Telefon)                                            -->
+<!-- ------------------------------------------------------------------ -->
+<div id="result" class="overlay hidden">
+  <div class="sheet">
+    <h2 id="res-title">Runde beendet</h2>
+    <p id="res-lead" class="lead"></p>
+    <table id="res-tab"></table>
+    <p id="res-interp" class="note"></p>
+    <div class="row">
+      <button id="btn-res-close" class="primary">Weiter &uuml;ben</button>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Anzeigetafel (Beamer / Spielleitung)                                -->
+<!-- ------------------------------------------------------------------ -->
+<div id="board" class="hidden">
+  <div class="b-wrap">
+    <header class="b-head">
+      <div>
+        <div class="b-title" id="b-title">Ideomotor-Pendel</div>
+        <div class="b-join">Mitspielen: <b id="b-url"></b></div>
+      </div>
+      <div class="b-right">
+        <div class="b-code"><span>Raumcode</span><b id="b-code">----</b></div>
+        <div id="b-qr" title="Antippen: QR-Code gro&szlig;"></div>
+      </div>
+    </header>
+
+    <div class="b-status">
+      <div id="b-phase">Warten auf Mitspielende</div>
+      <div id="b-clock"></div>
+    </div>
+    <div class="b-bar"><i id="b-fill"></i></div>
+
+    <div id="b-host" class="hidden">
+      <div class="row">
+        <button id="b-start" class="primary">Runde starten</button>
+        <button id="b-stop" class="danger hidden">Runde beenden</button>
+        <button id="b-set-toggle" class="ghost">Einstellungen</button>
+        <button id="b-csv" class="ghost">Ergebnisse als CSV</button>
+      </div>
+      <div id="b-settings" class="card hidden"></div>
+    </div>
+
+    <table id="b-tab"></table>
+    <p class="note" id="b-foot"></p>
+    <p class="note">Punkte = 1000 &middot; (Wirkungsgrad &divide; <i>Q</i>) &middot; erreichter Anteil der Zielmarke.
+      Wirkungsgrad = mittlerer Ausschlag &divide; mittlere Bewegung &uuml;ber die ganze Runde;
+      mehr als <i>Q</i> ist physikalisch nicht m&ouml;glich.</p>
+  </div>
+</div>
+
+<!-- Daten-Ausgabe (Kopieren, falls Download nicht geht) ----------------->
+<div id="dump" class="overlay hidden">
+  <div class="sheet">
+    <h2>Daten</h2>
+    <p class="note">Falls der Download nicht funktioniert: markieren und kopieren.</p>
+    <textarea id="dump-txt" readonly></textarea>
+    <div class="row">
+      <button id="btn-dump-dl" class="primary">Datei speichern</button>
+      <button id="btn-dump-close" class="ghost">Schlie&szlig;en</button>
+    </div>
+  </div>
+</div>
+
+<script src="lib/qrcode.js"></script>
+<script src="physik.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

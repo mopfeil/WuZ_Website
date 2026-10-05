@@ -1,0 +1,9 @@
+# Ideomotor online: Dateien immer frisch pruefen (kein Service Worker, die App braucht ohnehin Netz).
+# Ohne diese Regel wuerden app.js/style.css durch die 7-Tage-Regel der Hauptseite Updates verzoegern.
+<IfModule mod_expires.c>
+  ExpiresActive Off
+</IfModule>
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-cache"
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>

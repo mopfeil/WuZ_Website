@@ -5,3 +5,6 @@ Thumbs.db
 
 # Verschluesselte Sync-Daten der Familienaufgaben-App (entstehen auf dem Server)
 apps/familienaufgaben/api/data/
+
+# Raumdaten des Ideomotor-Pendels online (entstehen auf dem Server)
+apps/ideomotor-online/api/data/

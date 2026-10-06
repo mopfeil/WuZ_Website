@@ -22,6 +22,9 @@ apps/wuerfel/           Würfel (PWA, eigenständig entwickelt direkt in diesem 
 apps/abstimmung/        ArUco-Abstimmung (PWA, Kopie aus Code/webapp; 250er-Markerset, Antworten A–H)
 apps/abstimmung-75/     ArUco-Abstimmung 75 (PWA, Kopie aus Code/WebApp75; 7,5-cm-Karten, 7er-Skala,
                         Querformat = Ergebnisanzeige). Beide bisher nicht auf der Werkzeuge-Seite verlinkt.
+apps/quantumlinguistic-fusi/  Minimal-FuSi: quantenlinguistische Prüfschicht für LLMs (Build aus
+                        quantumlinguistic, `tools/build.py --app fusi`). Nirgends verlinkt, noindex;
+                        passwortgeschützt (gleiches Passwort wie apps/quantumlinguistic/), nur Chiffretext
 apps/familienaufgaben/  Private Familien-App (PWA, Kopie aus Code/Familienaufgaben). Nirgends verlinkt,
                         noindex; api/sync.php (PHP) legt verschlüsselte Sync-Daten in api/data/ ab
                         (per .gitignore ausgenommen, entsteht nur auf dem Server)

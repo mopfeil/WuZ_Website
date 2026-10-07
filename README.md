@@ -28,6 +28,9 @@ apps/quantumlinguistic-fusi/  Minimal-FuSi: quantenlinguistische Pr체fschicht f�
 apps/familienaufgaben/  Private Familien-App (PWA, Kopie aus Code/Familienaufgaben). Nirgends verlinkt,
                         noindex; api/sync.php (PHP) legt verschl체sselte Sync-Daten in api/data/ ab
                         (per .gitignore ausgenommen, entsteht nur auf dem Server)
+apps/kerntransformation/  Kerntransformation (PWA, Kopie aus /home/shared/core per `deploy.sh`): gef체hrte
+                        Core Transformation mit Spracheingabe; optionaler KI-Begleiter 체ber
+                        api/coach.php (braucht api/config.php auf dem Server, per .gitignore ausgenommen)
 shop/                   Shop-Stub (noch ohne Bestellfunktion)
 impressum/              Impressum
 datenschutz/            Datenschutzerkl채rung

@@ -1,0 +1,12 @@
+# Kerntransformation: Dateien immer frisch prüfen, damit der Service Worker nach einem Update
+# nicht die 7-Tage-gecachten Fassungen der Hauptseite erwischt.
+<IfModule mod_expires.c>
+  ExpiresActive Off
+</IfModule>
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-cache"
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+<FilesMatch "^(_make_icons\.py|README\.md)$">
+  Require all denied
+</FilesMatch>

@@ -1,0 +1,8 @@
+# Nur coach.php ist von außen erreichbar; Konfiguration, Leitfaden und Zähler nicht.
+Options -Indexes
+<FilesMatch "^(config\.php|config\.example\.php|guide\.md)$">
+  Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>

@@ -8,3 +8,7 @@ apps/familienaufgaben/api/data/
 
 # Raumdaten des Ideomotor-Pendels online (entstehen auf dem Server)
 apps/ideomotor-online/api/data/
+
+# Kerntransformation: Server-Konfiguration (API-Schluessel) und Tageszaehler (nur auf dem Server)
+apps/kerntransformation/api/config.php
+apps/kerntransformation/api/data/

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kerntransformation">
+  <meta name="theme-color" content="#0b1424">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Kerntransformation · Wissenschaft und Zauberkunst</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+  <header id="bar">
+    <a id="btn-home" class="icon" href="/werkzeuge/" aria-label="Zurück">&#8592;</a>
+    <h1 id="bar-title">Kerntransformation</h1>
+    <button id="btn-settings" class="icon" type="button" aria-label="Einstellungen" title="Einstellungen">&#9881;</button>
+  </header>
+
+  <!-- Startseite -->
+  <main id="home" class="screen">
+    <section class="hero">
+      <svg class="sigil" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="44"/><circle cx="50" cy="50" r="28"/><circle cx="50" cy="50" r="12"/>
+        <circle class="dot" cx="50" cy="50" r="4"/>
+      </svg>
+      <p class="lead">Ein geführter Weg von einem Verhalten, Gefühl oder Glaubenssatz zu seiner tiefsten positiven
+        Absicht – dem Kernzustand – und wieder zurück in deinen Alltag.</p>
+    </section>
+
+    <button id="btn-resume" class="primary" type="button" hidden></button>
+    <button id="btn-new" class="primary" type="button">Neue Kerntransformation</button>
+
+    <section id="archive-wrap" hidden>
+      <h2 class="sec">Frühere Sitzungen</h2>
+      <ul id="archive"></ul>
+    </section>
+
+    <details class="about">
+      <summary>Über die Methode</summary>
+      <p>Die Kerntransformation (Core Transformation) wurde von Connirae und Tamara Andreas entwickelt.
+        Sie geht davon aus, dass jeder Teil von uns – auch einer, der Ärger macht – eine positive Absicht
+        verfolgt. Fragt man ihn Schritt für Schritt, was er durch das Erreichte noch Wichtigeres will,
+        führt die Kette zu einem Zustand des Seins, der nichts mehr braucht: Frieden, Liebe, Ganzsein,
+        einfach Sein. Mit diesem Kernzustand geht man dann rückwärts durch die Kette, lässt den Teil
+        aufwachsen und nimmt ihn ganz in sich auf.</p>
+      <p>Die App führt durch alle fünfzehn Schritte, erkennt typische Stolpersteine (z.&nbsp;B. „weiß nicht“,
+        negativ formulierte Wünsche, Grübeln statt Spüren) und schlägt passende Nachfragen vor.
+        Antworten lassen sich sprechen oder tippen.</p>
+    </details>
+
+    <p class="fine">Die Übung ersetzt keine Psychotherapie. In einer akuten Krise: Telefonseelsorge
+      <a href="tel:08001110111">0800&nbsp;111&nbsp;0&nbsp;111</a> (kostenlos, rund um die Uhr) oder Notruf
+      <a href="tel:112">112</a>. Deine Antworten bleiben auf diesem Gerät, außer du schaltest den KI-Begleiter ein.</p>
+  </main>
+
+  <!-- Sitzung -->
+  <main id="session" class="screen" hidden>
+    <div id="progress" aria-hidden="true"><span></span></div>
+    <p id="phase-label" class="phase"></p>
+
+    <section id="card" aria-live="polite">
+      <p id="depth-badge" class="badge" hidden></p>
+      <h2 id="step-title"></h2>
+      <div id="say"></div>
+      <ol id="ladder" hidden></ol>
+      <p id="ask" class="ask"></p>
+      <button id="btn-speak" class="link" type="button">&#128264; Vorlesen</button>
+    </section>
+
+    <section id="hints" aria-live="assertive"></section>
+
+    <section id="input-area">
+      <div id="chips" class="chips" hidden></div>
+      <div id="text-wrap" hidden>
+        <textarea id="answer" rows="3" placeholder="Sprechen oder tippen …" autocomplete="off" autocapitalize="sentences"></textarea>
+        <p id="mic-status" class="mic-status"></p>
+      </div>
+      <div class="row" id="main-row">
+        <button id="btn-mic" class="mic" type="button" aria-label="Spracheingabe" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2z"/></svg>
+        </button>
+        <button id="btn-next" class="primary grow" type="button">Weiter</button>
+      </div>
+      <div id="choices" class="stack" hidden></div>
+      <div id="extras" class="stack" hidden></div>
+    </section>
+
+    <section id="summary-area" hidden>
+      <pre id="summary"></pre>
+      <div class="stack">
+        <button id="btn-share" class="secondary" type="button">Teilen / Kopieren</button>
+        <button id="btn-download" class="secondary" type="button">Als Textdatei sichern</button>
+        <button id="btn-finish" class="primary" type="button">Abschließen</button>
+      </div>
+    </section>
+
+    <footer id="session-foot">
+      <button id="btn-undo" class="foot" type="button">&#8630; Zurück</button>
+      <button id="btn-coach" class="foot" type="button" hidden>&#10067; Begleiter fragen</button>
+      <button id="btn-pause" class="foot" type="button">&#10074;&#10074; Pause</button>
+    </footer>
+  </main>
+</div>
+
+<!-- Überlagerungen -->
+<div id="ov-crisis" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="crisis-h">
+  <div class="sheet">
+    <h2 id="crisis-h">Einen Moment innehalten</h2>
+    <p id="crisis-text"></p>
+    <p>Wenn du daran denkst, dir etwas anzutun, sprich bitte jetzt mit einem Menschen:</p>
+    <a class="primary call" href="tel:08001110111">Telefonseelsorge 0800 111 0 111</a>
+    <a class="secondary call" href="tel:08001110222">Telefonseelsorge 0800 111 0 222</a>
+    <a class="secondary call" href="tel:112">Notruf 112</a>
+    <p class="fine">Kostenlos, anonym, rund um die Uhr. Online: telefonseelsorge.de</p>
+    <button id="crisis-continue" class="link" type="button">Ich bin sicher – das war die Antwort des Teils. Weiter.</button>
+    <button id="crisis-stop" class="secondary" type="button">Übung anhalten</button>
+  </div>
+</div>
+
+<div id="ov-ground" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="ground-h">
+  <div class="sheet">
+    <h2 id="ground-h">Pause</h2>
+    <p id="ground-text"></p>
+    <ol class="ground-steps">
+      <li>Spür deine Füße auf dem Boden und das Gewicht deines Körpers.</li>
+      <li>Atme drei Mal langsam aus – länger aus als ein.</li>
+      <li>Schau dich um und benenne fünf Dinge, die du siehst.</li>
+      <li>Tritt innerlich einen Schritt zurück und beobachte von dort.</li>
+    </ol>
+    <button id="ground-resume" class="primary" type="button">Weitermachen</button>
+    <button id="ground-close" class="secondary" type="button">Speichern und später fortsetzen</button>
+  </div>
+</div>
+
+<div id="ov-coach" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="coach-h">
+  <div class="sheet">
+    <h2 id="coach-h">Begleiter fragen</h2>
+    <p class="fine">Beschreibe, was gerade passiert oder wo du hängst.</p>
+    <textarea id="coach-q" rows="3" placeholder="z. B. Der Teil zeigt mir nur ein dunkles Bild …"></textarea>
+    <div class="row">
+      <button id="coach-mic" class="mic" type="button" aria-label="Spracheingabe">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2z"/></svg>
+      </button>
+      <button id="coach-send" class="primary grow" type="button">Fragen</button>
+    </div>
+    <div id="coach-answer" class="coach-answer" hidden></div>
+    <button id="coach-close" class="secondary" type="button">Schließen</button>
+  </div>
+</div>
+
+<div id="ov-settings" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="settings-h">
+  <div class="sheet">
+    <h2 id="settings-h">Einstellungen</h2>
+
+    <h3 class="sec">Vorlesen</h3>
+    <label class="switch"><input type="checkbox" id="set-autospeak"> Jeden Schritt automatisch vorlesen</label>
+    <label class="field">Tempo <input type="range" id="set-rate" min="0.6" max="1.2" step="0.05"></label>
+    <label class="field">Stimme <select id="set-voice"></select></label>
+
+    <h3 class="sec">KI-Begleiter</h3>
+    <p class="fine">Optional. Prüft jede Antwort mit Claude (Anthropic) und formuliert Nachfragen
+      bei Stolpersteinen. Dafür werden der aktuelle Schritt, deine bisherigen Antworten dieses Teils und
+      deine neue Antwort über den Server von wissenschaftundzauberkunst.de an Anthropic übertragen.
+      Ohne KI-Begleiter bleibt alles auf dem Gerät.</p>
+    <label class="switch"><input type="checkbox" id="set-ai"> KI-Begleiter verwenden</label>
+    <label class="field">Zugangscode <input type="password" id="set-code" autocomplete="off"></label>
+    <button id="set-test" class="secondary" type="button">Verbindung testen</button>
+    <p id="set-status" class="fine"></p>
+
+    <button id="settings-close" class="primary" type="button">Fertig</button>
+  </div>
+</div>
+
+<div id="ov-view" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="view-h">
+  <div class="sheet">
+    <h2 id="view-h">Sitzung</h2>
+    <pre id="view-text"></pre>
+    <button id="view-share" class="secondary" type="button">Teilen / Kopieren</button>
+    <button id="view-delete" class="secondary danger" type="button">Löschen</button>
+    <button id="view-close" class="primary" type="button">Schließen</button>
+  </div>
+</div>
+
+<p id="toast" class="toast" role="status" aria-live="polite" hidden></p>
+
+<script src="process.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

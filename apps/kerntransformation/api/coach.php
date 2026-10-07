@@ -33,7 +33,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 }
 // Gesucht wird zuerst außerhalb des Web-Verzeichnisses (übersteht Deploys), dann neben coach.php.
 $configFile = null;
-foreach ([dirname((string)($_SERVER['DOCUMENT_ROOT'] ?? __DIR__)) . '/kerntransformation-config.php',
+// __DIR__ ist der echte Pfad (…/domains/<domain>/public_html/apps/kerntransformation/api), DOCUMENT_ROOT
+// kann über eine Verknüpfung laufen (/home/<user>/public_html) – daher beide Elternordner prüfen.
+foreach ([dirname(__DIR__, 4) . '/kerntransformation-config.php',
+          dirname((string)($_SERVER['DOCUMENT_ROOT'] ?? __DIR__)) . '/kerntransformation-config.php',
           __DIR__ . '/config.php'] as $candidate) {
     if (is_file($candidate)) {
         $configFile = $candidate;

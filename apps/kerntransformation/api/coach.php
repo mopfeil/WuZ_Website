@@ -8,7 +8,8 @@
 //   -> 200 {verdict, nachricht, antwort}
 //   -> 401 falscher Zugangscode, 429 Tageslimit, 502/503 API nicht erreichbar
 //
-// Konfiguration in config.php (nicht im Repository, siehe config.example.php).
+// Konfiguration in kerntransformation-config.php NEBEN public_html (siehe config.example.php).
+// Dort bleibt sie bei Git-Deploys erhalten und ist vom Web aus nicht erreichbar.
 
 declare(strict_types=1);
 
@@ -30,12 +31,21 @@ function respond(int $status, array $body): void
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     respond(405, ['error' => 'POST erwartet']);
 }
-if (!is_file(__DIR__ . '/config.php')) {
+// Gesucht wird zuerst außerhalb des Web-Verzeichnisses (übersteht Deploys), dann neben coach.php.
+$configFile = null;
+foreach ([dirname((string)($_SERVER['DOCUMENT_ROOT'] ?? __DIR__)) . '/kerntransformation-config.php',
+          __DIR__ . '/config.php'] as $candidate) {
+    if (is_file($candidate)) {
+        $configFile = $candidate;
+        break;
+    }
+}
+if ($configFile === null) {
     respond(503, ['error' => 'KI-Begleiter ist auf diesem Server nicht eingerichtet']);
 }
-require __DIR__ . '/config.php';
+require $configFile;
 
-// Konfiguration prüfen, damit Tippfehler in config.php eine verständliche Meldung statt eines
+// Konfiguration prüfen, damit Tippfehler in der Konfiguration eine verständliche Meldung statt eines
 // 500-Fehlers ergeben. Werte (Schlüssel, Hash) werden dabei nie ausgegeben.
 $configErrors = [];
 foreach (['ANTHROPIC_API_KEY', 'ACCESS_CODE_HASH', 'DAILY_LIMIT'] as $name) {

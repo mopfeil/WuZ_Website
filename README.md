@@ -30,7 +30,8 @@ apps/familienaufgaben/  Private Familien-App (PWA, Kopie aus Code/Familienaufgab
                         (per .gitignore ausgenommen, entsteht nur auf dem Server)
 apps/kerntransformation/  Kerntransformation (PWA, Kopie aus /home/shared/core per `deploy.sh`): geführte
                         Core Transformation mit Spracheingabe; optionaler KI-Begleiter über
-                        api/coach.php (braucht api/config.php auf dem Server, per .gitignore ausgenommen)
+                        api/coach.php (braucht kerntransformation-config.php NEBEN public_html; dort
+                        übersteht sie Git-Deploys, die nicht versionierte Dateien in public_html löschen)
 shop/                   Shop-Stub (noch ohne Bestellfunktion)
 impressum/              Impressum
 datenschutz/            Datenschutzerklärung

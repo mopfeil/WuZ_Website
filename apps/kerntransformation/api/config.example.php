@@ -1,6 +1,7 @@
 <?php
-// Vorlage. Auf dem Server als config.php neben coach.php ablegen (z. B. über den
-// Hostinger-Dateimanager). config.php steht in .gitignore und wird nie veröffentlicht.
+// Vorlage. Auf dem Server als kerntransformation-config.php in den Ordner legen, der
+// public_html enthält (also NEBEN public_html, nicht darin). Dort wird die Datei bei
+// Git-Deploys nicht gelöscht und ist vom Web aus nicht abrufbar.
 
 // API-Schlüssel aus https://platform.claude.com (Settings → API Keys)
 const ANTHROPIC_API_KEY = 'sk-ant-...';

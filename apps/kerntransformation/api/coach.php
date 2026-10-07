@@ -44,17 +44,7 @@ foreach ([dirname(__DIR__, 4) . '/kerntransformation-config.php',
     }
 }
 if ($configFile === null) {
-    // Diagnose ohne Pfade: Version des Proxys, open_basedir aktiv?, je Kandidat Ordner sichtbar?
-    $seen = [];
-    foreach ([dirname(__DIR__, 4), dirname((string)($_SERVER['DOCUMENT_ROOT'] ?? __DIR__)), __DIR__] as $i => $dir) {
-        $names = array_values(array_filter((array)@scandir($dir), fn($n) => is_string($n) && preg_match('/kern|config/i', $n)));
-        $seen[] = ($i + 1) . ':' . (@is_dir($dir) ? 'ordner' : 'kein-ordner') . ($names ? ' [' . implode(' | ', $names) . ']' : '');
-    }
-    respond(503, [
-        'error' => 'KI-Begleiter ist auf diesem Server nicht eingerichtet',
-        'diag'  => 'v4; open_basedir=' . (ini_get('open_basedir') ? 'ja' : 'nein') . '; ' . implode(', ', $seen)
-            . '; docroot-gleich=' . (realpath((string)($_SERVER['DOCUMENT_ROOT'] ?? '')) === dirname(__DIR__, 3) ? 'ja' : 'nein'),
-    ]);
+    respond(503, ['error' => 'KI-Begleiter ist auf diesem Server nicht eingerichtet']);
 }
 require $configFile;
 

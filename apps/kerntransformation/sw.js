@@ -2,7 +2,7 @@
    WICHTIG: Bei jeder Änderung an den App-Dateien CACHE_VERSION erhöhen (deploy.sh erledigt das).
    Anfragen an api/ gehen immer ins Netz. */
 
-const CACHE_VERSION = 'kerntransformation-bb5a10f0';
+const CACHE_VERSION = 'kerntransformation-21a92bad';
 
 const ASSETS = [
   './',

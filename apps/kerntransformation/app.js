@@ -516,9 +516,10 @@
     try {
       const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: $('set-code').value.trim(), mode: 'ping' }) });
+      const msg = res.ok ? '' : ((await res.json().catch(() => ({}))).error || '');
       st.textContent = res.ok ? 'Verbunden. Der Begleiter ist bereit.'
         : res.status === 401 ? 'Zugangscode falsch.'
-        : res.status === 503 ? 'Auf dem Server ist der Begleiter nicht eingerichtet.'
+        : res.status === 503 ? (msg || 'Auf dem Server ist der Begleiter nicht eingerichtet.')
         : 'Fehler ' + res.status + '.';
     } catch (e) {
       st.textContent = 'Keine Verbindung (offline?).';

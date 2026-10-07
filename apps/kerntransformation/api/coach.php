@@ -35,6 +35,27 @@ if (!is_file(__DIR__ . '/config.php')) {
 }
 require __DIR__ . '/config.php';
 
+// Konfiguration prüfen, damit Tippfehler in config.php eine verständliche Meldung statt eines
+// 500-Fehlers ergeben. Werte (Schlüssel, Hash) werden dabei nie ausgegeben.
+$configErrors = [];
+foreach (['ANTHROPIC_API_KEY', 'ACCESS_CODE_HASH', 'DAILY_LIMIT'] as $name) {
+    if (!defined($name)) {
+        $configErrors[] = "$name fehlt";
+    }
+}
+if (defined('ANTHROPIC_API_KEY') && !preg_match('/^sk-ant-[A-Za-z0-9_-]{20,}$/', (string)ANTHROPIC_API_KEY)) {
+    $configErrors[] = 'ANTHROPIC_API_KEY sieht nicht wie ein API-Schlüssel aus (sk-ant-…, ohne Leerzeichen)';
+}
+if (defined('ACCESS_CODE_HASH') && !preg_match('/^\$2y\$\d\d\$[.\/A-Za-z0-9]{53}$/', (string)ACCESS_CODE_HASH)) {
+    $configErrors[] = 'ACCESS_CODE_HASH ist kein gültiger Hash (60 Zeichen, beginnt mit $2y$, in einfachen Anführungszeichen)';
+}
+if (defined('DAILY_LIMIT') && (!is_int(DAILY_LIMIT) || DAILY_LIMIT < 1)) {
+    $configErrors[] = 'DAILY_LIMIT muss eine ganze Zahl ohne Anführungszeichen sein';
+}
+if ($configErrors) {
+    respond(503, ['error' => 'config.php fehlerhaft: ' . implode('; ', $configErrors)]);
+}
+
 $raw = file_get_contents('php://input', false, null, 0, MAX_BODY + 1);
 if ($raw === false || strlen($raw) > MAX_BODY) {
     respond(413, ['error' => 'Anfrage zu groß']);

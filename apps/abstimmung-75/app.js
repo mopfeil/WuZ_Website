@@ -38,6 +38,7 @@ let statsVisible = false;      // Querformat-Statistik eingeblendet?
 let statsIndex = 0;            // welche Frage die Statistik zeigt
 let statsTimer = null;         // Live-Aktualisierung im Querformat
 let lockAt = {};               // markerId -> Zeitpunkt des Einrastens (Flash)
+let splitOverride = {};        // Frage-Index -> Gruppenansicht an/aus (manuell umgeschaltet)
 
 // ---- DOM ----
 const $ = (id) => document.getElementById(id);
@@ -115,8 +116,22 @@ function normalizeConfig(raw) {
     text: String(q.text || ''),
     options: Object.fromEntries(
       Object.entries(q.options || {}).map(([k, v]) => [String(k).trim(), String(v)])
-    )
+    ),
+    split: q.split === undefined ? true : !!q.split
   }));
+
+  // Optionale Gruppen (z. B. Thomas/Tanja): Gruppe = Marker-Nr. % divisor,
+  // Rest 0 -> Gruppe divisor (wie im Marker-Generator).
+  let groups = null;
+  const g = raw.groups;
+  const div = g ? parseInt(g.divisor, 10) : NaN;
+  if (!isNaN(div) && div > 1) {
+    const labels = {};
+    for (let i = 1; i <= div; i++) {
+      labels[i] = (g.labels && g.labels[i] != null) ? String(g.labels[i]) : 'Gruppe ' + i;
+    }
+    groups = { divisor: div, labels: labels };
+  }
 
   return {
     settings: {
@@ -128,7 +143,8 @@ function normalizeConfig(raw) {
     },
     orientationMap: om,
     participants: parts,
-    questions: qs
+    questions: qs,
+    groups: groups
   };
 }
 
@@ -415,14 +431,16 @@ function exportCSV() {
   if (results.length === 0) { alert('Es liegen noch keine Ergebnisse vor.'); return; }
   const head = ['Zeitstempel', 'Frage_ID', 'Frage_Text', 'Marker_ID',
                 'Antwort_Code', 'Antwort_Text', 'Gescannt'];
+  if (CFG.groups) head.push('Gruppe');
   const esc = (v) => {
     v = String(v);
     return /[";\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
   };
   const lines = [head.join(';')];
   for (const r of results) {
-    lines.push([r.ts, r.qid, r.qtext, r.marker, r.code, r.text, r.scanned]
-      .map(esc).join(';'));
+    const row = [r.ts, r.qid, r.qtext, r.marker, r.code, r.text, r.scanned];
+    if (CFG.groups) row.push(CFG.groups.labels[groupOf(r.marker)]);
+    lines.push(row.map(esc).join(';'));
   }
   const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv' });
   const name = 'ergebnisse_'
@@ -648,24 +666,54 @@ function maxStatsIndex() {
     : Math.min(qIndex, CFG.questions.length - 1);
 }
 
+const GROUP_COLORS = ['#36d1c4', '#f0a43a', '#b48cf0', '#e2574c'];
+
+function groupOf(id) {
+  const n = CFG.groups.divisor;
+  const r = id % n;
+  return r === 0 ? n : r;
+}
+
 function countsForStats(qi) {
   const q = CFG.questions[qi];
   const counts = {};
+  const byGroup = {};      // Gruppe -> { counts, n }
   let n = 0;
+  const add = (id, code) => {
+    counts[code] = (counts[code] || 0) + 1; n++;
+    if (CFG.groups) {
+      const g = groupOf(id);
+      if (!byGroup[g]) byGroup[g] = { counts: {}, n: 0 };
+      byGroup[g].counts[code] = (byGroup[g].counts[code] || 0) + 1;
+      byGroup[g].n++;
+    }
+  };
   if (currentScreen === 'scan' && qi === qIndex) {
     // laufende Frage: Live-Zaehlung
-    for (const v of Object.values(answers)) {
-      counts[v] = (counts[v] || 0) + 1; n++;
-    }
+    for (const [id, v] of Object.entries(answers)) add(parseInt(id, 10), v);
   } else {
     // abgeschlossene Frage: aus den gespeicherten Ergebnissen
     for (const r of results) {
-      if (r.qid === q.id && r.code) {
-        counts[r.code] = (counts[r.code] || 0) + 1; n++;
-      }
+      if (r.qid === q.id && r.code) add(r.marker, r.code);
     }
   }
-  return { counts: counts, n: n };
+  return { counts: counts, n: n, byGroup: byGroup };
+}
+
+function splitActive(qi) {
+  if (!CFG.groups) return false;
+  return (qi in splitOverride) ? splitOverride[qi] : CFG.questions[qi].split;
+}
+
+/* Mittelwert, falls alle Antwortcodes Zahlen sind (z. B. 7er-Skala). */
+function meanOf(counts) {
+  let sum = 0, n = 0;
+  for (const [code, c] of Object.entries(counts)) {
+    const v = Number(code);
+    if (isNaN(v)) return null;
+    sum += v * c; n += c;
+  }
+  return n ? sum / n : null;
 }
 
 function renderStats() {
@@ -682,6 +730,10 @@ function renderStats() {
   $('stats-next').disabled = statsIndex >= maxStatsIndex();
 
   const codes = Object.keys(q.options).sort();
+  const split = splitActive(statsIndex);
+  $('stats-split').classList.toggle('hidden', !CFG.groups);
+  $('stats-split').classList.toggle('on', split);
+  if (split) { renderSplitStats(q, codes, res); return; }
   const maxC = Math.max(1, ...codes.map((c) => res.counts[c] || 0));
   const chart = $('stats-chart');
   chart.innerHTML = '';
@@ -704,7 +756,58 @@ function renderStats() {
     : 'hochkant drehen = weiter scannen';
 }
 
+/* Gruppenansicht: pro Antwort ein Balken je Gruppe nebeneinander,
+   Hoehe = Anteil innerhalb der Gruppe (Gruppen koennen ungleich gross sein),
+   unten Mittelwert und n je Gruppe. */
+function renderSplitStats(q, codes, res) {
+  const gs = [];
+  for (let g = 1; g <= CFG.groups.divisor; g++) {
+    gs.push({ g: g, label: CFG.groups.labels[g],
+              color: GROUP_COLORS[(g - 1) % GROUP_COLORS.length],
+              d: res.byGroup[g] || { counts: {}, n: 0 } });
+  }
+  const share = (x, code) => x.d.n ? (x.d.counts[code] || 0) / x.d.n : 0;
+  let maxS = 0;
+  for (const code of codes) for (const x of gs) maxS = Math.max(maxS, share(x, code));
+  if (maxS === 0) maxS = 1;
+
+  const chart = $('stats-chart');
+  chart.innerHTML = '';
+  for (const code of codes) {
+    const col = document.createElement('div');
+    col.className = 'sbar-col';
+    let vals = '', bars = '';
+    for (const x of gs) {
+      const c = x.d.counts[code] || 0;
+      const h = c === 0 ? 0 : Math.max(3, Math.round(100 * share(x, code) / maxS));
+      vals += '<span style="color:' + x.color + '">' + c + '</span>';
+      bars += '<div class="sbar" style="height:' + h + '%;background:' + x.color + '"></div>';
+    }
+    col.innerHTML =
+      '<div class="sbar-value split">' + vals + '</div>'
+      + '<div class="sbar-track split">' + bars + '</div>'
+      + '<div class="sbar-code">' + escapeHtml(code) + '</div>'
+      + '<div class="sbar-label">' + escapeHtml(q.options[code]) + '</div>';
+    chart.appendChild(col);
+  }
+
+  const parts = gs.map((x) => {
+    const m = meanOf(x.d.counts);
+    return '<span style="color:' + x.color + '">' + escapeHtml(x.label)
+      + (m !== null ? ': \u00d8 ' + m.toFixed(1).replace('.', ',') : '')
+      + ' (n = ' + x.d.n + ')</span>';
+  });
+  $('stats-n').innerHTML = parts.join('&nbsp;&nbsp;·&nbsp;&nbsp;');
+  $('stats-hint').textContent = (currentScreen === 'done')
+    ? 'blaettern mit ‹ ›   ·   hochkant drehen = zurueck'
+    : 'hochkant drehen = weiter scannen';
+}
+
 function initStats() {
+  $('stats-split').addEventListener('click', () => {
+    splitOverride[statsIndex] = !splitActive(statsIndex);
+    renderStats();
+  });
   $('stats-prev').addEventListener('click', () => { statsIndex--; renderStats(); });
   $('stats-next').addEventListener('click', () => { statsIndex++; renderStats(); });
   if (mqLandscape.addEventListener) {

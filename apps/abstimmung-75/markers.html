@@ -10,6 +10,8 @@
     #controls { padding: 14px; background: #08161a; display: flex; flex-wrap: wrap;
                 gap: 10px; align-items: flex-end; position: sticky; top: 0; z-index: 2; }
     #controls label { font-size: 0.8rem; display: flex; flex-direction: column; gap: 3px; }
+    #controls select { padding: 6px; border-radius: 6px; border: 1px solid #2d6068;
+                       background: #06181c; color: #eef3f3; font: inherit; }
     #controls input { width: 5rem; padding: 6px; border-radius: 6px; border: 1px solid #2d6068;
                       background: #06181c; color: #eef3f3; font: inherit; }
     #controls button { padding: 9px 14px; border-radius: 8px; border: 1px solid #36d1c4;
@@ -77,6 +79,7 @@
   <div id="controls">
     <label>von Marker-Nr.<input id="from" type="number" min="0" value="0"></label>
     <label>bis Marker-Nr.<input id="to" type="number" min="0" value="19"></label>
+    <label>Kartentext<select id="study"></select></label>
     <button id="gen">Erzeugen</button>
     <button id="print" class="ghost">Drucken</button>
     <a href="index.html">&larr; zur&uuml;ck zur App</a>
@@ -85,8 +88,9 @@
     <b>Duplex-Karten (7,5 &times; 7,5 cm), 6 pro A4-Seite.</b>
     Vorderseite: nur der Marker. R&uuml;ckseite: Antwortziffern 1&ndash;7
     (die nach oben gedrehte Ziffer ist die Antwort; zwischen 7 und 1 ist eine
-    L&uuml;cke) und in der Mitte der Studientext &mdash; je nach Marker-Nummer
-    eine der 4 Gruppenversionen (Autor wechselt, Marker-Nr. % 4).
+    L&uuml;cke) und in der Mitte der gew&auml;hlte Kartentext &mdash; je nach
+    Marker-Nummer eine der Gruppenversionen (Schlaf-Studie: Autor wechselt,
+    Marker-Nr. % 4; Thomas/Tanja: ungerade Nr. = Thomas, gerade = Tanja).
     <b>Drucken:</b> Beidseitig, <i>an langer Kante spiegeln</i>, Gr&ouml;&szlig;e
     100&nbsp;% (keine Anpassung), R&auml;nder: Keine. Danach an den gestrichelten
     Linien ausschneiden.

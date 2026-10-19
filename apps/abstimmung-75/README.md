@@ -59,3 +59,19 @@ dann gilt wieder die kürzere Reichweite.
 
 Nach Datei-Änderungen in `sw.js` die `CACHE_VERSION` erhöhen
 (z. B. `-v2`), damit installierte iPhones die neue Version laden.
+
+## Gruppenansicht (z. B. Orange Days, Thomas/Tanja)
+
+Optional in der Konfiguration:
+
+```json
+"groups": { "divisor": 2, "labels": { "1": "Thomas", "2": "Tanja" } }
+```
+
+Gruppe = Marker-Nr. % divisor (Rest 0 → Gruppe divisor), genau wie im
+Marker-Generator (`markers.html?text=berger`: ungerade = Thomas, gerade = Tanja).
+Im Querformat zeigt die Statistik dann pro Antwort einen Balken je Gruppe
+(Höhe = Anteil innerhalb der Gruppe) und unten Mittelwert und n je Gruppe.
+Pro Frage steuert `"split": true/false` die Voreinstellung; der Knopf
+„Gruppen“ schaltet live um. Der CSV-Export bekommt eine Spalte `Gruppe`.
+Fertige Konfiguration: `config_orange_days.json`.

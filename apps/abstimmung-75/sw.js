@@ -2,7 +2,7 @@
    WICHTIG: Bei jeder Aenderung an den App-Dateien CACHE_VERSION erhoehen,
    damit die Geraete die neue Version laden. */
 
-const CACHE_VERSION = 'aruco-abstimmung75-v4';
+const CACHE_VERSION = 'aruco-abstimmung75-v5';
 
 const ASSETS = [
   './',

@@ -1,0 +1,133 @@
+{
+  "settings": {
+    "stable_frames": 8,
+    "process_width": 1280,
+    "marker_dictionary": "WUZ_16h5_20",
+    "max_hamming_distance": 2
+  },
+  "orientation_map": {
+    "0": "1",
+    "45": "2",
+    "90": "3",
+    "135": "4",
+    "180": "5",
+    "225": "6",
+    "270": "7",
+    "315": "E"
+  },
+  "participants": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "questions": [
+    {
+      "id": "OD1_1",
+      "text": "Diese Person ist kompetent.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      },
+      "split": true
+    },
+    {
+      "id": "OD1_2",
+      "text": "Diese Person ist mir sympathisch.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      },
+      "split": true
+    },
+    {
+      "id": "OD1_3",
+      "text": "Mit dieser Person würde ich gerne zusammenarbeiten.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      },
+      "split": true
+    },
+    {
+      "id": "OD2_1",
+      "text": "Mir ist im Video etwas Ungewöhnliches aufgefallen.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      },
+      "split": false
+    },
+    {
+      "id": "OD2_2",
+      "text": "Ich habe gesehen, dass sich im Hintergrund etwas verändert hat.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      },
+      "split": false
+    },
+    {
+      "id": "OD2_3",
+      "text": "Ich habe gesehen, dass jemand das Spielfeld verlassen hat.",
+      "options": {
+        "1": "trifft gar nicht zu",
+        "2": "trifft nicht zu",
+        "3": "trifft eher nicht zu",
+        "4": "teils-teils",
+        "5": "trifft eher zu",
+        "6": "trifft zu",
+        "7": "trifft voll zu"
+      },
+      "split": false
+    }
+  ],
+  "groups": {
+    "divisor": 2,
+    "labels": {
+      "1": "Thomas",
+      "2": "Tanja"
+    }
+  }
+}

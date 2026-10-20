@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The AI made of pins and beads: the NIM learning board | Science and Magic</title>
+  <meta name="description" content="Instructions for the NIM learning board: a pegboard, a draw box and beads learn NIM through punishment, without electricity.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="author" content="Prof. Dr. Markus Pfeil">
+  <meta name="theme-color" content="#0e2244">
+  <link rel="icon" href="/assets/img/sigil.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <style>
+    .steps{counter-reset:s;list-style:none;padding-left:0}
+    .steps>li{counter-increment:s;position:relative;padding-left:2.6em;margin:1.1em 0}
+    .steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:1.8em;height:1.8em;border-radius:50%;background:var(--navy,#0e2244);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+    .lid-fig{display:block;width:100%;max-width:640px;height:auto;margin:1.2rem 0 .4rem}
+    .lid-fig text{font-family:inherit;font-size:13px;fill:#0e2244}
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/" aria-label="Science and Magic – home">
+      <svg viewBox="0 0 400 400" aria-hidden="true" fill="none" stroke="#E8B73A" stroke-width="12" stroke-linejoin="round">
+        <circle cx="200" cy="200" r="150"/>
+        <polygon points="200,60 78.8,270 321.2,270"/>
+        <path d="M140,200 C180,168 220,168 260,200 C220,232 180,232 140,200 Z"/>
+        <polygon fill="#E8B73A" stroke="none" points="200,168 207,193 232,200 207,207 200,232 193,207 168,200 193,193"/>
+      </svg>
+      <span class="word">Science &amp; Magic<small>Play · Wonder · Understand</small></span>
+    </a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Open or close the menu">
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Main navigation">
+      <ul>
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/#formats">Formats</a></li>
+        <li><a href="/en/background/">Background</a></li>
+        <li><a href="/en/blog/">Blog</a></li>
+        <li><a href="/en/tools/">Tools</a></li>
+        <li><a href="/en/shop/">Shop</a></li>
+        <li><a class="cta" href="/en/#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="lang-switch" aria-label="Sprache / Language"><a href="/N/" lang="de" hreflang="de" title="Deutsche Fassung">DE</a><a href="/en/N/" lang="en" aria-current="true">EN</a></div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap">
+      <p class="breadcrumb"><a href="/en/">Home</a> / <a href="/en/K/">Magic case</a> / NIM learning board</p>
+      <h1>The AI made of pins and beads</h1>
+      <p class="lead">The NIM learning board. A pegboard, a draw box and a few coloured beads play against your audience. At first the board moves completely at random, then it learns from every defeat. No electricity required.</p>
+    </div>
+  </section>
+
+  <section class="legal">
+    <div class="wrap narrow">
+
+      <div class="notice">
+        <strong>Before you read on:</strong> there is no secret to keep here. The learning board is an experiment, and the wonder comes from the fact that everyone can see how it works and still hardly believes that a bunch of pins can learn. Play a few games on your own first so that you know the handling well.
+      </div>
+
+      <h2>What your audience sees</h2>
+      <p>There are 15 sticks on the table. A spectator plays against the AI: you take turns removing 1, 2 or 3 sticks, and whoever takes the last one loses. When it is the AI's turn, you count the sticks, load beads into a small box, shake it and tip it. The colour that shows in the window tells you how many sticks the AI takes.</p>
+      <p>At first the AI is easy to beat, because it plays pure chance. But after every defeat you pull a pin out of the board. Game by game the AI gets better, until in every position that has a good move it plays only that move. Nobody told it the solution.</p>
+
+      <h2>What you need</h2>
+      <ul>
+        <li><strong>The NIM board</strong> (216 × 184 × 6 mm). It has 14 cells, labelled 15 down to 2. The number on a cell is the number of sticks left when the AI is to move. Each cell has a red row “1”, a green row “2” and a blue row “3” with four holes each; cell 2 has only red and green. There is no cell for 1 stick, because the AI has no choice left there.</li>
+        <li><strong>Pins</strong>: 28 red, 28 green and 26 blue, plus a few spares.</li>
+        <li><strong>The draw box</strong> with lid (50 × 74 × 14.7 mm). Inside it has a V-shaped tip with a small window.</li>
+        <li><strong>Beads</strong> 10 mm in diameter, four each in red, green and blue. Wooden beads roll better than printed ones.</li>
+        <li><strong>15 sticks</strong> or coins.</li>
+      </ul>
+      <p>Board, draw box, pins and beads are in the magic case: the board in the lid, the small parts in the insert.</p>
+
+      <h2>How the board works</h2>
+      <p>Each cell stands for a game situation, each coloured row for a possible move: red means “take 1”, green “take 2”, blue “take 3”. The number of pins in a row is the number of beads of that colour that go into the draw box. More pins of one colour means more beads, so that move becomes more likely. The pins are the AI's memory.</p>
+      <p>Instead of many boxes full of beads, as in the famous MENACE machine, there is just one draw box for all cells.</p>
+
+      <svg class="lid-fig" viewBox="0 0 680 250" role="img" aria-label="Cell 12 before and after training: on the left two pins in every row, on the right only two blue pins">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0e2244"/></marker></defs>
+        <g transform="translate(40,10)">
+        <rect x="0" y="0" width="208" height="176" rx="6" fill="#fff" stroke="#0e2244" stroke-width="2"/>
+        <text x="104" y="30" text-anchor="middle" style="font-size:22px;font-weight:700">12</text>
+        <text x="22" y="70" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#c0392b">1</text>
+        <circle cx="64" cy="64" r="13" fill="#c0392b" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="104" cy="64" r="13" fill="#c0392b" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="144" cy="64" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="184" cy="64" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <text x="22" y="110" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#2e8b57">2</text>
+        <circle cx="64" cy="104" r="13" fill="#2e8b57" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="104" cy="104" r="13" fill="#2e8b57" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="144" cy="104" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="184" cy="104" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <text x="22" y="150" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#2f5fb3">3</text>
+        <circle cx="64" cy="144" r="13" fill="#2f5fb3" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="104" cy="144" r="13" fill="#2f5fb3" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="144" cy="144" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="184" cy="144" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        </g>
+        <text x="144" y="214" text-anchor="middle">At the start: 6 beads, pure chance</text>
+        <path d="M290,98 h90" stroke="#0e2244" stroke-width="2.5" fill="none" marker-end="url(#ah)"/>
+        <g transform="translate(432,10)">
+        <rect x="0" y="0" width="208" height="176" rx="6" fill="#fff" stroke="#0e2244" stroke-width="2"/>
+        <text x="104" y="30" text-anchor="middle" style="font-size:22px;font-weight:700">12</text>
+        <text x="22" y="70" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#c0392b">1</text>
+        <circle cx="64" cy="64" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="104" cy="64" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="144" cy="64" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="184" cy="64" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <text x="22" y="110" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#2e8b57">2</text>
+        <circle cx="64" cy="104" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="104" cy="104" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="144" cy="104" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="184" cy="104" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <text x="22" y="150" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#2f5fb3">3</text>
+        <circle cx="64" cy="144" r="13" fill="#2f5fb3" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="104" cy="144" r="13" fill="#2f5fb3" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="144" cy="144" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        <circle cx="184" cy="144" r="6" fill="#e6e9ef" stroke="#0e2244" stroke-width="1.5"/>
+        </g>
+        <text x="536" y="214" text-anchor="middle">After training: always take 3</text>
+      </svg>
+
+      <h2>Preparation</h2>
+      <p>Put <strong>two pins</strong> of the matching colour into every row. Place the 15 sticks in the middle and the draw box with the beads next to them.</p>
+
+      <h2>Performance</h2>
+      <ol class="steps">
+        <li><strong>Explain the rules.</strong> 15 sticks, take 1, 2 or 3 in turn, whoever takes the last stick loses. Decide who starts.</li>
+        <li><strong>Count the sticks.</strong> When it is the AI's turn, count the sticks that are left. The cell with that number applies.</li>
+        <li><strong>Load the beads.</strong> For every pin in the cell, one bead of the same colour goes into the draw box.</li>
+        <li><strong>Draw.</strong> Lid on, shake, tip the box so the V tip points down. The colour in the window tells you how many sticks the AI takes.</li>
+        <li><strong>Remember.</strong> Pull the pin of that colour in the cell <strong>halfway out</strong>. After the game you can see which moves the AI made. Then empty the draw box.</li>
+        <li><strong>If the AI loses:</strong> take the half-raised pin of its <strong>last</strong> move out completely. The AI will now make that move less often in that position. Exception: if it was the last pin in the cell, it stays in. Remove the pin of the <em>second-to-last</em> AI move instead. A cell always keeps at least one pin.</li>
+        <li><strong>If the AI wins:</strong> nothing happens.</li>
+        <li><strong>Next game.</strong> Push all pins back in and start again. After a few games, show your audience which rows have already emptied.</li>
+      </ol>
+
+      <h2>What the AI knows in the end</h2>
+      <p>Whoever ends their move with <strong>13, 9, 5 or 1</strong> sticks left always wins. So a fully trained AI has only one colour left in every cell except 13, 9 and 5: the one that leads to one of these numbers. At 15 it takes 2, at 14 it takes 1, at 12 it takes 3, and so on in steps of four down to 2, where it takes 1. At 13, 9 and 5 there is no good move. All the AI can do there is hope that the human makes a mistake.</p>
+      <p>Because 15 is not one of these numbers, whoever starts can always win by taking 2 sticks.</p>
+      <p>We simulated how quickly this happens on a computer: 2000 training runs with exactly these rules, the AI starting every other game. Against a random player it wins 54 % of the first 10 games, 77 % of games 41 to 50 and 90 % of games 191 to 200. Against a half-clever player it rises from 30 % to 60 %.</p>
+
+      <h2>Tips</h2>
+      <ul>
+        <li><strong>Let the AI start often.</strong> That is the only way it learns the best opening move.</li>
+        <li><strong>Let it win now and then.</strong> Against a perfect player the AI learns almost nothing; in the simulation it still wins only 1 % after 200 games. The penalty always hits the last move, and against an expert that move was already made in a hopeless position. The real mistake happened much earlier and is never punished.</li>
+        <li><strong>MENACE variant:</strong> when the AI wins, add one pin of the same colour next to each half-raised pin (at most four per row). According to the computer simulation, though, the AI does not learn any faster this way.</li>
+        <li><strong>Without the board:</strong> on the paper sheet “KI-Computerblatt: Das NIM-Spiel” a die decides instead of the draw box. So that you do not have to keep re-rolling once numbers are crossed out, you can use the <a href="/apps/wuerfel/">die</a> on this website and switch off the crossed-out numbers before you roll.</li>
+        <li>Something to try with your audience: would the AI learn faster if you punished <em>all</em> the moves of a lost game?</li>
+      </ul>
+
+      <h2>And what does this have to do with science?</h2>
+      <p>The AI does not know the rules and calculates nothing. All it notices is: after this move I lost. Computer scientists call this <em>reinforcement learning</em>, and it is how computers learn chess, Go or video games, only with millions of games. The model is MENACE: in 1961 the British researcher Donald Michie built a machine out of 304 matchboxes and coloured beads that learned to play noughts and crosses.</p>
+      <p>The interesting part is what the AI does <em>not</em> know at the end. It finds the numbers 13, 9, 5 and 1 without knowing that they are four apart. A human can spot the pattern and generalise it. Give the AI 21 sticks and it has to start all over again. Is it intelligence when someone wins but does not know why?</p>
+
+      <p class="small muted" style="margin-top:2.5rem">Based on Markus Pfeil’s “KI-Computerblatt: Das NIM-Spiel”, adapted here as a pegboard with draw box from the magic case. The figures come from a computer simulation of the board rules. As of October 2026.</p>
+    </div>
+  </section>
+</main>
+
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <h4>Science and Magic</h4>
+      <p>A working model by Prof. Dr. Markus Pfeil. Conjuring as a tool for scientific thinking in schools, universities and organisations. German name: Wissenschaft und Zauberkunst.</p>
+      <p class="motto">Play, wonder and understand for a better picture of the world.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/#formats">Formats</a></li>
+        <li><a href="/en/background/">Background</a></li>
+        <li><a href="/en/blog/">Blog</a></li>
+        <li><a href="/en/tools/">Tools</a></li>
+        <li><a href="/en/shop/">Shop</a></li>
+        <li><a href="/Z/" lang="de">Deutsche Fassung</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/en/imprint/">Legal notice</a></li>
+        <li><a href="/en/privacy/">Privacy policy</a></li>
+        <li><a href="mailto:m.o.pfeil@gmail.com">Contact</a></li>
+      </ul>
+    </div>
+    <div class="bottom">
+      <span>© <span data-year>2026</span> Markus Pfeil</span>
+      <span>Scientia et Magia · Ludendo, mirando et inveniendo ad melius intellegendum mundum</span>
+    </div>
+  </div>
+</footer>
+<script defer src="/assets/js/site.js"></script>
+</body>
+</html>

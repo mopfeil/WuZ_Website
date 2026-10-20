@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erst messen, dann rechnen: die Ellipsen-Rollbahn | Wissenschaft und Zauberkunst</title>
+  <meta name="description" content="Anleitung zum Experiment mit der Ellipsen-Rollbahn und den Scheiben K1, K2 und E1 bis E4: Umfang messen, dann nachrechnen.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="author" content="Prof. Dr. Markus Pfeil">
+  <meta name="theme-color" content="#0e2244">
+  <link rel="icon" href="/assets/img/sigil.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <style>
+    .steps{counter-reset:s;list-style:none;padding-left:0}
+    .steps>li{counter-increment:s;position:relative;padding-left:2.6em;margin:1.1em 0}
+    .steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:1.8em;height:1.8em;border-radius:50%;background:var(--navy,#0e2244);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+    .lid-fig{display:block;width:100%;max-width:640px;height:auto;margin:1.2rem 0 .4rem}
+    .lid-fig text{font-family:inherit;font-size:13px;fill:#0e2244}
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Wissenschaft und Zauberkunst – Startseite">
+      <svg viewBox="0 0 400 400" aria-hidden="true" fill="none" stroke="#E8B73A" stroke-width="12" stroke-linejoin="round">
+        <circle cx="200" cy="200" r="150"/>
+        <polygon points="200,60 78.8,270 321.2,270"/>
+        <path d="M140,200 C180,168 220,168 260,200 C220,232 180,232 140,200 Z"/>
+        <polygon fill="#E8B73A" stroke="none" points="200,168 207,193 232,200 207,207 200,232 193,207 168,200 193,193"/>
+      </svg>
+      <span class="word">Wissenschaft &amp; Zauberkunst<small>Spielen · Staunen · Erkennen</small></span>
+    </a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="/">Start</a></li>
+        <li><a href="/#formate">Formate</a></li>
+        <li><a href="/hintergrund/">Hintergrund</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/werkzeuge/">Werkzeuge</a></li>
+        <li><a href="/shop/">Shop</a></li>
+        <li><a class="cta" href="/#kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+    <div class="lang-switch" aria-label="Sprache / Language"><a href="/E/" lang="de" aria-current="true">DE</a><a href="/en/E/" lang="en" hreflang="en" title="English version">EN</a></div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap">
+      <p class="breadcrumb"><a href="/">Start</a> / <a href="/K/">Zauberkoffer</a> / Ellipsen-Rollbahn</p>
+      <h1>Erst messen, dann rechnen</h1>
+      <p class="lead">Das Experiment mit der Rollbahn und den sechs Scheiben. Deine Mitspieler messen den Umfang von Kreisen und Ellipsen und bekommen erst danach eine Formel, die einleuchtend begründet ist und trotzdem nicht passt. Wem glauben sie, der Rollbahn oder der Formel?</p>
+    </div>
+  </section>
+
+  <section class="legal">
+    <div class="wrap narrow">
+
+      <div class="notice">
+        <strong>Bevor du weiterliest:</strong> Hier gibt es keinen Trick, aber eine Auflösung. Die Formel für den Ellipsenumfang, die deine Mitspieler bekommen, ist absichtlich falsch. Verrate das erst, wenn sie sich entschieden haben, wie sie sich die Abweichungen erklären. Sonst ist das Experiment vorbei, bevor es anfängt.
+      </div>
+
+      <h2>Was dein Publikum erlebt</h2>
+      <p>Auf dem Tisch liegen eine schmale Bahn mit einer Rille und einer Millimeterskala und sechs flache Scheiben: zwei Kreise, K1 und K2, und vier Ellipsen, E1 bis E4. Deine Mitspieler messen bei jeder Scheibe Länge und Breite. Dann stellen sie die Scheibe hochkant in die Rille und rollen sie genau einmal herum. Die Strecke, die sie dabei zurücklegt, ist ihr Umfang.</p>
+      <p>Erst wenn die Tabelle voll ist, wird gerechnet. Bei den Kreisen passt die bekannte Formel auf ein, zwei Prozent. Das zeigt: Die Rollbahn misst genau. Für die Ellipsen gibt es eine Formel mit einer schönen Begründung. Bei E1 und E2 passt sie auch. Bei E3 und E4 liegt sie weit daneben, und zwar immer zu niedrig. Jetzt müssen sich deine Mitspieler entscheiden: Haben sie falsch gemessen, ist die Scheibe gerutscht, sind die Scheiben ungenau gedruckt, oder stimmt die Formel nicht?</p>
+
+      <h2>Was du brauchst</h2>
+      <ul>
+        <li><strong>Die Rollbahn.</strong> 195 mm lang, 34 mm breit, 10 mm hoch. In der Mitte läuft eine Rille, 6,8 mm breit und 5 mm tief, daneben eine Skala von 0 bis 170 mm. Der Nullstrich ist auch auf dem Rillenboden markiert.</li>
+        <li><strong>Sechs Scheiben, 6 mm dick.</strong> K1 hat 30 mm Durchmesser, K2 40 mm. Die Ellipsen messen E1 50 × 40, E2 48 × 32, E3 64 × 16 und E4 72 × 12 mm. Auf den Scheiben steht nur die Kennung, keine Maße, denn die sollen ja gemessen werden. Jede Scheibe hat am Rand eine rote Marke.</li>
+        <li><strong>Zwei Blätter für jeden Mitspieler.</strong> Auf dem ersten eine Tabelle mit den Spalten Scheibe, Länge A, Breite B und drei Spalten für den Umfang (1., 2. und 3. Rollen). Auf dem zweiten die Formeln zum Nachrechnen. Das zweite Blatt gibst du erst später aus oder druckst es auf die Rückseite.</li>
+        <li><strong>Stifte und einen Taschenrechner</strong>, ein Smartphone genügt.</li>
+      </ul>
+      <p>Im Zauberkoffer liegt die Rollbahn im Fach MASSRILLE der unteren Ebene. Die Scheiben stecken im Einsatz in zwei Fächern, gestapelt als E1, E2, K2 und als E4, E3, K1.</p>
+
+      <h2>So funktioniert das Requisit</h2>
+      <p>Eine Scheibe, die ohne zu rutschen genau eine Umdrehung macht, legt auf der Bahn genau ihren Umfang zurück. Das gilt für den Kreis wie für die Ellipse. Du brauchst also kein Maßband, das am Rand verrutschen kann. Du stellst die Scheibe auf die Null, rollst und liest ab.</p>
+      <p>Die rote Marke sitzt am Ende der kurzen Achse. Steht die Marke unten, liegt die Scheibe auf ihrer flachen Seite und steht zum Start stabil. Nach einer vollen Umdrehung ist die Marke wieder unten, und dort liest du an der Skala ab.</p>
+
+      <svg class="lid-fig" viewBox="0 0 680 220" role="img" aria-label="Seitenansicht der Rollbahn: Die Ellipse E3 steht mit der roten Marke auf dem Nullstrich. Nach einer Umdrehung steht die Marke bei etwa 137 mm.">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0e2244"/></marker></defs>
+        <rect x="50" y="118" width="585" height="34" fill="#e8ecf2" stroke="#0e2244" stroke-width="1"/>
+        <path d="M110,120v10 M125,120v5 M140,120v10 M155,120v5 M170,120v10 M185,120v5 M200,120v10 M215,120v5 M230,120v10 M245,120v5 M260,120v10 M275,120v5 M290,120v10 M305,120v5 M320,120v10 M335,120v5 M350,120v10 M365,120v5 M380,120v10 M395,120v5 M410,120v10 M425,120v5 M440,120v10 M455,120v5 M470,120v10 M485,120v5 M500,120v10 M515,120v5 M530,120v10 M545,120v5 M560,120v10 M575,120v5 M590,120v10 M605,120v5 M620,120v10" stroke="#0e2244" stroke-width="1" fill="none"/>
+        <text x="110" y="145" text-anchor="middle">0</text>
+        <text x="260" y="145" text-anchor="middle">50</text>
+        <text x="410" y="145" text-anchor="middle">100</text>
+        <text x="560" y="145" text-anchor="middle">150</text>
+        <ellipse cx="110" cy="94" rx="96" ry="24" fill="#f5f0e1" stroke="#0e2244" stroke-width="1.5"/>
+        <rect x="108" y="110" width="4" height="8" fill="#c0392b"/>
+        <text x="110" y="98" text-anchor="middle">E3</text>
+        <ellipse cx="521.6" cy="94" rx="96" ry="24" fill="none" stroke="#0e2244" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <rect x="519.6" y="110" width="4" height="8" fill="#c0392b"/>
+        <path d="M150,58 C250,30 390,30 480,58" stroke="#0e2244" stroke-width="1.5" fill="none" marker-end="url(#ah)"/>
+        <text x="315" y="28" text-anchor="middle">eine volle Umdrehung</text>
+        <path d="M110,172 H521.6" stroke="#0e2244" stroke-width="1.5" fill="none" marker-start="url(#ah)" marker-end="url(#ah)"/>
+        <text x="315" y="192" text-anchor="middle">zurückgelegte Strecke = Umfang (bei E3 etwa 137 mm)</text>
+        <text x="110" y="212" text-anchor="middle">Start: Marke unten auf 0</text>
+        <text x="521.6" y="212" text-anchor="middle">Marke wieder unten: ablesen</text>
+      </svg>
+
+      <p>Die flachen Ellipsen E3 und E4 kippen beim Rollen über ihre Spitzen, ihr Mittelpunkt hebt und senkt sich dabei stark. Die Rille hält sie aufrecht, du führst sie mit einem Finger oben am Rand. Beim Start ragen E3 und E4 links bis zu 16 mm über das Ende der Bahn hinaus. Das stört nicht, denn die Scheibe steht nur auf ihrem Berührpunkt in der Rille.</p>
+      <p>Länge A und Breite B misst man, indem man die Scheibe flach auf die Skala legt. A ist der längste Durchmesser, B der kürzeste.</p>
+
+      <h2>Vorbereitung</h2>
+      <p>Leg die Bahn flach auf den Tisch und die sechs Scheiben daneben. Druck die beiden Blätter aus. Roll jede Scheibe vorher selbst ein paarmal, damit du das Rollen vormachen kannst und weißt, wie sich E3 und E4 verhalten. Rutscht eine Scheibe auf der Bahn, leg einen Streifen Malerkrepp in die Rille.</p>
+
+      <h2>Ablauf</h2>
+      <ol class="steps">
+        <li><strong>Erst messen.</strong> Gib das erste Blatt aus. Deine Mitspieler messen alle sechs Scheiben, bevor sie irgendeine Formel sehen. Länge und Breite messen sie, indem sie die Scheibe flach auf die Skala legen.</li>
+        <li><strong>Rollen vormachen.</strong> Scheibe hochkant in die Rille, die rote Marke unten auf 0. Langsam und mit leichtem Druck eine Umdrehung weiterrollen, bis die Marke wieder unten ist, und dort ablesen. Bei E3 und E4 führt ein Finger oben am Rand mit, sonst kippen sie leicht.</li>
+        <li><strong>Zweimal rollen.</strong> Jede Scheibe wird zweimal gerollt. Liegen die beiden Werte mehr als 2 mm auseinander, ein drittes Mal.</li>
+        <li><strong>Dann rechnen: die Kreise.</strong> Erst wenn die Tabelle voll ist, kommt das zweite Blatt. Für den Kreis gilt Umfang = 3,14 · D. Deine Mitspieler rechnen für K1 und K2 die Abweichung aus: (gemessen − berechnet) / berechnet · 100 %. Bei den Kreisen passt es auf 1 bis 2 %. Unter 2 % heißt: Du rollst wie ein Profi. Das bestätigt die eigene Messgenauigkeit.</li>
+        <li><strong>Die Ellipsen.</strong> Jetzt kommt die Formel mit ihrer Begründung: „Eine Ellipse ist ein plattgedrückter Kreis mit der Länge A und der Breite B. Sie hat genauso viel Fläche wie ein Kreis mit dem Durchmesser √(A · B). Beim Plattdrücken wird sie in der einen Richtung so viel länger, wie sie in der anderen schmaler wird. Also bleibt auch der Umfang gleich: Umfang = 3,14 · √(A · B).“ E1 und E2 passen ebenfalls, mit etwa 1 und 3 %. E3 und E4 passen nicht.</li>
+        <li><strong>Nicht verraten.</strong> Sag nicht, was stimmt. Frag stattdessen: „Wem glaubst du, der Rollbahn oder der Formel?“ Wer nachrollen will, darf das. Dann kreuzt jeder an, wie er sich die Abweichungen bei E3 und E4 erklärt: Ich habe falsch gemessen. Die Scheibe ist beim Rollen gerutscht. Die Scheiben sind ungenau gedruckt. Die Formel stimmt nicht.</li>
+        <li><strong>Der schnelle Test.</strong> Frag zum Schluss: Wie lang muss der Rand mindestens sein? Beim Rollen muss die Scheibe einmal an ihrer ganzen Länge entlang und wieder zurück. Der Umfang von E4 mit A = 72 mm ist also mehr als 2 · 72 = 144 mm. Die Formel sagt 92 mm. Das kann nicht stimmen.</li>
+        <li><strong>Die Auflösung.</strong> Die Rollbahn hat recht, die Formel ist falsch.</li>
+      </ol>
+
+      <h2>Was dahintersteckt</h2>
+      <p>Richtig ist nur der erste Teil der Begründung: Die Ellipse hat wirklich dieselbe Fläche wie ein Kreis mit dem Durchmesser √(A · B). Aber gleiche Fläche heißt nicht gleicher Umfang. Je länger und schmaler eine Form ist, desto länger ist ihr Rand bei gleicher Fläche. Deshalb rechnet die Formel bei Kreisen richtig, bei fast runden Ellipsen beinahe richtig und bei gestreckten Ellipsen viel zu wenig.</p>
+
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Scheibe</th><th>A × B (mm)</th><th>wahrer Umfang (mm)</th><th>falsche Formel (mm)</th><th>Abweichung</th></tr></thead>
+          <tbody>
+            <tr><td>K1</td><td>30</td><td>94,2</td><td>94,2</td><td>0 %</td></tr>
+            <tr><td>K2</td><td>40</td><td>125,7</td><td>125,7</td><td>0 %</td></tr>
+            <tr><td>E1</td><td>50 × 40</td><td>141,8</td><td>140,5</td><td>+0,9 %</td></tr>
+            <tr><td>E2</td><td>48 × 32</td><td>126,9</td><td>123,1</td><td>+3,1 %</td></tr>
+            <tr><td>E3</td><td>64 × 16</td><td>137,2</td><td>100,5</td><td>+36,5 %</td></tr>
+            <tr><td>E4</td><td>72 × 12</td><td>149,4</td><td>92,3</td><td>+61,7 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Für den Umfang einer Ellipse gibt es keine einfache genaue Formel. Die Werte in der Tabelle stammen aus einer sehr guten Näherung, die der indische Mathematiker Srinivasa Ramanujan 1914 gefunden hat:</p>
+      <p style="text-align:center">Umfang ≈ 1,571 · [ 3 (A + B) − √((3A + B) · (A + 3B)) ]</p>
+      <p>Die Scheiben sind die Papierschablonen aus dem Hörsaalexperiment im Maßstab 1:5. Das Verhältnis von A zu B ist dasselbe, deshalb liegt die falsche Formel prozentual genauso daneben wie bei den großen Schablonen mit dem Maßband. Dort ist E3 320 × 80 mm groß, hat 686 mm Umfang, und die Formel sagt 502 mm.</p>
+      <p>Wer sorgfältig rollt, dürfte auf etwa 1 bis 2 mm genau messen. Das ist eine Schätzung, erprobt ist es noch nicht. Bei E3 und E4 liegt die Formel 37 und 57 mm daneben, das sieht jeder. Bei E1 (+1 %) geht der Unterschied im Messfehler unter, bei E2 (+3 %) wird es knapp. Gerade das macht die Formel glaubwürdig: Sie hat ja zweimal gestimmt.</p>
+
+      <h2>Tipps</h2>
+      <ul>
+        <li>PLA auf PLA kann rutschen, vor allem wenn E3 und E4 über ihre Spitzen kippen. Rutschen verkürzt die gerollte Strecke und macht den Widerspruch scheinbar kleiner. Roll langsam mit leichtem Druck. Hilft das nicht, leg Malerkrepp in die Rille oder rau den Scheibenrand etwas an.</li>
+        <li>Gib das zweite Blatt wirklich erst aus, wenn alle Tabellen voll sind. Der Witz dieser Fassung ist, dass die Messwerte feststehen, bevor jemand eine Erwartung hat.</li>
+        <li>Es gibt eine Fassung mit großen Papierschablonen und Maßband, bei der die Formel vor der Messung kommt. Dort kann die Erwartung schon auf das Ablesen wirken. Bei der Rollbahn richtet sich der Zweifel eher auf das Verfahren („gerutscht“, „ungenau gedruckt“). Wenn du beide Reihenfolgen zeigst, kannst du vergleichen, welche Erklärung deine Mitspieler jeweils ankreuzen.</li>
+        <li>Die Rollbahn ist neu und noch nicht im Einsatz erprobt. Probier sie aus, bevor du sie vor Publikum verwendest.</li>
+      </ul>
+
+      <h2>Und was hat das mit Wissenschaft zu tun?</h2>
+      <p>In einem bekannten Experiment sollten Wissenschaftler mit Doktortitel das Volumen von Kugeln einmal messen und einmal mit einer Formel ausrechnen. Die Formel war absichtlich falsch. Fast alle vertrauten eher der Formel als ihrer eigenen Messung, und einige „verbesserten“ ihre Messwerte, bis sie besser passten (Nissani und Hoefler-Nissani 1992).</p>
+      <p>Bei der Rollbahn stehen die Zahlen schon fest, bevor die Formel kommt. Trotzdem suchen viele den Fehler zuerst bei sich oder beim Werkzeug. Eine Formel ist aber nur so gut wie ihre Begründung, und eine Begründung kann einleuchtend klingen und trotzdem falsch sein. Wenn Messung und Rechnung nicht zusammenpassen, lohnt sich das Staunen, denn genau dort beginnt Wissenschaft.</p>
+
+      <p class="small muted" style="margin-top:2.5rem">Nach dem Hörsaalexperiment „Messen und Rechnen, Einheit 4“ von Markus Pfeil, hier als Station mit der gedruckten Rollbahn und den Schablonen K1, K2 und E1 bis E4 im Maßstab 1:5. Das Kugel-Experiment: Nissani und Hoefler-Nissani (1992), Cognition and Instruction 9(2), 97–111. Stand: Oktober 2026.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <h4>Wissenschaft und Zauberkunst</h4>
+      <p>Ein Arbeitsmodell von Prof. Dr. Markus Pfeil. Zauberkunst als Werkzeug für wissenschaftliches Denken in Schule, Hochschule und Organisation.</p>
+      <p class="motto">Spielen, Staunen und Erkennen für ein besseres Bild von der Welt.</p>
+    </div>
+    <div>
+      <h4>Seiten</h4>
+      <ul>
+        <li><a href="/">Start</a></li>
+        <li><a href="/#formate">Formate</a></li>
+        <li><a href="/hintergrund/">Hintergrund</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/werkzeuge/">Werkzeuge</a></li>
+        <li><a href="/shop/">Shop</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="/impressum/">Impressum</a></li>
+        <li><a href="/datenschutz/">Datenschutzerklärung</a></li>
+        <li><a href="mailto:m.o.pfeil@gmail.com">Kontakt</a></li>
+      </ul>
+    </div>
+    <div class="bottom">
+      <span>© <span data-year>2026</span> Markus Pfeil</span>
+      <span>Scientia et Magia · Ludendo, mirando et inveniendo ad melius intellegendum mundum</span>
+    </div>
+  </div>
+</footer>
+<script defer src="/assets/js/site.js"></script>
+</body>
+</html>

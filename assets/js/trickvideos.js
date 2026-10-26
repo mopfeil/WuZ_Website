@@ -4,7 +4,7 @@
 (function () {
   var INTRO = "";              // Einleitungsvideo Wissenschaft & Zauberkunst
   var VIDEOS = {
-    Z: "", P: "", C: "", H: "", N: "", A: "", E: "", M: "", W: "", I: ""
+    Z: "PTe0kkg2Yyg", P: "OESKTOXCUjA", C: "EWPEpj-YEO8", H: "", N: "", A: "", E: "", M: "", W: "", I: ""
   };
 
   var box = document.querySelector(".trick-videos[data-trick]");

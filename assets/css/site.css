@@ -369,3 +369,9 @@ hr.rule{border:0;border-top:1px solid var(--rule);margin:2.5rem 0}
 .post-nav .next{text-align:right;grid-column:2}
 @media (max-width:760px){.post-nav,.post-gallery{grid-template-columns:1fr}.post-nav .next{grid-column:auto}}
 .post-cap{font-size:.85rem;color:var(--muted);text-align:center;margin-top:-.8rem}
+
+/* ---------- Trick pages: WuZ introduction + video links ---------- */
+.wuz-intro{background:var(--white);border:1px solid var(--rule);border-radius:var(--radius);padding:18px 22px;margin-top:1.5rem}
+.wuz-intro h2{margin-top:0}
+.trick-videos{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem}
+.trick-videos[hidden]{display:none}

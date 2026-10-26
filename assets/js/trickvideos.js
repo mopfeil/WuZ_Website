@@ -3,7 +3,7 @@
 // A page without an ID shows no video link.
 (function () {
   var VIDEOS = {
-    Z: "PTe0kkg2Yyg", P: "OESKTOXCUjA", C: "EWPEpj-YEO8", H: "", N: "", A: "", E: "", M: "", W: "", I: ""
+    Z: "PTe0kkg2Yyg", P: "OESKTOXCUjA", C: "EWPEpj-YEO8", H: "", N: "", A: "", E: "", M: "", W: "", I: "", B: ""
   };
 
   var box = document.querySelector(".trick-videos[data-trick]");

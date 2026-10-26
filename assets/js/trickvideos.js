@@ -1,8 +1,7 @@
 // Video links on the trick pages (/Z/, /C/, /I/ …), unlisted YouTube videos.
 // Enter the video ID (the part after "watch?v=" or "youtu.be/").
-// A page shows only the links that have an ID; with none, the block stays hidden.
+// A page without an ID shows no video link.
 (function () {
-  var INTRO = "";              // Einleitungsvideo Wissenschaft & Zauberkunst
   var VIDEOS = {
     Z: "PTe0kkg2Yyg", P: "OESKTOXCUjA", C: "EWPEpj-YEO8", H: "", N: "", A: "", E: "", M: "", W: "", I: ""
   };
@@ -13,7 +12,6 @@
   var links = [];
   var id = VIDEOS[box.getAttribute("data-trick")];
   if (id) links.push([id, en ? "Watch the video of this trick" : "Video zu diesem Kunststück"]);
-  if (INTRO) links.push([INTRO, en ? "Introduction to Science & Magic" : "Einleitungsvideo Wissenschaft & Zauberkunst"]);
   if (!links.length) return;
   links.forEach(function (l) {
     var a = document.createElement("a");

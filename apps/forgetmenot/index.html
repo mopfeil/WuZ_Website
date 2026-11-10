@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Forget-me-not Trainer</title>
+<style>
+:root{
+  --bg:#f6f4ef; --panel:#ffffff; --ink:#1f2328; --muted:#6a6f76; --line:#dcd8cf; --accent:#3b5bdb; --accent-ink:#fff;
+  --ok:#2f9e44; --bad:#e03131; --chip:#efece5;
+  --c0:#dbe8f7; --c1:#dfeed6; --c2:#fff0c2; --c3:#fbe0d3;
+  --c0s:#3d6fb6; --c1s:#3f8a3a; --c2s:#b08300; --c3s:#c0532b;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#16181c; --panel:#20232a; --ink:#e7e9ec; --muted:#9aa1ab; --line:#353a43; --accent:#7c93f5; --accent-ink:#0e1220;
+  --ok:#51cf66; --bad:#ff6b6b; --chip:#2a2e36;
+  --c0:#1f3047; --c1:#22351f; --c2:#3a3115; --c3:#3e2519;
+  --c0s:#8fb4ea; --c1s:#8fd18a; --c2s:#e6c260; --c3s:#f09a76;
+}}
+:root[data-theme="dark"]{
+  --bg:#16181c; --panel:#20232a; --ink:#e7e9ec; --muted:#9aa1ab; --line:#353a43; --accent:#7c93f5; --accent-ink:#0e1220;
+  --ok:#51cf66; --bad:#ff6b6b; --chip:#2a2e36;
+  --c0:#1f3047; --c1:#22351f; --c2:#3a3115; --c3:#3e2519;
+  --c0s:#8fb4ea; --c1s:#8fd18a; --c2s:#e6c260; --c3s:#f09a76;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{max-width:980px;margin:0 auto;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:700;font-size:17px;margin-right:auto;white-space:nowrap}
+.brand small{font-weight:400;color:var(--muted);margin-left:6px}
+nav{max-width:980px;margin:0 auto;padding:0 16px;display:flex;gap:4px;overflow-x:auto}
+nav button{border:0;background:none;color:var(--muted);padding:8px 12px;font:inherit;font-size:15px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+nav button.on{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+main{max-width:980px;margin:0 auto;padding:18px 16px 60px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--panel);color:var(--ink);padding:5px 11px;font:inherit;font-size:14px;cursor:pointer}
+.seg button.on{background:var(--accent);color:var(--accent-ink)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted)}
+.small{font-size:13.5px}
+h2{font-size:19px;margin:0 0 10px}
+h3{font-size:16px;margin:16px 0 8px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:8px 14px;font:inherit;font-size:15px;cursor:pointer}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff;font-weight:600}
+.btn.bad{background:var(--bad);border-color:var(--bad);color:#fff;font-weight:600}
+.btn.link{border:0;background:none;color:var(--accent);padding:4px 6px}
+input[type=text]{font:inherit;font-size:18px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;max-width:420px}
+input[type=text]:focus{outline:2px solid var(--accent);outline-offset:1px}
+.chip{display:inline-block;background:var(--chip);border-radius:999px;padding:2px 9px;font-size:13px;color:var(--muted)}
+.cardq{min-height:250px;display:flex;flex-direction:column;gap:14px}
+.q{font-size:22px;line-height:1.35}
+.q b{font-weight:700}
+.ans{border-top:1px dashed var(--line);padding-top:12px;font-size:17px}
+.ans .big{font-size:22px;font-weight:700}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--ok)} .verdict.bad{color:var(--bad)}
+.hint{background:var(--chip);border-radius:8px;padding:8px 12px;font-size:15px}
+.boxes{display:flex;gap:6px;align-items:flex-end;height:64px}
+.boxes div{flex:1;background:var(--accent);opacity:.75;border-radius:4px 4px 0 0;min-height:2px;position:relative}
+.boxes div span{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:12px;color:var(--muted)}
+.boxlbl{display:flex;gap:6px;font-size:12px;color:var(--muted)} .boxlbl span{flex:1;text-align:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:720px){.grid2{grid-template-columns:1fr}.q{font-size:20px}}
+.lessons label{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:15px}
+.lessons .prog{margin-left:auto;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.pbar{height:6px;background:var(--chip);border-radius:3px;overflow:hidden;margin-top:3px}
+.pbar i{display:block;height:100%;background:var(--ok)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--muted);font-weight:600}
+.tblwrap{overflow-x:auto}
+.cg0{background:var(--c0)} .cg1{background:var(--c1)} .cg2{background:var(--c2)} .cg3{background:var(--c3)}
+.ring{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:720px){.ring{grid-template-columns:1fr 1fr}}
+.cyc{border-radius:10px;padding:10px 12px}
+.cyc ol{margin:6px 0 0;padding-left:22px;font-size:14.5px}
+.cyc li.o{font-weight:700}
+svg text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.palace svg{width:100%;height:auto;display:block}
+.story{font-size:16px;font-style:italic;margin:6px 0 0}
+.step{font-size:17px;min-height:52px}
+.kbd{font-family:ui-monospace,monospace;font-size:12px;border:1px solid var(--line);border-radius:4px;padding:0 4px;color:var(--muted)}
+.spect{font-size:20px;line-height:1.6}
+.spect q{font-weight:700}
+.timer{font-variant-numeric:tabular-nums;font-size:15px;color:var(--muted)}
+.page{border:1px solid var(--line);border-radius:8px;padding:8px 14px;background:var(--bg);max-width:340px}
+.page ol{margin:0;padding-left:24px;font-family:Georgia,serif;font-size:17px}
+.page li.f{background:var(--c2);font-weight:700}
+.page li.l{text-decoration:underline}
+.center{text-align:center}
+.mt{margin-top:14px}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brand">Forget-me-not <small id="subtitle"></small></div>
+    <div class="seg" id="langSeg"><button data-l="de">DE</button><button data-l="en">EN</button></div>
+  </div>
+  <nav id="tabs"></nav>
+</header>
+<main id="main"></main>
+
+<script>
+const DATA = {"de": {"levels": ["leicht", "mittel", "schwer"], "lenrule": ["kurz (bis 7)", "mittel (8–10)", "lang (ab 11)"], "concepts": [{"nr": 0, "o": ["Kranz", "Girlande", "Lorbeerkranz"], "p": ["Tanne", "Nadelbaum", "Weihnachtsbaum"], "hook": "rund wie eine 0", "oread": "Ehre, Abschluss – ein Kreis schließt sich", "pread": "Beständigkeit, Familie, Weihnacht", "link": "Der Kranz ist aus Tanne gebunden.", "oalive": 0}, {"nr": 1, "o": ["Kerze", "Teelicht", "Kronleuchter"], "p": ["Kind", "Säugling", "Neugeborenes"], "hook": "steht da wie eine 1", "oread": "Hoffnung, Licht in dunkler Zeit", "pread": "Unschuld, Neubeginn, Freude", "link": "Das Kind bläst die Kerze aus.", "oalive": 0}, {"nr": 2, "o": ["Schwan", "Wildgans", "Höckerschwan"], "p": ["Daune", "Gefieder", "Schwungfeder"], "hook": "der Hals ist eine 2", "oread": "Treue, Anmut, Verwandlung", "pread": "Sanftheit, Geborgenheit", "link": "Die Daune stammt vom Schwan.", "oalive": 1}, {"nr": 3, "o": ["Herz", "Herzblatt", "Herzklopfen"], "p": ["Engel", "Erzengel", "Schutzengel"], "hook": "eine liegende 3 ist der Herzbogen", "oread": "Liebe, Gefühl, Herzensangelegenheit", "pread": "Schutz, Beistand", "link": "Der Engel trägt das Herz.", "oalive": 0}, {"nr": 4, "o": ["Klee", "Kleeblatt", "Glückskleeblatt"], "p": ["Amulett", "Talisman", "Maskottchen"], "hook": "vier Blätter", "oread": "Glück, eine unerwartete Chance", "pread": "Schutz, Glaube an das Glück", "link": "Das Kleeblatt ist mein Amulett.", "oalive": 1}, {"nr": 5, "o": ["Haken", "Angelhaken", "Kleiderhaken"], "p": ["Karpfen", "Goldfisch", "Bachforelle"], "hook": "der Bauch der 5 ist ein Angelhaken", "oread": "Ein Haken an der Sache, Köder, Vorsicht", "pread": "Wohlstand, Ausdauer", "link": "Der Karpfen hängt am Haken.", "oalive": 0}, {"nr": 6, "o": ["Muschel", "Schnecke", "Schneckenhaus"], "p": ["Regen", "Regenguss", "Wolkenbruch"], "hook": "das Haus ist eine 6", "oread": "Geduld, langsam aber sicher, Rückzug", "pread": "Reinigung, Tränen, Wachstum", "link": "Die Schnecke kommt im Regen.", "oalive": 1}, {"nr": 7, "o": ["Sense", "Rasenmäher", "Mähdrescher"], "p": ["Bauer", "Schnitter", "Erntehelfer"], "hook": "Stiel und Blatt bilden eine 7", "oread": "Abschied, klarer Schnitt, Ernte", "pread": "Vergänglichkeit, Erntezeit", "link": "Der Schnitter schwingt die Sense.", "oalive": 0}, {"nr": 8, "o": ["Krake", "Kopffüßer", "Riesenkrake"], "p": ["Wrack", "Autowrack", "Schiffswrack"], "hook": "acht Arme", "oread": "Verstrickung, viele Aufgaben, Klammern", "pread": "Scheitern, verborgene Schätze", "link": "Die Krake haust im Wrack.", "oalive": 1}, {"nr": 9, "o": ["Ballon", "Luftballon", "Wetterballon"], "p": ["Gauner", "Schwindler", "Taschendieb"], "hook": "Ballon an der Schnur = 9", "oread": "Leichtigkeit, Loslassen, Aufstieg", "pread": "List, Täuschung", "link": "Der Gauner stiehlt den Ballon.", "oalive": 0}, {"nr": 10, "o": ["Rad", "Glücksrad", "Speichenrad"], "p": ["Pfau", "Truthahn", "Paradiesvogel"], "hook": "Glücksrad = Tarotkarte X", "oread": "Schicksal, Wandel – das Rad dreht sich", "pread": "Stolz, Pracht, Eitelkeit", "link": "Der Pfau schlägt ein Rad.", "oalive": 0}, {"nr": 11, "o": ["Elfe", "Zauberfee", "Feenkönigin"], "p": ["Flügel", "Schwinge", "Flügelschlag"], "hook": "Elfe = Elf", "oread": "Zauber, Intuition, das Unsichtbare", "pread": "Freiheit, Aufbruch", "link": "Die Elfe hat zarte Flügel.", "oalive": 1}, {"nr": 12, "o": ["Uhr", "Standuhr", "Kuckucksuhr"], "p": ["Uhu", "Nachtkauz", "Schleiereule"], "hook": "zwölf Stunden auf dem Zifferblatt", "oread": "Zeit, ein Termin – es ist an der Zeit", "pread": "Weisheit, Nacht, Wachsamkeit", "link": "Der Uhu ruft, wenn die Uhr zwölf schlägt.", "oalive": 0}, {"nr": 13, "o": ["Rabe", "Saatkrähe", "Unglücksrabe"], "p": ["Grab", "Grabstein", "Familiengrab"], "hook": "Unglückszahl 13 – Unglücksrabe", "oread": "Botschaft, Warnung, Weisheit", "pread": "Ende, Vergangenheit, Ruhe", "link": "Der Rabe sitzt auf dem Grab.", "oalive": 1}, {"nr": 14, "o": ["Rose", "Wildrose", "Kletterrose"], "p": ["Schwur", "Gelöbnis", "Versprechen"], "hook": "14. Februar, Valentinstag", "oread": "Romantik, Schönheit mit Dornen", "pread": "Versprechen, Bindung, Treue", "link": "Mit der Rose besiegelt er den Schwur.", "oalive": 1}, {"nr": 15, "o": ["Teufel", "Beelzebub", "Höllenfürst"], "p": ["Feuer", "Lagerfeuer", "Flammenmeer"], "hook": "Tarotkarte XV", "oread": "Versuchung, Abhängigkeit, Schattenseite", "pread": "Leidenschaft, Zerstörung, Neubeginn", "link": "Der Teufel sitzt im Feuer.", "oalive": 1}], "cards": [[["Kranz", "Kerze", "Schwan", "Herz", "Tanne", "Kind", "Daune", "Engel"], ["Klee", "Haken", "Muschel", "Sense", "Amulett", "Karpfen", "Regen", "Bauer"], ["Krake", "Ballon", "Rad", "Elfe", "Wrack", "Gauner", "Pfau", "Flügel"], ["Uhr", "Rabe", "Rose", "Teufel", "Uhu", "Grab", "Schwur", "Feuer"]], [["Girlande", "Teelicht", "Wildgans", "Herzblatt", "Nadelbaum", "Säugling", "Gefieder", "Erzengel"], ["Kleeblatt", "Angelhaken", "Schnecke", "Rasenmäher", "Talisman", "Goldfisch", "Regenguss", "Schnitter"], ["Kopffüßer", "Luftballon", "Glücksrad", "Zauberfee", "Autowrack", "Schwindler", "Truthahn", "Schwinge"], ["Standuhr", "Saatkrähe", "Wildrose", "Beelzebub", "Nachtkauz", "Grabstein", "Gelöbnis", "Lagerfeuer"]], [["Lorbeerkranz", "Kronleuchter", "Höckerschwan", "Herzklopfen", "Weihnachtsbaum", "Neugeborenes", "Schwungfeder", "Schutzengel"], ["Glückskleeblatt", "Kleiderhaken", "Schneckenhaus", "Mähdrescher", "Maskottchen", "Bachforelle", "Wolkenbruch", "Erntehelfer"], ["Riesenkrake", "Wetterballon", "Speichenrad", "Feenkönigin", "Schiffswrack", "Taschendieb", "Paradiesvogel", "Flügelschlag"], ["Kuckucksuhr", "Unglücksrabe", "Kletterrose", "Höllenfürst", "Schleiereule", "Familiengrab", "Versprechen", "Flammenmeer"]]], "words": {"Kranz": {"nr": 0, "t": "O", "deck": 0, "alive": 0, "partner": "Tanne", "letter": "N", "next": "Kerze"}, "Tanne": {"nr": 0, "t": "P", "deck": 0, "alive": 1, "partner": "Kranz", "letter": "N", "next": "Kind"}, "Girlande": {"nr": 0, "t": "O", "deck": 1, "alive": 0, "partner": "Nadelbaum", "letter": "D", "next": "Teelicht"}, "Nadelbaum": {"nr": 0, "t": "P", "deck": 1, "alive": 1, "partner": "Girlande", "letter": "D", "next": "Säugling"}, "Lorbeerkranz": {"nr": 0, "t": "O", "deck": 2, "alive": 0, "partner": "Weihnachtsbaum", "letter": "B", "next": "Kronleuchter"}, "Weihnachtsbaum": {"nr": 0, "t": "P", "deck": 2, "alive": 1, "partner": "Lorbeerkranz", "letter": "B", "next": "Neugeborenes"}, "Kerze": {"nr": 1, "t": "O", "deck": 0, "alive": 0, "partner": "Kind", "letter": "K", "next": "Schwan"}, "Kind": {"nr": 1, "t": "P", "deck": 0, "alive": 1, "partner": "Kerze", "letter": "K", "next": "Daune"}, "Teelicht": {"nr": 1, "t": "O", "deck": 1, "alive": 0, "partner": "Säugling", "letter": "L", "next": "Wildgans"}, "Säugling": {"nr": 1, "t": "P", "deck": 1, "alive": 1, "partner": "Teelicht", "letter": "L", "next": "Gefieder"}, "Kronleuchter": {"nr": 1, "t": "O", "deck": 2, "alive": 0, "partner": "Neugeborenes", "letter": "R", "next": "Höckerschwan"}, "Neugeborenes": {"nr": 1, "t": "P", "deck": 2, "alive": 1, "partner": "Kronleuchter", "letter": "R", "next": "Schwungfeder"}, "Schwan": {"nr": 2, "t": "O", "deck": 0, "alive": 1, "partner": "Daune", "letter": "N", "next": "Herz"}, "Daune": {"nr": 2, "t": "P", "deck": 0, "alive": 0, "partner": "Schwan", "letter": "N", "next": "Engel"}, "Wildgans": {"nr": 2, "t": "O", "deck": 1, "alive": 1, "partner": "Gefieder", "letter": "D", "next": "Herzblatt"}, "Gefieder": {"nr": 2, "t": "P", "deck": 1, "alive": 0, "partner": "Wildgans", "letter": "D", "next": "Erzengel"}, "Höckerschwan": {"nr": 2, "t": "O", "deck": 2, "alive": 1, "partner": "Schwungfeder", "letter": "C", "next": "Herzklopfen"}, "Schwungfeder": {"nr": 2, "t": "P", "deck": 2, "alive": 0, "partner": "Höckerschwan", "letter": "C", "next": "Schutzengel"}, "Herz": {"nr": 3, "t": "O", "deck": 0, "alive": 0, "partner": "Engel", "letter": "E", "next": "Tanne"}, "Engel": {"nr": 3, "t": "P", "deck": 0, "alive": 1, "partner": "Herz", "letter": "E", "next": "Kranz"}, "Herzblatt": {"nr": 3, "t": "O", "deck": 1, "alive": 0, "partner": "Erzengel", "letter": "Z", "next": "Nadelbaum"}, "Erzengel": {"nr": 3, "t": "P", "deck": 1, "alive": 1, "partner": "Herzblatt", "letter": "Z", "next": "Girlande"}, "Herzklopfen": {"nr": 3, "t": "O", "deck": 2, "alive": 0, "partner": "Schutzengel", "letter": "Z", "next": "Weihnachtsbaum"}, "Schutzengel": {"nr": 3, "t": "P", "deck": 2, "alive": 1, "partner": "Herzklopfen", "letter": "Z", "next": "Lorbeerkranz"}, "Klee": {"nr": 4, "t": "O", "deck": 0, "alive": 1, "partner": "Amulett", "letter": "L", "next": "Haken"}, "Amulett": {"nr": 4, "t": "P", "deck": 0, "alive": 0, "partner": "Klee", "letter": "L", "next": "Karpfen"}, "Kleeblatt": {"nr": 4, "t": "O", "deck": 1, "alive": 1, "partner": "Talisman", "letter": "L", "next": "Angelhaken"}, "Talisman": {"nr": 4, "t": "P", "deck": 1, "alive": 0, "partner": "Kleeblatt", "letter": "L", "next": "Goldfisch"}, "Glückskleeblatt": {"nr": 4, "t": "O", "deck": 2, "alive": 1, "partner": "Maskottchen", "letter": "C", "next": "Kleiderhaken"}, "Maskottchen": {"nr": 4, "t": "P", "deck": 2, "alive": 0, "partner": "Glückskleeblatt", "letter": "C", "next": "Bachforelle"}, "Haken": {"nr": 5, "t": "O", "deck": 0, "alive": 0, "partner": "Karpfen", "letter": "K", "next": "Muschel"}, "Karpfen": {"nr": 5, "t": "P", "deck": 0, "alive": 1, "partner": "Haken", "letter": "K", "next": "Regen"}, "Angelhaken": {"nr": 5, "t": "O", "deck": 1, "alive": 0, "partner": "Goldfisch", "letter": "G", "next": "Schnecke"}, "Goldfisch": {"nr": 5, "t": "P", "deck": 1, "alive": 1, "partner": "Angelhaken", "letter": "G", "next": "Regenguss"}, "Kleiderhaken": {"nr": 5, "t": "O", "deck": 2, "alive": 0, "partner": "Bachforelle", "letter": "L", "next": "Schneckenhaus"}, "Bachforelle": {"nr": 5, "t": "P", "deck": 2, "alive": 1, "partner": "Kleiderhaken", "letter": "L", "next": "Wolkenbruch"}, "Muschel": {"nr": 6, "t": "O", "deck": 0, "alive": 1, "partner": "Regen", "letter": "E", "next": "Sense"}, "Regen": {"nr": 6, "t": "P", "deck": 0, "alive": 0, "partner": "Muschel", "letter": "E", "next": "Bauer"}, "Schnecke": {"nr": 6, "t": "O", "deck": 1, "alive": 1, "partner": "Regenguss", "letter": "S", "next": "Rasenmäher"}, "Regenguss": {"nr": 6, "t": "P", "deck": 1, "alive": 0, "partner": "Schnecke", "letter": "S", "next": "Schnitter"}, "Schneckenhaus": {"nr": 6, "t": "O", "deck": 2, "alive": 1, "partner": "Wolkenbruch", "letter": "C", "next": "Mähdrescher"}, "Wolkenbruch": {"nr": 6, "t": "P", "deck": 2, "alive": 0, "partner": "Schneckenhaus", "letter": "C", "next": "Erntehelfer"}, "Sense": {"nr": 7, "t": "O", "deck": 0, "alive": 0, "partner": "Bauer", "letter": "E", "next": "Amulett"}, "Bauer": {"nr": 7, "t": "P", "deck": 0, "alive": 1, "partner": "Sense", "letter": "E", "next": "Klee"}, "Rasenmäher": {"nr": 7, "t": "O", "deck": 1, "alive": 0, "partner": "Schnitter", "letter": "H", "next": "Talisman"}, "Schnitter": {"nr": 7, "t": "P", "deck": 1, "alive": 1, "partner": "Rasenmäher", "letter": "H", "next": "Kleeblatt"}, "Mähdrescher": {"nr": 7, "t": "O", "deck": 2, "alive": 0, "partner": "Erntehelfer", "letter": "H", "next": "Maskottchen"}, "Erntehelfer": {"nr": 7, "t": "P", "deck": 2, "alive": 1, "partner": "Mähdrescher", "letter": "H", "next": "Glückskleeblatt"}, "Krake": {"nr": 8, "t": "O", "deck": 0, "alive": 1, "partner": "Wrack", "letter": "K", "next": "Ballon"}, "Wrack": {"nr": 8, "t": "P", "deck": 0, "alive": 0, "partner": "Krake", "letter": "K", "next": "Gauner"}, "Kopffüßer": {"nr": 8, "t": "O", "deck": 1, "alive": 1, "partner": "Autowrack", "letter": "K", "next": "Luftballon"}, "Autowrack": {"nr": 8, "t": "P", "deck": 1, "alive": 0, "partner": "Kopffüßer", "letter": "K", "next": "Schwindler"}, "Riesenkrake": {"nr": 8, "t": "O", "deck": 2, "alive": 1, "partner": "Schiffswrack", "letter": "K", "next": "Wetterballon"}, "Schiffswrack": {"nr": 8, "t": "P", "deck": 2, "alive": 0, "partner": "Riesenkrake", "letter": "K", "next": "Taschendieb"}, "Ballon": {"nr": 9, "t": "O", "deck": 0, "alive": 0, "partner": "Gauner", "letter": "N", "next": "Rad"}, "Gauner": {"nr": 9, "t": "P", "deck": 0, "alive": 1, "partner": "Ballon", "letter": "N", "next": "Pfau"}, "Luftballon": {"nr": 9, "t": "O", "deck": 1, "alive": 0, "partner": "Schwindler", "letter": "L", "next": "Glücksrad"}, "Schwindler": {"nr": 9, "t": "P", "deck": 1, "alive": 1, "partner": "Luftballon", "letter": "L", "next": "Truthahn"}, "Wetterballon": {"nr": 9, "t": "O", "deck": 2, "alive": 0, "partner": "Taschendieb", "letter": "B", "next": "Speichenrad"}, "Taschendieb": {"nr": 9, "t": "P", "deck": 2, "alive": 1, "partner": "Wetterballon", "letter": "B", "next": "Paradiesvogel"}, "Rad": {"nr": 10, "t": "O", "deck": 0, "alive": 0, "partner": "Pfau", "letter": "A", "next": "Elfe"}, "Pfau": {"nr": 10, "t": "P", "deck": 0, "alive": 1, "partner": "Rad", "letter": "A", "next": "Flügel"}, "Glücksrad": {"nr": 10, "t": "O", "deck": 1, "alive": 0, "partner": "Truthahn", "letter": "R", "next": "Zauberfee"}, "Truthahn": {"nr": 10, "t": "P", "deck": 1, "alive": 1, "partner": "Glücksrad", "letter": "R", "next": "Schwinge"}, "Speichenrad": {"nr": 10, "t": "O", "deck": 2, "alive": 0, "partner": "Paradiesvogel", "letter": "P", "next": "Feenkönigin"}, "Paradiesvogel": {"nr": 10, "t": "P", "deck": 2, "alive": 1, "partner": "Speichenrad", "letter": "P", "next": "Flügelschlag"}, "Elfe": {"nr": 11, "t": "O", "deck": 0, "alive": 1, "partner": "Flügel", "letter": "F", "next": "Wrack"}, "Flügel": {"nr": 11, "t": "P", "deck": 0, "alive": 0, "partner": "Elfe", "letter": "F", "next": "Krake"}, "Zauberfee": {"nr": 11, "t": "O", "deck": 1, "alive": 1, "partner": "Schwinge", "letter": "E", "next": "Autowrack"}, "Schwinge": {"nr": 11, "t": "P", "deck": 1, "alive": 0, "partner": "Zauberfee", "letter": "E", "next": "Kopffüßer"}, "Feenkönigin": {"nr": 11, "t": "O", "deck": 2, "alive": 1, "partner": "Flügelschlag", "letter": "F", "next": "Schiffswrack"}, "Flügelschlag": {"nr": 11, "t": "P", "deck": 2, "alive": 0, "partner": "Feenkönigin", "letter": "F", "next": "Riesenkrake"}, "Uhr": {"nr": 12, "t": "O", "deck": 0, "alive": 0, "partner": "Uhu", "letter": "H", "next": "Rabe"}, "Uhu": {"nr": 12, "t": "P", "deck": 0, "alive": 1, "partner": "Uhr", "letter": "H", "next": "Grab"}, "Standuhr": {"nr": 12, "t": "O", "deck": 1, "alive": 0, "partner": "Nachtkauz", "letter": "H", "next": "Saatkrähe"}, "Nachtkauz": {"nr": 12, "t": "P", "deck": 1, "alive": 1, "partner": "Standuhr", "letter": "H", "next": "Grabstein"}, "Kuckucksuhr": {"nr": 12, "t": "O", "deck": 2, "alive": 0, "partner": "Schleiereule", "letter": "C", "next": "Unglücksrabe"}, "Schleiereule": {"nr": 12, "t": "P", "deck": 2, "alive": 1, "partner": "Kuckucksuhr", "letter": "C", "next": "Familiengrab"}, "Rabe": {"nr": 13, "t": "O", "deck": 0, "alive": 1, "partner": "Grab", "letter": "B", "next": "Rose"}, "Grab": {"nr": 13, "t": "P", "deck": 0, "alive": 0, "partner": "Rabe", "letter": "B", "next": "Schwur"}, "Saatkrähe": {"nr": 13, "t": "O", "deck": 1, "alive": 1, "partner": "Grabstein", "letter": "T", "next": "Wildrose"}, "Grabstein": {"nr": 13, "t": "P", "deck": 1, "alive": 0, "partner": "Saatkrähe", "letter": "T", "next": "Gelöbnis"}, "Unglücksrabe": {"nr": 13, "t": "O", "deck": 2, "alive": 1, "partner": "Familiengrab", "letter": "B", "next": "Kletterrose"}, "Familiengrab": {"nr": 13, "t": "P", "deck": 2, "alive": 0, "partner": "Unglücksrabe", "letter": "B", "next": "Versprechen"}, "Rose": {"nr": 14, "t": "O", "deck": 0, "alive": 1, "partner": "Schwur", "letter": "S", "next": "Teufel"}, "Schwur": {"nr": 14, "t": "P", "deck": 0, "alive": 0, "partner": "Rose", "letter": "S", "next": "Feuer"}, "Wildrose": {"nr": 14, "t": "O", "deck": 1, "alive": 1, "partner": "Gelöbnis", "letter": "L", "next": "Beelzebub"}, "Gelöbnis": {"nr": 14, "t": "P", "deck": 1, "alive": 0, "partner": "Wildrose", "letter": "L", "next": "Lagerfeuer"}, "Kletterrose": {"nr": 14, "t": "O", "deck": 2, "alive": 1, "partner": "Versprechen", "letter": "S", "next": "Höllenfürst"}, "Versprechen": {"nr": 14, "t": "P", "deck": 2, "alive": 0, "partner": "Kletterrose", "letter": "S", "next": "Flammenmeer"}, "Teufel": {"nr": 15, "t": "O", "deck": 0, "alive": 1, "partner": "Feuer", "letter": "F", "next": "Uhu"}, "Feuer": {"nr": 15, "t": "P", "deck": 0, "alive": 0, "partner": "Teufel", "letter": "F", "next": "Uhr"}, "Beelzebub": {"nr": 15, "t": "O", "deck": 1, "alive": 1, "partner": "Lagerfeuer", "letter": "L", "next": "Nachtkauz"}, "Lagerfeuer": {"nr": 15, "t": "P", "deck": 1, "alive": 0, "partner": "Beelzebub", "letter": "L", "next": "Standuhr"}, "Höllenfürst": {"nr": 15, "t": "O", "deck": 2, "alive": 1, "partner": "Flammenmeer", "letter": "F", "next": "Schleiereule"}, "Flammenmeer": {"nr": 15, "t": "P", "deck": 2, "alive": 0, "partner": "Höllenfürst", "letter": "F", "next": "Kuckucksuhr"}}, "scenes": [["morgens – 1. Advent", "Am Morgen des 1. Advents brennt die Kerze im Kranz, und auf dem Teich formt der Schwan mit dem Hals ein Herz."], ["mittags – im Garten", "Mittags im Garten: Im Klee liegt ein Haken, darauf kriecht die Schnecke – da kommt die Sense."], ["abends – auf dem Jahrmarkt", "Abends auf dem Jahrmarkt: Die Krake wirbelt, der Ballon steigt, das Riesenrad dreht sich, und die Elfe zaubert."], ["Mitternacht", "Um Mitternacht schlägt die Uhr, der Rabe krächzt, die Rose welkt, der Teufel kommt."]]}, "en": {"levels": ["easy", "moderate", "hard"], "lenrule": ["short (up to 6)", "medium (7–9)", "long (10+)"], "concepts": [{"nr": 0, "o": ["Wreath", "Garland", "Advent wreath"], "p": ["Holly", "Mistletoe", "Christmas tree"], "hook": "round like a 0", "oread": "Honour, completion – a circle closes", "pread": "Protection, winter cheer, family", "link": "The wreath is woven from holly.", "oalive": 0}, {"nr": 1, "o": ["Candle", "Lantern", "Candelabra"], "p": ["Child", "Daughter", "Granddaughter"], "hook": "stands upright like a 1", "oread": "Hope, light in dark times", "pread": "Legacy, the future, innocence", "link": "The child lights the candle.", "oalive": 0}, {"nr": 2, "o": ["Ark", "Lifeboat", "Fishing boat"], "p": ["Lark", "Songbird", "Nightingale"], "hook": "the animals came in two by two", "oread": "Rescue, refuge, a fresh start", "pread": "Joy, dawn, new hope", "link": "A lark sings above the ark.", "oalive": 0}, {"nr": 3, "o": ["Heart", "Heartbeat", "Heartstrings"], "p": ["Angel", "Archangel", "Guardian angel"], "hook": "a 3 on its side is the top of a heart", "oread": "Love, feelings, a matter of the heart", "pread": "Protection, support", "link": "The angel carries the heart.", "oalive": 0}, {"nr": 4, "o": ["Clover", "Shamrock", "Lucky clover"], "p": ["Dice", "Roulette", "Lottery ticket"], "hook": "four leaves", "oread": "Luck, an unexpected chance", "pread": "Chance, risk, a gamble", "link": "The clover lies beside the dice.", "oalive": 1}, {"nr": 5, "o": ["Hook", "Fishhook", "Grappling hook"], "p": ["Fish", "Goldfish", "Rainbow trout"], "hook": "the belly of a 5 is a fish hook", "oread": "A catch, bait, caution", "pread": "Abundance, intuition, the depths", "link": "The fish bites the hook.", "oalive": 0}, {"nr": 6, "o": ["Snail", "Seashell", "Garden snail"], "p": ["Rain", "Downpour", "Cloudburst"], "hook": "the shell is a 6", "oread": "Patience, slow but sure, retreat", "pread": "Cleansing, tears, growth", "link": "The snail comes out in the rain.", "oalive": 1}, {"nr": 7, "o": ["Axe", "Tomahawk", "Guillotine"], "p": ["Hawk", "Buzzard", "Sparrowhawk"], "hook": "handle and blade form a 7", "oread": "A clean break – or burying the hatchet", "pread": "Vision, focus, sharp sight", "link": "The hawk hides inside the tomahawk.", "oalive": 0}, {"nr": 8, "o": ["Squid", "Octopus", "Giant squid"], "p": ["Wreck", "Wreckage", "Sunken ship"], "hook": "eight arms", "oread": "Entanglement, too many tasks, clinging", "pread": "Failure, hidden treasure", "link": "The octopus clings to the wreck.", "oalive": 1}, {"nr": 9, "o": ["Blimp", "Balloon", "Hot air balloon"], "p": ["Clown", "Juggler", "Ringmaster"], "hook": "a balloon on a string = 9", "oread": "Lightness, letting go, rising", "pread": "Laughter, masks, hidden sadness", "link": "The clown holds the balloon.", "oalive": 0}, {"nr": 10, "o": ["Wheel", "Cartwheel", "Ferris wheel"], "p": ["Horse", "Stallion", "Thoroughbred"], "hook": "Wheel of Fortune = Tarot X", "oread": "Fate, change – the wheel turns", "pread": "Strength, freedom, drive", "link": "The horse turns the wheel.", "oalive": 0}, {"nr": 11, "o": ["Elf", "Gremlin", "Leprechaun"], "p": ["Flute", "Piccolo", "Penny whistle"], "hook": "two pointed ears = 11", "oread": "Magic, intuition, the unseen", "pread": "Harmony, enchantment, a call", "link": "The elf plays the flute.", "oalive": 1}, {"nr": 12, "o": ["Clock", "Stopwatch", "Cuckoo clock"], "p": ["Owl", "Barn owl", "Screech owl"], "hook": "twelve hours on the dial", "oread": "Time, an appointment – it is time", "pread": "Wisdom, night, watchfulness", "link": "The owl hoots when the clock strikes twelve.", "oalive": 0}, {"nr": 13, "o": ["Raven", "Blackbird", "Carrion crow"], "p": ["Grave", "Tombstone", "Burial ground"], "hook": "unlucky 13 – bird of ill omen", "oread": "A message, a warning, wisdom", "pread": "An ending, the past, rest", "link": "The raven sits on the grave.", "oalive": 1}, {"nr": 14, "o": ["Kiss", "Embrace", "Love letter"], "p": ["King", "Monarch", "Crown prince"], "hook": "14 February, Valentine's Day", "oread": "Romance, affection, a promise sealed", "pread": "Power, authority, responsibility", "link": "The king blows a kiss.", "oalive": 0}, {"nr": 15, "o": ["Devil", "Lucifer", "Mephistopheles"], "p": ["Spell", "Sorcery", "Witchcraft"], "hook": "Tarot card XV", "oread": "Temptation, the shadow side", "pread": "Binding, manipulation, temptation", "link": "The devil casts a spell.", "oalive": 1}], "cards": [[["Wreath", "Candle", "Ark", "Heart", "Holly", "Child", "Lark", "Angel"], ["Clover", "Hook", "Snail", "Axe", "Dice", "Fish", "Rain", "Hawk"], ["Squid", "Blimp", "Wheel", "Elf", "Wreck", "Clown", "Horse", "Flute"], ["Clock", "Raven", "Kiss", "Devil", "Owl", "Grave", "King", "Spell"]], [["Garland", "Lantern", "Lifeboat", "Heartbeat", "Mistletoe", "Daughter", "Songbird", "Archangel"], ["Shamrock", "Fishhook", "Seashell", "Tomahawk", "Roulette", "Goldfish", "Downpour", "Buzzard"], ["Octopus", "Balloon", "Cartwheel", "Gremlin", "Wreckage", "Juggler", "Stallion", "Piccolo"], ["Stopwatch", "Blackbird", "Embrace", "Lucifer", "Barn owl", "Tombstone", "Monarch", "Sorcery"]], [["Advent wreath", "Candelabra", "Fishing boat", "Heartstrings", "Christmas tree", "Granddaughter", "Nightingale", "Guardian angel"], ["Lucky clover", "Grappling hook", "Garden snail", "Guillotine", "Lottery ticket", "Rainbow trout", "Cloudburst", "Sparrowhawk"], ["Giant squid", "Hot air balloon", "Ferris wheel", "Leprechaun", "Sunken ship", "Ringmaster", "Thoroughbred", "Penny whistle"], ["Cuckoo clock", "Carrion crow", "Love letter", "Mephistopheles", "Screech owl", "Burial ground", "Crown prince", "Witchcraft"]]], "words": {"Wreath": {"nr": 0, "t": "O", "deck": 0, "alive": 0, "partner": "Holly", "letter": "H", "next": "Candle"}, "Holly": {"nr": 0, "t": "P", "deck": 0, "alive": 1, "partner": "Wreath", "letter": "H", "next": "Child"}, "Garland": {"nr": 0, "t": "O", "deck": 1, "alive": 0, "partner": "Mistletoe", "letter": "L", "next": "Lantern"}, "Mistletoe": {"nr": 0, "t": "P", "deck": 1, "alive": 1, "partner": "Garland", "letter": "L", "next": "Daughter"}, "Advent wreath": {"nr": 0, "t": "O", "deck": 2, "alive": 0, "partner": "Christmas tree", "letter": "H", "next": "Candelabra"}, "Christmas tree": {"nr": 0, "t": "P", "deck": 2, "alive": 1, "partner": "Advent wreath", "letter": "H", "next": "Granddaughter"}, "Candle": {"nr": 1, "t": "O", "deck": 0, "alive": 0, "partner": "Child", "letter": "C", "next": "Ark"}, "Child": {"nr": 1, "t": "P", "deck": 0, "alive": 1, "partner": "Candle", "letter": "C", "next": "Lark"}, "Lantern": {"nr": 1, "t": "O", "deck": 1, "alive": 0, "partner": "Daughter", "letter": "R", "next": "Lifeboat"}, "Daughter": {"nr": 1, "t": "P", "deck": 1, "alive": 1, "partner": "Lantern", "letter": "R", "next": "Songbird"}, "Candelabra": {"nr": 1, "t": "O", "deck": 2, "alive": 0, "partner": "Granddaughter", "letter": "D", "next": "Fishing boat"}, "Granddaughter": {"nr": 1, "t": "P", "deck": 2, "alive": 1, "partner": "Candelabra", "letter": "D", "next": "Nightingale"}, "Ark": {"nr": 2, "t": "O", "deck": 0, "alive": 0, "partner": "Lark", "letter": "K", "next": "Heart"}, "Lark": {"nr": 2, "t": "P", "deck": 0, "alive": 1, "partner": "Ark", "letter": "K", "next": "Angel"}, "Lifeboat": {"nr": 2, "t": "O", "deck": 1, "alive": 0, "partner": "Songbird", "letter": "B", "next": "Heartbeat"}, "Songbird": {"nr": 2, "t": "P", "deck": 1, "alive": 1, "partner": "Lifeboat", "letter": "B", "next": "Archangel"}, "Fishing boat": {"nr": 2, "t": "O", "deck": 2, "alive": 0, "partner": "Nightingale", "letter": "G", "next": "Heartstrings"}, "Nightingale": {"nr": 2, "t": "P", "deck": 2, "alive": 1, "partner": "Fishing boat", "letter": "G", "next": "Guardian angel"}, "Heart": {"nr": 3, "t": "O", "deck": 0, "alive": 0, "partner": "Angel", "letter": "E", "next": "Holly"}, "Angel": {"nr": 3, "t": "P", "deck": 0, "alive": 1, "partner": "Heart", "letter": "A", "next": "Wreath"}, "Heartbeat": {"nr": 3, "t": "O", "deck": 1, "alive": 0, "partner": "Archangel", "letter": "H", "next": "Mistletoe"}, "Archangel": {"nr": 3, "t": "P", "deck": 1, "alive": 1, "partner": "Heartbeat", "letter": "H", "next": "Garland"}, "Heartstrings": {"nr": 3, "t": "O", "deck": 2, "alive": 0, "partner": "Guardian angel", "letter": "G", "next": "Christmas tree"}, "Guardian angel": {"nr": 3, "t": "P", "deck": 2, "alive": 1, "partner": "Heartstrings", "letter": "G", "next": "Advent wreath"}, "Clover": {"nr": 4, "t": "O", "deck": 0, "alive": 1, "partner": "Dice", "letter": "C", "next": "Hook"}, "Dice": {"nr": 4, "t": "P", "deck": 0, "alive": 0, "partner": "Clover", "letter": "C", "next": "Fish"}, "Shamrock": {"nr": 4, "t": "O", "deck": 1, "alive": 1, "partner": "Roulette", "letter": "R", "next": "Fishhook"}, "Roulette": {"nr": 4, "t": "P", "deck": 1, "alive": 0, "partner": "Shamrock", "letter": "R", "next": "Goldfish"}, "Lucky clover": {"nr": 4, "t": "O", "deck": 2, "alive": 1, "partner": "Lottery ticket", "letter": "K", "next": "Grappling hook"}, "Lottery ticket": {"nr": 4, "t": "P", "deck": 2, "alive": 0, "partner": "Lucky clover", "letter": "K", "next": "Rainbow trout"}, "Hook": {"nr": 5, "t": "O", "deck": 0, "alive": 0, "partner": "Fish", "letter": "H", "next": "Snail"}, "Fish": {"nr": 5, "t": "P", "deck": 0, "alive": 1, "partner": "Hook", "letter": "H", "next": "Rain"}, "Fishhook": {"nr": 5, "t": "O", "deck": 1, "alive": 0, "partner": "Goldfish", "letter": "F", "next": "Seashell"}, "Goldfish": {"nr": 5, "t": "P", "deck": 1, "alive": 1, "partner": "Fishhook", "letter": "F", "next": "Downpour"}, "Grappling hook": {"nr": 5, "t": "O", "deck": 2, "alive": 0, "partner": "Rainbow trout", "letter": "R", "next": "Garden snail"}, "Rainbow trout": {"nr": 5, "t": "P", "deck": 2, "alive": 1, "partner": "Grappling hook", "letter": "R", "next": "Cloudburst"}, "Snail": {"nr": 6, "t": "O", "deck": 0, "alive": 1, "partner": "Rain", "letter": "N", "next": "Axe"}, "Rain": {"nr": 6, "t": "P", "deck": 0, "alive": 0, "partner": "Snail", "letter": "N", "next": "Hawk"}, "Seashell": {"nr": 6, "t": "O", "deck": 1, "alive": 1, "partner": "Downpour", "letter": "–", "next": "Tomahawk"}, "Downpour": {"nr": 6, "t": "P", "deck": 1, "alive": 0, "partner": "Seashell", "letter": "–", "next": "Buzzard"}, "Garden snail": {"nr": 6, "t": "O", "deck": 2, "alive": 1, "partner": "Cloudburst", "letter": "D", "next": "Guillotine"}, "Cloudburst": {"nr": 6, "t": "P", "deck": 2, "alive": 0, "partner": "Garden snail", "letter": "D", "next": "Sparrowhawk"}, "Axe": {"nr": 7, "t": "O", "deck": 0, "alive": 0, "partner": "Hawk", "letter": "A", "next": "Dice"}, "Hawk": {"nr": 7, "t": "P", "deck": 0, "alive": 1, "partner": "Axe", "letter": "A", "next": "Clover"}, "Tomahawk": {"nr": 7, "t": "O", "deck": 1, "alive": 0, "partner": "Buzzard", "letter": "A", "next": "Roulette"}, "Buzzard": {"nr": 7, "t": "P", "deck": 1, "alive": 1, "partner": "Tomahawk", "letter": "A", "next": "Shamrock"}, "Guillotine": {"nr": 7, "t": "O", "deck": 2, "alive": 0, "partner": "Sparrowhawk", "letter": "O", "next": "Lottery ticket"}, "Sparrowhawk": {"nr": 7, "t": "P", "deck": 2, "alive": 1, "partner": "Guillotine", "letter": "O", "next": "Lucky clover"}, "Squid": {"nr": 8, "t": "O", "deck": 0, "alive": 1, "partner": "Wreck", "letter": "–", "next": "Blimp"}, "Wreck": {"nr": 8, "t": "P", "deck": 0, "alive": 0, "partner": "Squid", "letter": "–", "next": "Clown"}, "Octopus": {"nr": 8, "t": "O", "deck": 1, "alive": 1, "partner": "Wreckage", "letter": "C", "next": "Balloon"}, "Wreckage": {"nr": 8, "t": "P", "deck": 1, "alive": 0, "partner": "Octopus", "letter": "C", "next": "Juggler"}, "Giant squid": {"nr": 8, "t": "O", "deck": 2, "alive": 1, "partner": "Sunken ship", "letter": "S", "next": "Hot air balloon"}, "Sunken ship": {"nr": 8, "t": "P", "deck": 2, "alive": 0, "partner": "Giant squid", "letter": "S", "next": "Ringmaster"}, "Blimp": {"nr": 9, "t": "O", "deck": 0, "alive": 0, "partner": "Clown", "letter": "L", "next": "Wheel"}, "Clown": {"nr": 9, "t": "P", "deck": 0, "alive": 1, "partner": "Blimp", "letter": "L", "next": "Horse"}, "Balloon": {"nr": 9, "t": "O", "deck": 1, "alive": 0, "partner": "Juggler", "letter": "L", "next": "Cartwheel"}, "Juggler": {"nr": 9, "t": "P", "deck": 1, "alive": 1, "partner": "Balloon", "letter": "L", "next": "Stallion"}, "Hot air balloon": {"nr": 9, "t": "O", "deck": 2, "alive": 0, "partner": "Ringmaster", "letter": "R", "next": "Ferris wheel"}, "Ringmaster": {"nr": 9, "t": "P", "deck": 2, "alive": 1, "partner": "Hot air balloon", "letter": "R", "next": "Thoroughbred"}, "Wheel": {"nr": 10, "t": "O", "deck": 0, "alive": 0, "partner": "Horse", "letter": "H", "next": "Elf"}, "Horse": {"nr": 10, "t": "P", "deck": 0, "alive": 1, "partner": "Wheel", "letter": "H", "next": "Flute"}, "Cartwheel": {"nr": 10, "t": "O", "deck": 1, "alive": 0, "partner": "Stallion", "letter": "L", "next": "Gremlin"}, "Stallion": {"nr": 10, "t": "P", "deck": 1, "alive": 1, "partner": "Cartwheel", "letter": "L", "next": "Piccolo"}, "Ferris wheel": {"nr": 10, "t": "O", "deck": 2, "alive": 0, "partner": "Thoroughbred", "letter": "H", "next": "Leprechaun"}, "Thoroughbred": {"nr": 10, "t": "P", "deck": 2, "alive": 1, "partner": "Ferris wheel", "letter": "H", "next": "Penny whistle"}, "Elf": {"nr": 11, "t": "O", "deck": 0, "alive": 1, "partner": "Flute", "letter": "F", "next": "Wreck"}, "Flute": {"nr": 11, "t": "P", "deck": 0, "alive": 0, "partner": "Elf", "letter": "F", "next": "Squid"}, "Gremlin": {"nr": 11, "t": "O", "deck": 1, "alive": 1, "partner": "Piccolo", "letter": "L", "next": "Wreckage"}, "Piccolo": {"nr": 11, "t": "P", "deck": 1, "alive": 0, "partner": "Gremlin", "letter": "L", "next": "Octopus"}, "Leprechaun": {"nr": 11, "t": "O", "deck": 2, "alive": 1, "partner": "Penny whistle", "letter": "P", "next": "Sunken ship"}, "Penny whistle": {"nr": 11, "t": "P", "deck": 2, "alive": 0, "partner": "Leprechaun", "letter": "P", "next": "Giant squid"}, "Clock": {"nr": 12, "t": "O", "deck": 0, "alive": 0, "partner": "Owl", "letter": "L", "next": "Raven"}, "Owl": {"nr": 12, "t": "P", "deck": 0, "alive": 1, "partner": "Clock", "letter": "L", "next": "Grave"}, "Stopwatch": {"nr": 12, "t": "O", "deck": 1, "alive": 0, "partner": "Barn owl", "letter": "W", "next": "Blackbird"}, "Barn owl": {"nr": 12, "t": "P", "deck": 1, "alive": 1, "partner": "Stopwatch", "letter": "W", "next": "Tombstone"}, "Cuckoo clock": {"nr": 12, "t": "O", "deck": 2, "alive": 0, "partner": "Screech owl", "letter": "C", "next": "Carrion crow"}, "Screech owl": {"nr": 12, "t": "P", "deck": 2, "alive": 1, "partner": "Cuckoo clock", "letter": "C", "next": "Burial ground"}, "Raven": {"nr": 13, "t": "O", "deck": 0, "alive": 1, "partner": "Grave", "letter": "V", "next": "Kiss"}, "Grave": {"nr": 13, "t": "P", "deck": 0, "alive": 0, "partner": "Raven", "letter": "V", "next": "King"}, "Blackbird": {"nr": 13, "t": "O", "deck": 1, "alive": 1, "partner": "Tombstone", "letter": "B", "next": "Embrace"}, "Tombstone": {"nr": 13, "t": "P", "deck": 1, "alive": 0, "partner": "Blackbird", "letter": "B", "next": "Monarch"}, "Carrion crow": {"nr": 13, "t": "O", "deck": 2, "alive": 1, "partner": "Burial ground", "letter": "R", "next": "Love letter"}, "Burial ground": {"nr": 13, "t": "P", "deck": 2, "alive": 0, "partner": "Carrion crow", "letter": "R", "next": "Crown prince"}, "Kiss": {"nr": 14, "t": "O", "deck": 0, "alive": 0, "partner": "King", "letter": "K", "next": "Devil"}, "King": {"nr": 14, "t": "P", "deck": 0, "alive": 1, "partner": "Kiss", "letter": "K", "next": "Spell"}, "Embrace": {"nr": 14, "t": "O", "deck": 1, "alive": 0, "partner": "Monarch", "letter": "M", "next": "Lucifer"}, "Monarch": {"nr": 14, "t": "P", "deck": 1, "alive": 1, "partner": "Embrace", "letter": "M", "next": "Sorcery"}, "Love letter": {"nr": 14, "t": "O", "deck": 2, "alive": 0, "partner": "Crown prince", "letter": "R", "next": "Mephistopheles"}, "Crown prince": {"nr": 14, "t": "P", "deck": 2, "alive": 1, "partner": "Love letter", "letter": "R", "next": "Witchcraft"}, "Devil": {"nr": 15, "t": "O", "deck": 0, "alive": 1, "partner": "Spell", "letter": "L", "next": "Owl"}, "Spell": {"nr": 15, "t": "P", "deck": 0, "alive": 0, "partner": "Devil", "letter": "L", "next": "Clock"}, "Lucifer": {"nr": 15, "t": "O", "deck": 1, "alive": 1, "partner": "Sorcery", "letter": "C", "next": "Barn owl"}, "Sorcery": {"nr": 15, "t": "P", "deck": 1, "alive": 0, "partner": "Lucifer", "letter": "C", "next": "Stopwatch"}, "Mephistopheles": {"nr": 15, "t": "O", "deck": 2, "alive": 1, "partner": "Witchcraft", "letter": "H", "next": "Screech owl"}, "Witchcraft": {"nr": 15, "t": "P", "deck": 2, "alive": 0, "partner": "Mephistopheles", "letter": "H", "next": "Cuckoo clock"}}, "scenes": [["morning – Advent Sunday", "On the first Sunday of Advent the candle burns in the wreath, and the toy ark carries a paper heart."], ["noon – in the garden", "At noon in the garden: in the clover lies a hook, a snail crawls over it – then comes the axe."], ["evening – at the fair", "In the evening at the fair: the octopus ride spins, the balloon rises, the big wheel turns, and the elf works his magic."], ["midnight", "At midnight the clock strikes, the raven croaks, there is a kiss – and the devil appears."]]}};
+const ROM = ["I","II","III","IV"];
+
+/* ---------------- texts ---------------- */
+const T = {
+de:{
+  qo:"„", qc:"“", sub:"Trainer", tabs:{learn:"Lernen",palace:"Gedächtnispalast",perform:"Vorführung",ref:"Übersicht",progress:"Fortschritt"},
+  card:"Karte", nr:"Nr", alive:["lebt nicht","lebt"], O:"Original", P:"Partner", deck:"Deck",
+  lessons:["Zahlen & Originale","Partner","Karten & Szenen","Varianten & Decks","Nachfolger: zuletzt erinnert → vergessen","Enthüllung: Buchstabe · lebt? · Deutung"],
+  q:{
+    num_o:"Original <b>Nr {nr}</b>?",
+    o_num:"<b>{w}</b> – welche Nummer?",
+    o_p:"Partner von <b>{w}</b>?",
+    p_o:"<b>{w}</b> ist der Partner von …?",
+    o_card:"<b>{w}</b> – auf welcher Karte?",
+    scene:"<b>Karte {g}</b> · {title}<br>Die 4 Originale in Reihenfolge?",
+    cycle:"<b>Karte {g}</b> ({deck}): alle 8 Wörter im Zyklus?",
+    var:"<b>{w}</b> – welches Deck, welcher Grundbegriff?",
+    vars:"<b>{w}</b> – mittlere und lange Variante?",
+    next:"Zuletzt erinnert: <b>{w}</b><br>Welches Wort wurde vergessen?",
+    rev:"Vergessen: <b>{w}</b><br>Einstiegsbuchstabe · lebt es? · Deutung?"
+  },
+  hint:"Tipp", show:"Aufdecken", check:"Prüfen", knew:"Gewusst", didnt:"Nicht gewusst", next:"Weiter",
+  right:"Richtig!", wrong:"Leider falsch.", yourAns:"Deine Antwort", override:"Doch richtig", overrideBad:"Doch falsch",
+  typeHere:"Antwort eintippen (oder leer lassen und aufdecken)",
+  sessionDone:"Für heute ist nichts mehr fällig.", sessionDoneMore:"Neue Karten dazunehmen", cram:"Trotzdem üben (alle aktiven)",
+  queue:"noch {n} in dieser Runde", newToday:"Neue Karten pro Runde", lessonsH:"Lektionen", boxesH:"Leitner-Fächer",
+  boxNames:["neu","1","2","3","4","5"], start:"Runde starten", due:"fällig", newc:"neu",
+  intervals:"Fach 1 täglich · 2 nach 1 Tag · 3 nach 3 · 4 nach 7 · 5 nach 16 Tagen. Falsch → zurück in Fach 1.",
+  learnIntro:"Leitner-System: Was du weißt, wandert ein Fach weiter und kommt seltener; was du nicht weißt, fällt zurück in Fach 1. Neue Karten kommen in der Reihenfolge der Lektionen dazu.",
+  pal:{intro:"Jede Karte ist ein Raum zu einer Tageszeit. Im Raum stehen 4 Stationen – die Originale in Nummernreihenfolge. Bei jeder Station wartet ihr Partner. Der Rundgang geht zweimal herum: erst die 4 Originale, dann dieselben Stationen noch einmal für die 4 Partner – danach wieder von vorn. Das nächste Wort auf dem Rundgang ist immer das vergessene.",
+    walk:"Rundgang", quiz:"Raum abfragen", reset:"Zurück", prev:"◀", nextStep:"▶",
+    stationO:"Station {s}: <b>{w}</b> (Nr {nr} – {hook}) · {alive}",
+    stationP:"Zurück zu Station {s}: <b>{w}</b> – „{link}“ · {alive}",
+    wrap:"Nach dem letzten Partner geht es wieder bei Station 1 los.",
+    quizQ:"Was liegt an der markierten Stelle ({pos}. Wort im Zyklus)?", quizDone:"Raum fertig: {r} von 8 richtig.",
+    station:"Station", roundSwitch:"Runde wechseln", round1:"1. Runde: Originale", round2:"2. Runde: Partner", order:"Reihenfolge", inOrder:"der Reihe nach", random:"zufällig",
+    successorQuiz:"Nachfolger im Raum", succQ:"Zuletzt erinnert: <b>{w}</b> – was kommt danach?"},
+  perf:{intro:"Simulation der Vorführung: Der Zuschauer nennt das zuletzt erinnerte Wort und irgendein anderes Wort seiner Seite. Du nennst das vergessene Wort und gehst die Enthüllung durch.",
+    go:"Neuer Zuschauer", says:"Der Zuschauer sagt:", last:"Zuletzt erinnert", other:"Ein anderes Wort",
+    forgot:"Vergessenes Wort?", letter:"Einstiegsbuchstabe?", alive:"Lebt es?", yes:"ja", no:"nein",
+    solution:"Auflösung", proof:"Die Seite (Beweis)", time:"Zeit", stats:"Letzte {n}: {ok} richtig · Ø {t} s",
+    deckOf:"Deck {deck} (aus der Wortlänge), Karte {g}", reading:"Deutung", reveal:"Enthüllen", none:"noch keine Durchgänge",
+    allRecalled:"(Erinnert er alle 8: keine Lücke – loben und wiederholen.)"},
+  ref:{cycles:"Zyklen je Karte", table:"Alle Begriffe", hook:"Zahl-Merkhilfe", link:"Merksatz", reading:"Deutung", rules:[
+    "Das Deck steckt in der Wortlänge: leicht = bis 7 Buchstaben · mittel = 8–10 · schwer = ab 11.",
+    "Karte = Nummer // 4: I = Nr 0–3 · II = 4–7 · III = 8–11 · IV = 12–15.",
+    "Zyklus je Karte: 4 Originale aufsteigend, dann ihre 4 Partner in derselben Reihenfolge, dann wieder von vorn.",
+    "Vergessen ist immer der Nachfolger des zuletzt erinnerten Worts.",
+    "Partner: gleiche Nummer, umgekehrter Status lebt / lebt nicht.",
+    "Enthüllung: gemeinsamer Buchstabe (sicheres Ja) → „lebt es?“ → Deutung → Name."]},
+  prog:{h:"Fortschritt", export:"Lernstand exportieren", import:"Lernstand importieren", reset:"Lernstand dieser Sprache löschen",
+    confirm:"Wirklich den gesamten Lernstand für Deutsch löschen?", imported:"Importiert.", bad:"Datei nicht lesbar.",
+    store:"Der Lernstand wird nur in diesem Browser gespeichert. Für ein anderes Gerät: exportieren und dort importieren.",
+    nostore:"Achtung: Dieser Browser erlaubt kein Speichern – der Lernstand geht beim Schließen verloren. Exportieren nicht vergessen.",
+    mastered:"sicher (Fach 4–5)", learning:"im Lernen", unseen:"noch nicht gesehen", perfH:"Vorführ-Simulation"},
+  theme:"Hell/Dunkel"
+},
+en:{
+  qo:"“", qc:"”", sub:"Trainer", tabs:{learn:"Learn",palace:"Memory palace",perform:"Performance",ref:"Reference",progress:"Progress"},
+  card:"Card", nr:"No", alive:["not alive","alive"], O:"original", P:"partner", deck:"deck",
+  lessons:["Numbers & originals","Partners","Cards & scenes","Variants & decks","Successor: last recalled → forgotten","Reveal: letter · alive? · reading"],
+  q:{
+    num_o:"Original <b>no {nr}</b>?",
+    o_num:"<b>{w}</b> – which number?",
+    o_p:"Partner of <b>{w}</b>?",
+    p_o:"<b>{w}</b> is the partner of …?",
+    o_card:"<b>{w}</b> – which card?",
+    scene:"<b>Card {g}</b> · {title}<br>The 4 originals in order?",
+    cycle:"<b>Card {g}</b> ({deck}): all 8 words of the cycle?",
+    var:"<b>{w}</b> – which deck, which base concept?",
+    vars:"<b>{w}</b> – moderate and hard variants?",
+    next:"Last word recalled: <b>{w}</b><br>Which word was forgotten?",
+    rev:"Forgotten: <b>{w}</b><br>Shared letter · alive? · reading?"
+  },
+  hint:"Hint", show:"Reveal", check:"Check", knew:"Knew it", didnt:"Didn't know", next:"Next",
+  right:"Correct!", wrong:"Not quite.", yourAns:"Your answer", override:"Count as right", overrideBad:"Count as wrong",
+  typeHere:"Type your answer (or leave empty and reveal)",
+  sessionDone:"Nothing else is due today.", sessionDoneMore:"Add new cards", cram:"Practise anyway (all active)",
+  queue:"{n} left in this round", newToday:"New cards per round", lessonsH:"Lessons", boxesH:"Leitner boxes",
+  boxNames:["new","1","2","3","4","5"], start:"Start round", due:"due", newc:"new",
+  intervals:"Box 1 daily · 2 after 1 day · 3 after 3 · 4 after 7 · 5 after 16 days. Wrong → back to box 1.",
+  learnIntro:"Leitner system: what you know moves up a box and comes back less often; what you miss drops back to box 1. New cards are added in lesson order.",
+  pal:{intro:"Each card is a room at a time of day. The room has 4 stations – the originals in number order. At each station its partner is waiting. The walk goes round twice: first the 4 originals, then the same stations again for the 4 partners – then from the top. The next word on the walk is always the forgotten one.",
+    walk:"Walk through", quiz:"Test this room", reset:"Back", prev:"◀", nextStep:"▶",
+    stationO:"Station {s}: <b>{w}</b> (no {nr} – {hook}) · {alive}",
+    stationP:"Back to station {s}: <b>{w}</b> – “{link}” · {alive}",
+    wrap:"After the last partner you start again at station 1.",
+    quizQ:"What is at the marked spot (word {pos} of the cycle)?", quizDone:"Room done: {r} of 8 correct.",
+    station:"Station", roundSwitch:"switch round", round1:"Round 1: originals", round2:"Round 2: partners", order:"Order", inOrder:"in order", random:"random",
+    successorQuiz:"Successors in this room", succQ:"Last recalled: <b>{w}</b> – what comes next?"},
+  perf:{intro:"Performance simulation: the spectator names the last word recalled and any other word from their page. You name the forgotten word and walk through the reveal.",
+    go:"New spectator", says:"The spectator says:", last:"Last recalled", other:"Another word",
+    forgot:"Forgotten word?", letter:"Shared letter?", alive:"Is it alive?", yes:"yes", no:"no",
+    solution:"Solution", proof:"The page (proof)", time:"Time", stats:"Last {n}: {ok} correct · avg {t} s",
+    deckOf:"{deck} deck (from word length), card {g}", reading:"Reading", reveal:"Reveal", none:"no runs yet",
+    allRecalled:"(If they recall all 8: no gap – praise them and repeat.)"},
+  ref:{cycles:"Cycle per card", table:"All concepts", hook:"Number hook", link:"Link sentence", reading:"Reading", rules:[
+    "The deck lives in the word length: easy = up to 6 letters · moderate = 7–9 · hard = 10 or more (spaces don't count).",
+    "Card = number // 4: I = no 0–3 · II = 4–7 · III = 8–11 · IV = 12–15.",
+    "Cycle per card: 4 originals ascending, then their 4 partners in the same order, then from the top.",
+    "The forgotten word is always the successor of the last word recalled.",
+    "Partner: same number, opposite alive / not alive.",
+    "Reveal: shared letter (a safe yes) → “is it alive?” → reading → name."]},
+  prog:{h:"Progress", export:"Export progress", import:"Import progress", reset:"Delete progress for this language",
+    confirm:"Really delete all progress for English?", imported:"Imported.", bad:"Could not read that file.",
+    store:"Progress is saved in this browser only. For another device: export here and import there.",
+    nostore:"Warning: this browser does not allow saving – progress is lost when you close it. Remember to export.",
+    mastered:"solid (box 4–5)", learning:"learning", unseen:"not seen yet", perfH:"Performance simulation"},
+  theme:"Light/dark"
+}};
+
+/* ---------------- storage ---------------- */
+const KEY = "fmn-trainer-v1";
+let STORE_OK = true;
+function loadState(){
+  try{ const s = JSON.parse(localStorage.getItem(KEY)||"null"); if(s) return s; }catch(e){ STORE_OK=false; }
+  return {lang:"de", tab:"learn", de:{}, en:{}};
+}
+let S = loadState();
+for(const l of ["de","en"]){ S[l] = Object.assign({cards:{}, lessons:[true,true,true,true,true,true], newPer:10, perf:[]}, S[l]||{}); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ STORE_OK=false; } }
+try{ localStorage.setItem(KEY+"-t","1"); localStorage.removeItem(KEY+"-t"); }catch(e){ STORE_OK=false; }
+
+/* ---------------- helpers ---------------- */
+const $ = (s,el=document)=>el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = (s,o)=> s.replace(/\{(\w+)\}/g,(m,k)=> k in o ? o[k] : m);
+function norm(s){ return String(s).toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9]/g,""); }
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const DAY = 864e5, INTERVAL = [0,0,1,3,7,16];
+let L = S.lang; let D = DATA[L]; let TX = T[L];
+const cardOf = w => Math.floor(D.words[w].nr/4);
+const readingOf = w => { const x=D.words[w], c=D.concepts[x.nr]; return x.t==="O"? c.oread : c.pread; };
+const conceptWord = (w) => { const x=D.words[w], c=D.concepts[x.nr]; return x.t==="O"? c.o : c.p; };
+function blank(sentence, variants){
+  let s = esc(sentence);
+  for(const v of variants.slice().sort((a,b)=>b.length-a.length)){
+    const re = new RegExp(v.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"), "i"); s = s.replace(re, "____");
+  }
+  return s;
+}
+const romAccept = g => [ROM[g], String(g+1)];
+
+/* ---------------- card generation ---------------- */
+function makeCards(){
+  const C = [], q = TX.q, lv = D.levels;
+  const add = (lesson,id,qh,ah,accept,hint) => C.push({lesson,id,q:qh,a:ah,accept,hint});
+  // L0 numbers & originals
+  for(const c of D.concepts){
+    add(0,"num-o-"+c.nr, fmt(q.num_o,{nr:c.nr}), `<span class="big">${esc(c.o[0])}</span> <span class="muted">· ${esc(c.o[1])} · ${esc(c.o[2])}</span><br><span class="muted">${esc(c.hook)}</span>`, c.o, esc(c.hook));
+    add(0,"o-num-"+c.nr, fmt(q.o_num,{w:esc(c.o[0])}), `<span class="big">${TX.nr} ${c.nr}</span><br><span class="muted">${esc(c.hook)}</span>`, [String(c.nr)], esc(c.hook));
+  }
+  // L1 partners
+  for(const c of D.concepts){
+    const al = TX.alive;
+    add(1,"o-p-"+c.nr, fmt(q.o_p,{w:esc(c.o[0])}), `<span class="big">${esc(c.p[0])}</span> <span class="muted">· ${esc(c.p[1])} · ${esc(c.p[2])}</span><br>${TX.qo}${esc(c.link)}${TX.qc}<br><span class="muted">${esc(c.o[0])}: ${al[c.oalive]} → ${esc(c.p[0])}: ${al[1-c.oalive]}</span>`, c.p, blank(c.link, c.p));
+    add(1,"p-o-"+c.nr, fmt(q.p_o,{w:esc(c.p[0])}), `<span class="big">${esc(c.o[0])}</span> <span class="muted">(${TX.nr} ${c.nr})</span><br>${TX.qo}${esc(c.link)}${TX.qc}`, c.o, blank(c.link, c.o));
+  }
+  // L2 cards & scenes (palace)
+  for(const c of D.concepts){
+    const g = Math.floor(c.nr/4);
+    add(2,"o-card-"+c.nr, fmt(q.o_card,{w:esc(c.o[0])}), `<span class="big">${TX.card} ${ROM[g]}</span> <span class="muted">(${TX.nr} ${4*g}–${4*g+3})</span><br>${esc(D.scenes[g][0])}`, romAccept(g), `${TX.nr} ${c.nr} · ${TX.card} = ${TX.nr} // 4`);
+  }
+  for(let g=0; g<4; g++){
+    const os = D.concepts.slice(4*g,4*g+4);
+    add(2,"scene-"+g, fmt(q.scene,{g:ROM[g], title:esc(D.scenes[g][0])}), `<span class="big">${os.map(c=>esc(c.o[0])).join(" · ")}</span><br><i>${TX.qo}${esc(D.scenes[g][1])}${TX.qc}</i>`, null, esc(D.scenes[g][1].split(/[:,]/)[0])+" …");
+    add(2,"cycle-"+g, fmt(q.cycle,{g:ROM[g], deck:esc(lv[0])}), `<span class="big">${D.cards[0][g].map(esc).join(" → ")}</span> → …`, null, os.map(c=>esc(c.o[0])).join(" · ")+" · …");
+  }
+  // L3 variants
+  for(const c of D.concepts){
+    for(const [t,v] of [["O",c.o],["P",c.p]]){
+      add(3,`vars-${t}-${c.nr}`, fmt(q.vars,{w:esc(v[0])}), `<span class="big">${esc(v[1])}</span> <span class="muted">(${esc(lv[1])})</span> · <span class="big">${esc(v[2])}</span> <span class="muted">(${esc(lv[2])})</span>`, null, `${esc(D.lenrule[1])} · ${esc(D.lenrule[2])}`);
+      for(const d of [1,2]){
+        const w=v[d], x=D.words[w];
+        add(3,`var-${w}`, fmt(q.var,{w:esc(w)}), `<span class="big">${esc(lv[d])}</span> <span class="muted">(${esc(D.lenrule[d])})</span> · = <span class="big">${esc(v[0])}</span><br><span class="muted">${t==="O"?TX.O:TX.P} · ${TX.nr} ${c.nr} · ${TX.card} ${ROM[cardOf(w)]}</span>`, null, D.lenrule.map(esc).join(" · "));
+      }
+    }
+  }
+  // L4 successor, L5 reveal (all 96 words, decks in order)
+  const order = [];
+  for(let d=0; d<3; d++) for(let g=0; g<4; g++) for(const w of D.cards[d][g]) order.push(w);
+  for(const w of order){
+    const x=D.words[w], g=cardOf(w), d=x.deck, i=D.cards[d][g].indexOf(w), n=x.next;
+    add(4,"next-"+w, fmt(q.next,{w:esc(w)}), `<span class="big">${esc(n)}</span><br><span class="muted">${esc(lv[d])} · ${TX.card} ${ROM[g]} · ${i+1} → ${(i+1)%8+1}</span>`, [n], `${esc(lv[d])} · ${TX.card} ${ROM[g]} · ${x.t==="O"?TX.O:TX.P} ${TX.nr} ${x.nr}`);
+  }
+  for(const w of order){
+    const x=D.words[w];
+    add(5,"rev-"+w, fmt(q.rev,{w:esc(w)}), `<span class="big">${esc(x.letter)}</span> <span class="muted">(${esc(w)} / ${esc(x.partner)})</span> · <span class="big">${TX.alive[x.alive]}</span><br>${esc(readingOf(w))}`, null, `${TX.P}: ${esc(x.partner)}`);
+  }
+  return C;
+}
+let CARDS = makeCards(); let BYID = Object.fromEntries(CARDS.map(c=>[c.id,c]));
+
+/* ---------------- Leitner ---------------- */
+const st = id => S[L].cards[id];
+function grade(id, ok){
+  const now = Date.now(); let s = st(id) || {box:0, right:0, wrong:0};
+  if(ok){ s.box = Math.min(5, Math.max(1, s.box) + 1); s.right++; } else { s.box = 1; s.wrong++; }
+  s.due = now + INTERVAL[s.box]*DAY - 3600e3; s.seen = now;
+  S[L].cards[id] = s; save();
+}
+function activeCards(){ return CARDS.filter(c=>S[L].lessons[c.lesson]); }
+function dueCards(){ const now=Date.now(); return activeCards().filter(c=>{const s=st(c.id); return s && s.box>0 && s.due<=now;}); }
+function newCards(n){ return activeCards().filter(c=>!st(c.id) || !st(c.id).box).slice(0,n); }
+function boxCounts(cards){ const b=[0,0,0,0,0,0]; for(const c of cards){ const s=st(c.id); b[s&&s.box?s.box:0]++; } return b; }
+
+let SESSION = null;  // {queue:[ids], cur, phase:'ask'|'shown', typed, verdict, hintShown}
+function startSession(mode){
+  let ids;
+  if(mode==="cram") ids = shuffle(activeCards().filter(c=>st(c.id)&&st(c.id).box).map(c=>c.id));
+  else if(mode==="new") ids = newCards(S[L].newPer).map(c=>c.id);
+  else {
+    const due = shuffle(dueCards().map(c=>c.id)).sort((a,b)=>st(a).box-st(b).box);
+    ids = due.concat(newCards(S[L].newPer).map(c=>c.id));
+  }
+  SESSION = {queue:ids, phase:"ask", done:0, right:0};
+  render();
+}
+
+/* ---------------- views ---------------- */
+const TABS = ["learn","palace","perform","ref","progress"];
+function renderShell(){
+  document.documentElement.lang = L;
+  $("#subtitle").textContent = TX.sub;
+  for(const b of document.querySelectorAll("#langSeg button")) b.classList.toggle("on", b.dataset.l===L);
+  $("#tabs").innerHTML = TABS.map(t=>`<button data-t="${t}" class="${S.tab===t?"on":""}">${TX.tabs[t]}</button>`).join("");
+}
+function render(){
+  renderShell();
+  const m = $("#main");
+  ({learn:viewLearn, palace:viewPalace, perform:viewPerform, ref:viewRef, progress:viewProgress})[S.tab](m);
+}
+
+function boxesHTML(cards){
+  const b = boxCounts(cards), mx = Math.max(1,...b);
+  return `<div class="boxes">${b.map(n=>`<div style="height:${Math.max(3,Math.round(56*n/mx))}px"><span>${n}</span></div>`).join("")}</div>
+  <div class="boxlbl">${TX.boxNames.map(n=>`<span>${n}</span>`).join("")}</div>`;
+}
+
+function viewLearn(m){
+  if(SESSION && SESSION.queue.length){ return viewCard(m); }
+  const finished = SESSION && SESSION.done;
+  const due = dueCards().length, nw = newCards(1e9).length;
+  const lessons = TX.lessons.map((name,i)=>{
+    const cs = CARDS.filter(c=>c.lesson===i), b = boxCounts(cs), solid = b[4]+b[5], seen = cs.length-b[0];
+    return `<label><input type="checkbox" data-les="${i}" ${S[L].lessons[i]?"checked":""}>
+      <span style="flex:1">${i+1}. ${esc(name)}<div class="pbar"><i style="width:${Math.round(100*seen/cs.length)}%;opacity:.45"></i></div><div class="pbar" style="margin-top:2px"><i style="width:${Math.round(100*solid/cs.length)}%"></i></div></span>
+      <span class="prog">${seen}/${cs.length}</span></label>`;
+  }).join("");
+  m.innerHTML = `
+  <div class="grid2">
+    <div class="panel">
+      ${finished?`<p><b>${SESSION.right}/${SESSION.done}</b> ✓</p>`:""}
+      <h2>${TX.tabs.learn}</h2>
+      <p class="muted small">${TX.learnIntro}</p>
+      <p><span class="chip">${due} ${TX.due}</span> <span class="chip">${nw} ${TX.newc}</span></p>
+      <div class="row">
+        ${due||nw?`<button class="btn primary" id="go">${TX.start}</button>`:`<span>${TX.sessionDone}</span>`}
+        ${!due&&nw?`<button class="btn" id="goNew">${TX.sessionDoneMore}</button>`:""}
+        <button class="btn" id="cram">${TX.cram}</button>
+      </div>
+      <div class="row mt small"><label>${TX.newToday}: <select id="newPer">${[0,5,10,15,20,30,50].map(n=>`<option ${n==S[L].newPer?"selected":""}>${n}</option>`).join("")}</select></label></div>
+      <h3>${TX.boxesH}</h3>
+      <div style="padding-top:16px">${boxesHTML(activeCards())}</div>
+      <p class="muted small">${TX.intervals}</p>
+    </div>
+    <div class="panel lessons"><h2>${TX.lessonsH}</h2>${lessons}</div>
+  </div>`;
+  if($("#go")) $("#go").onclick=()=>startSession("due");
+  if($("#goNew")) $("#goNew").onclick=()=>startSession("new");
+  $("#cram").onclick=()=>startSession("cram");
+  $("#newPer").onchange=e=>{S[L].newPer=+e.target.value; save(); render();};
+  for(const cb of m.querySelectorAll("[data-les]")) cb.onchange=e=>{S[L].lessons[+e.target.dataset.les]=e.target.checked; save(); render();};
+}
+
+function viewCard(m){
+  const Sx = SESSION, c = BYID[Sx.queue[0]], s = st(c.id);
+  const boxTxt = s&&s.box ? `${TX.boxesH.split(" ")[0]} ${s.box}` : TX.newc;
+  let body = `<div class="panel cardq">
+    <div class="row small"><span class="chip">${c.lesson+1}. ${esc(TX.lessons[c.lesson])}</span><span class="chip">${boxTxt}</span><span class="muted" style="margin-left:auto">${fmt(TX.queue,{n:Sx.queue.length})}</span></div>
+    <div class="q">${c.q}</div>`;
+  if(Sx.phase==="ask"){
+    body += `${Sx.hintShown?`<div class="hint">${c.hint}</div>`:""}
+    <div><input type="text" id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(TX.typeHere)}"></div>
+    <div class="row"><button class="btn primary" id="sub">${TX.check}</button>${c.hint&&!Sx.hintShown?`<button class="btn link" id="hint">${TX.hint}</button>`:""}</div>`;
+  } else {
+    const auto = Sx.verdict!==undefined;
+    body += `${Sx.typed?`<div class="small muted">${TX.yourAns}: <b>${esc(Sx.typed)}</b> ${auto?`<span class="verdict ${Sx.verdict?"ok":"bad"}">${Sx.verdict?TX.right:TX.wrong}</span>`:""}</div>`:""}
+      <div class="ans">${c.a}</div>`;
+    if(auto) body += `<div class="row"><button class="btn primary" id="nx">${TX.next}</button><button class="btn link" id="ovr">${Sx.verdict?TX.overrideBad:TX.override}</button></div>`;
+    else body += `<div class="row"><button class="btn bad" id="no">${TX.didnt} <span class="kbd">1</span></button><button class="btn ok" id="yes">${TX.knew} <span class="kbd">2</span></button></div>`;
+  }
+  body += `</div><p class="center"><button class="btn link" id="quit">✕ ${TX.tabs.learn}</button></p>`;
+  m.innerHTML = body;
+  if(Sx.phase==="ask"){
+    const inp=$("#inp"); inp.focus();
+    const submit=()=>{
+      Sx.typed = inp.value.trim();
+      if(Sx.typed && c.accept){ Sx.verdict = c.accept.some(a=>norm(a)===norm(Sx.typed)); } else delete Sx.verdict;
+      Sx.phase="shown"; render();
+    };
+    $("#sub").onclick=submit; inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); submit(); } };
+    if($("#hint")) $("#hint").onclick=()=>{ Sx.hintShown=true; const v=inp.value; render(); $("#inp").value=v; };
+  } else {
+    const finish = ok => {
+      grade(c.id, ok); Sx.done++; if(ok) Sx.right++;
+      Sx.queue.shift(); if(!ok) Sx.queue.splice(Math.min(3,Sx.queue.length),0,c.id);
+      Sx.phase="ask"; Sx.typed=""; Sx.hintShown=false; delete Sx.verdict; render();
+    };
+    if($("#nx")){ $("#nx").onclick=()=>finish(Sx.verdict); $("#ovr").onclick=()=>finish(!Sx.verdict); $("#nx").focus(); }
+    else { $("#yes").onclick=()=>finish(true); $("#no").onclick=()=>finish(false); $("#yes").focus(); }
+    KEYH = e=>{ if($("#yes")){ if(e.key==="1") finish(false); if(e.key==="2") finish(true); } };
+  }
+  $("#quit").onclick=()=>{ SESSION=null; render(); };
+}
+let KEYH = null;
+document.addEventListener("keydown", e=>{ if(KEYH && e.target.tagName!=="INPUT" && S.tab==="learn" && SESSION) KEYH(e); });
+
+/* ---------------- memory palace ---------------- */
+let PAL = {g:0, d:0, mode:"view", step:0, quizOrder:[], qi:0, right:0, results:{}, rand:false, last:null};
+function palaceSVG(g, d, highlight, hidden, results){
+  const cyc = D.cards[d][g], W=680, H=440, col = `var(--c${g}s)`;
+  const bw=250, bh=118, m=26;
+  const box = [[m,m],[W-m-bw,m],[W-m-bw,H-m-bh],[m,H-m-bh]];   // stations clockwise: top-left, top-right, bottom-right, bottom-left
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(D.scenes[g][0])}">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${col}"/></marker></defs>
+  <rect x="2" y="2" width="${W-4}" height="${H-4}" rx="22" fill="var(--c${g})" stroke="${col}" stroke-opacity=".35"/>
+  <text x="${W/2}" y="${H/2-8}" text-anchor="middle" font-size="24" font-weight="700" fill="var(--ink)">${TX.card} ${ROM[g]}</text>
+  <text x="${W/2}" y="${H/2+15}" text-anchor="middle" font-size="14" fill="var(--muted)">${esc(D.scenes[g][0])}</text>
+  <text x="${W/2}" y="${H/2+34}" text-anchor="middle" font-size="12" fill="var(--muted)">${TX.nr} ${4*g}–${4*g+3} · ${esc(D.levels[d])}</text>`;
+  const arrows = [[m+bw+10,m+bh/2, W-m-bw-10,m+bh/2],[W-m-bw/2,m+bh+10, W-m-bw/2,H-m-bh-10],
+                  [W-m-bw-10,H-m-bh/2, m+bw+10,H-m-bh/2],[m+bw/2,H-m-bh-10, m+bw/2,m+bh+10]];
+  arrows.forEach(([x1,y1,x2,y2],k)=>{ s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="2.5" ${k===3?'stroke-dasharray="6 5"':""} marker-end="url(#ar)" opacity=".7"/>`; });
+  s += `<text x="${m+bw/2+10}" y="${H/2+4}" font-size="12" fill="${col}" font-weight="600">${TX.pal.roundSwitch}</text>`;
+  for(let st=0; st<4; st++){
+    const [bx,by] = box[st];
+    s += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="14" fill="var(--panel)" stroke="${col}" stroke-width="1.5"/>
+      <text x="${bx+12}" y="${by+18}" font-size="11.5" fill="var(--muted)" font-weight="600">${TX.pal.station} ${st+1}</text>`;
+    for(const layer of [0,1]){
+      const i = st + 4*layer, w = cyc[i], x = D.words[w], on = highlight===i, hid = hidden && hidden.has(i), r = results && results[i];
+      const ry = by + 26 + layer*44, label = hid ? "?" : w;
+      const stroke = r===true ? "var(--ok)" : r===false ? "var(--bad)" : "none";
+      s += `<rect x="${bx+6}" y="${ry}" width="${bw-12}" height="40" rx="10" fill="${on?col:"transparent"}" stroke="${stroke}" stroke-width="3"/>
+        <circle cx="${bx+24}" cy="${ry+20}" r="11" fill="${col}"/><text x="${bx+24}" y="${ry+24}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--panel)">${i+1}</text>
+        <text x="${bx+44}" y="${ry+20}" font-size="${label.length>13?15:17}" font-weight="${layer?400:700}" ${layer?'font-style="italic"':""} fill="${on?"var(--panel)":"var(--ink)"}">${esc(label)}</text>
+        ${hid?"":`<text x="${bx+44}" y="${ry+35}" font-size="11" fill="${on?"var(--panel)":"var(--muted)"}">${layer?TX.P:TX.O} · ${x.nr} · ${TX.alive[x.alive]}</text>`}`;
+    }
+  }
+  return s + `</svg>`;
+}
+function viewPalace(m){
+  const P = PAL, g=P.g, d=P.d, cyc=D.cards[d][g], tp=TX.pal;
+  const segG = ROM.map((r,i)=>`<button data-g="${i}" class="${g===i?"on":""}">${r}</button>`).join("");
+  const segD = D.levels.map((l,i)=>`<button data-d="${i}" class="${d===i?"on":""}">${esc(l)}</button>`).join("");
+  let svg, below = "";
+  if(P.mode==="walk"){
+    const i=P.step, w=cyc[i], x=D.words[w], c=D.concepts[x.nr];
+    svg = palaceSVG(g,d,i,null);
+    const txt = i<4 ? fmt(tp.stationO,{s:i+1, w:esc(w), nr:x.nr, hook:esc(c.hook), alive:TX.alive[x.alive]})
+                    : fmt(tp.stationP,{s:i-3, w:esc(w), link:esc(c.link), alive:TX.alive[x.alive]});
+    below = `<div class="chip">${i<4?tp.round1:tp.round2}</div><p class="step">${txt}${i===7?`<br><span class="muted small">${tp.wrap}</span>`:""}</p>
+      <div class="row"><button class="btn" id="pv">${tp.prev}</button><button class="btn primary" id="nxs">${tp.nextStep}</button><span class="muted small">${i+1}/8</span><button class="btn link" id="back">${tp.reset}</button></div>`;
+  } else if(P.mode==="quiz" || P.mode==="succ"){
+    const done = P.qi>=8, i = done?null:P.quizOrder[P.qi];
+    const hidden = new Set(P.mode==="quiz" ? [0,1,2,3,4,5,6,7].filter(k=>P.results[k]===undefined) : []);
+    svg = palaceSVG(g,d, done?null:(P.mode==="succ"?null:i), hidden, P.results);
+    if(done) below = `<p class="step"><b>${fmt(tp.quizDone,{r:P.right})}</b></p><div class="row"><button class="btn primary" id="again">${P.mode==="quiz"?tp.quiz:tp.successorQuiz}</button><button class="btn link" id="back">${tp.reset}</button></div>`;
+    else {
+      const qtxt = P.mode==="quiz" ? fmt(tp.quizQ,{pos:i+1}) : fmt(tp.succQ,{w:esc(cyc[(i+7)%8])});
+      below = `<p class="step">${qtxt}</p>${P.last?`<p class="small">${P.last}</p>`:""}
+      <div class="row"><input type="text" id="pin" autocomplete="off" autocapitalize="off" spellcheck="false" style="max-width:280px"><button class="btn primary" id="pok">${TX.check}</button><span class="muted small">${P.qi+1}/8</span><button class="btn link" id="back">${tp.reset}</button></div>`;
+    }
+  } else {
+    svg = palaceSVG(g,d,null,null);
+    below = `<div class="row"><button class="btn primary" id="walk">${tp.walk}</button><button class="btn" id="quiz">${tp.quiz}</button><button class="btn" id="succ">${tp.successorQuiz}</button>
+      <label class="small muted"><input type="checkbox" id="rand" ${P.rand?"checked":""}> ${tp.random}</label></div>`;
+  }
+  m.innerHTML = `<div class="panel palace">
+    <p class="muted small" style="margin-top:0">${tp.intro}</p>
+    <div class="row"><div class="seg">${segG}</div><div class="seg">${segD}</div></div>
+    <p class="story">${TX.qo}${esc(D.scenes[g][1])}${TX.qc}</p>
+    <div class="mt">${svg}</div>
+    <div class="mt">${below}</div>
+  </div>`;
+  for(const b of m.querySelectorAll("[data-g]")) b.onclick=()=>{PAL={...PAL,g:+b.dataset.g,mode:"view"}; render();};
+  for(const b of m.querySelectorAll("[data-d]")) b.onclick=()=>{PAL={...PAL,d:+b.dataset.d,mode:"view"}; render();};
+  const startQuiz = mode => { PAL.mode=mode; PAL.qi=0; PAL.right=0; PAL.results={}; PAL.last=null; PAL.quizOrder = PAL.rand? shuffle([0,1,2,3,4,5,6,7]) : [0,1,2,3,4,5,6,7]; render(); };
+  if($("#walk")) $("#walk").onclick=()=>{PAL.mode="walk"; PAL.step=0; render();};
+  if($("#quiz")) $("#quiz").onclick=()=>startQuiz("quiz");
+  if($("#succ")) $("#succ").onclick=()=>startQuiz("succ");
+  if($("#rand")) $("#rand").onchange=e=>{PAL.rand=e.target.checked;};
+  if($("#again")) $("#again").onclick=()=>startQuiz(PAL.mode);
+  if($("#back")) $("#back").onclick=()=>{PAL.mode="view"; render();};
+  if($("#pv")) $("#pv").onclick=()=>{PAL.step=(PAL.step+7)%8; render();};
+  if($("#nxs")){ $("#nxs").onclick=()=>{PAL.step=(PAL.step+1)%8; render();}; $("#nxs").focus(); }
+  if($("#pin")){
+    const inp=$("#pin"); inp.focus();
+    const go=()=>{
+      const i=PAL.quizOrder[PAL.qi], w=cyc[i], ok = norm(inp.value)===norm(w);
+      PAL.results[i]=ok; if(ok) PAL.right++;
+      PAL.last = `<span class="verdict ${ok?"ok":"bad"}">${ok?TX.right:TX.wrong}</span> ${i+1}. <b>${esc(w)}</b>`;
+      PAL.qi++; render();
+    };
+    $("#pok").onclick=go; inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); go(); } };
+  }
+}
+
+/* ---------------- performance simulation ---------------- */
+let PF = null;
+function newSpectator(){
+  const d = Math.floor(Math.random()*3), g = Math.floor(Math.random()*4), s = Math.floor(Math.random()*8);
+  const page = [0,1,2,3,4,5,6,7].map(i=>D.cards[d][g][(s+i)%8]);
+  const k = 1 + Math.floor(Math.random()*7);          // forgotten = page[k], last recalled = page[k-1]
+  const others = page.filter((w,i)=>i!==k && i!==k-1);
+  PF = {d,g,page,k,last:page[k-1],forgot:page[k],other:pick(others),t0:Date.now(),phase:"name",ans:{}};
+  render();
+}
+function viewPerform(m){
+  const tp = TX.perf, hist = S[L].perf;
+  const stats = hist.length ? fmt(tp.stats,{n:hist.length, ok:hist.filter(h=>h.ok).length, t:(hist.reduce((a,h)=>a+h.t,0)/hist.length/1000).toFixed(1)}) : tp.none;
+  let h = `<div class="panel"><p class="muted small" style="margin-top:0">${tp.intro}</p>
+    <div class="row"><button class="btn primary" id="spec">${tp.go}</button><span class="muted small">${stats}</span></div>`;
+  if(PF){
+    const P=PF;
+    h += `<div class="mt spect">${tp.says}<br>${tp.last}: <q>${esc(P.last)}</q><br>${tp.other}: <q>${esc(P.other)}</q></div>`;
+    if(P.phase==="name"){
+      h += `<div class="mt"><label class="small muted">${tp.forgot}</label><br><input type="text" id="fw" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="mt"><label class="small muted">${tp.letter}</label><br><input type="text" id="fl" maxlength="2" autocomplete="off" style="max-width:90px"></div>
+        <div class="mt"><span class="small muted">${tp.alive}</span><br><div class="seg" id="fa"><button data-a="1" class="${P.ans.alive===1?"on":""}">${tp.yes}</button><button data-a="0" class="${P.ans.alive===0?"on":""}">${tp.no}</button></div></div>
+        <div class="row mt"><button class="btn primary" id="rv">${tp.reveal}</button><span class="timer" id="tm"></span></div>`;
+    } else {
+      const x = D.words[P.forgot], A = P.ans;
+      const mark = ok => `<span class="verdict ${ok?"ok":"bad"}">${ok?"✓":"✗"}</span>`;
+      h += `<div class="mt ans"><h3 style="margin-top:0">${tp.solution} <span class="timer">· ${tp.time} ${(P.t/1000).toFixed(1)} s</span></h3>
+        <p class="muted small">${fmt(tp.deckOf,{deck:esc(D.levels[P.d]), g:ROM[P.g]})} · ${esc(P.last)} → <b>${esc(P.forgot)}</b></p>
+        <p>${mark(A.okW)} <span class="big">${esc(P.forgot)}</span> ${A.w?`<span class="muted small">(${esc(A.w)})</span>`:""}</p>
+        <p>${mark(A.okL)} ${tp.letter.replace("?","")}: <b>${esc(x.letter)}</b> <span class="muted small">(${esc(P.forgot)} / ${esc(x.partner)})</span></p>
+        <p>${mark(A.okA)} ${TX.alive[x.alive]}</p>
+        <p>${tp.reading}: ${esc(readingOf(P.forgot))}</p>
+        <h3>${tp.proof}</h3><div class="page"><ol>${P.page.map((w,i)=>`<li class="${i===P.k?"f":i===P.k-1?"l":""}">${esc(w)}</li>`).join("")}</ol></div>
+        <p class="muted small">${tp.allRecalled}</p></div>`;
+    }
+  }
+  m.innerHTML = h + `</div>`;
+  $("#spec").onclick=newSpectator;
+  if(PF && PF.phase==="name"){
+    const P=PF; $("#fw").focus();
+    for(const b of m.querySelectorAll("#fa button")) b.onclick=()=>{P.ans.alive=+b.dataset.a; for(const bb of m.querySelectorAll("#fa button")) bb.classList.toggle("on", bb===b);};
+    const reveal=()=>{
+      const x=D.words[P.forgot]; P.t=Date.now()-P.t0;
+      P.ans.w=$("#fw").value.trim(); P.ans.l=$("#fl").value.trim();
+      P.ans.okW = norm(P.ans.w)===norm(P.forgot); P.ans.okL = norm(P.ans.l)===norm(x.letter); P.ans.okA = P.ans.alive===x.alive;
+      const ok = P.ans.okW && P.ans.okL && P.ans.okA;
+      S[L].perf = S[L].perf.concat([{ok, t:P.t}]).slice(-20);
+      if(st("next-"+P.last) && st("next-"+P.last).box) grade("next-"+P.last, P.ans.okW);
+      if(st("rev-"+P.forgot) && st("rev-"+P.forgot).box) grade("rev-"+P.forgot, P.ans.okL && P.ans.okA);
+      save(); P.phase="shown"; clearInterval(TIMER); render();
+    };
+    $("#rv").onclick=reveal;
+    for(const id of ["#fw","#fl"]) $(id).onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); reveal(); } };
+    clearInterval(TIMER); TIMER=setInterval(()=>{ const t=$("#tm"); if(t) t.textContent=((Date.now()-P.t0)/1000).toFixed(0)+" s"; else clearInterval(TIMER); },500);
+  } else if(PF){ $("#spec").focus(); }
+}
+let TIMER=null;
+
+/* ---------------- reference ---------------- */
+function viewRef(m){
+  const R = TX.ref;
+  let h = `<div class="panel"><ul>${R.rules.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>`;
+  for(let d=0; d<3; d++){
+    h += `<h3>${esc(D.levels[d])} <span class="muted small">(${esc(D.lenrule[d])})</span></h3><div class="ring">`;
+    for(let g=0; g<4; g++){
+      h += `<div class="cyc cg${g}"><b>${TX.card} ${ROM[g]}</b> <span class="small muted">${esc(D.scenes[g][0])}</span><ol>${D.cards[d][g].map(w=>`<li class="${D.words[w].t==="O"?"o":""}">${esc(w)} <span class="muted small">${D.words[w].nr} · ${TX.alive[D.words[w].alive]}</span></li>`).join("")}</ol></div>`;
+    }
+    h += `</div>`;
+  }
+  h += `<h3>${R.table}</h3><div class="tblwrap"><table><thead><tr><th>${TX.nr}</th><th>${esc(D.levels.join(" / "))}</th><th>${R.hook}</th><th>${TX.P}</th><th>${R.link}</th><th>${TX.alive[1]}?</th><th>${R.reading}</th></tr></thead><tbody>`;
+  for(const c of D.concepts){
+    h += `<tr class="cg${Math.floor(c.nr/4)}"><td>${c.nr}</td><td><b>${c.o.map(esc).join("</b> · <b>")}</b></td><td>${esc(c.hook)}</td><td><i>${c.p.map(esc).join(" · ")}</i></td><td>${esc(c.link)}</td><td>${TX.O}: ${TX.alive[c.oalive]}<br>${TX.P}: ${TX.alive[1-c.oalive]}</td><td>${esc(c.oread)}<br><i>${esc(c.pread)}</i></td></tr>`;
+  }
+  m.innerHTML = h + `</tbody></table></div></div>`;
+}
+
+/* ---------------- progress ---------------- */
+function viewProgress(m){
+  const P = TX.prog;
+  const rows = TX.lessons.map((name,i)=>{
+    const cs = CARDS.filter(c=>c.lesson===i), b = boxCounts(cs);
+    return `<tr><td>${i+1}. ${esc(name)}</td><td>${b[4]+b[5]}</td><td>${b[1]+b[2]+b[3]}</td><td>${b[0]}</td><td>${cs.length}</td></tr>`;
+  }).join("");
+  const hist = S[L].perf;
+  m.innerHTML = `<div class="panel"><h2>${P.h}</h2>
+    ${STORE_OK?`<p class="muted small">${P.store}</p>`:`<p class="verdict bad">${P.nostore}</p>`}
+    <div style="padding-top:16px;max-width:420px">${boxesHTML(CARDS)}</div>
+    <div class="tblwrap mt"><table><thead><tr><th></th><th>${P.mastered}</th><th>${P.learning}</th><th>${P.unseen}</th><th>Σ</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <h3>${P.perfH}</h3><p class="small">${hist.length?hist.map(h=>`<span class="verdict ${h.ok?"ok":"bad"}">${h.ok?"✓":"✗"}</span> ${(h.t/1000).toFixed(1)}s`).join(" · "):TX.perf.none}</p>
+    <div class="row mt"><button class="btn" id="exp">${P.export}</button><label class="btn">${P.import}<input type="file" id="imp" accept="application/json,.json" class="hide"></label>
+    <button class="btn link" id="rst" style="color:var(--bad)">${P.reset}</button><button class="btn link" id="thm">${TX.theme}</button></div></div>`;
+  $("#exp").onclick=()=>{
+    const blob=new Blob([JSON.stringify(S,null,1)],{type:"application/json"}), a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=`forgetmenot-trainer-${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); a.remove();
+  };
+  $("#imp").onchange=e=>{
+    const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+    r.onload=()=>{ try{ const x=JSON.parse(r.result); if(!x.de||!x.en) throw 0; S=x; for(const l of ["de","en"]) S[l]=Object.assign({cards:{},lessons:[true,true,true,true,true,true],newPer:10,perf:[]},S[l]); S.tab="progress"; save(); setLang(S.lang||"de"); alert(P.imported);}catch(err){ alert(P.bad); } };
+    r.readAsText(f);
+  };
+  $("#rst").onclick=()=>{ if(confirm(P.confirm)){ S[L].cards={}; S[L].perf=[]; save(); render(); } };
+  $("#thm").onclick=()=>{ const r=document.documentElement, dark = r.dataset.theme ? r.dataset.theme==="dark" : matchMedia("(prefers-color-scheme: dark)").matches; r.dataset.theme = dark?"light":"dark"; S.theme=r.dataset.theme; save(); };
+}
+
+/* ---------------- wiring ---------------- */
+function setLang(l){ L=S.lang=l; D=DATA[L]; TX=T[L]; CARDS=makeCards(); BYID=Object.fromEntries(CARDS.map(c=>[c.id,c])); SESSION=null; PF=null; PAL.mode="view"; save(); render(); }
+$("#langSeg").onclick=e=>{ const b=e.target.closest("button"); if(b && b.dataset.l!==L) setLang(b.dataset.l); };
+$("#tabs").onclick=e=>{ const b=e.target.closest("button"); if(b){ S.tab=b.dataset.t; save(); clearInterval(TIMER); render(); window.scrollTo(0,0);} };
+if(S.theme) document.documentElement.dataset.theme = S.theme;
+if(!TABS.includes(S.tab)) S.tab="learn";
+render();
+</script>
+</body>
+</html>

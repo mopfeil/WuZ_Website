@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#14111b">
+<title>FATUM – Das Gewölbe des Orakels</title>
+<style>
+:root{
+  --bg:#14111b; --bg2:#1d1828; --panel:#241e33; --line:#3a3150; --ink:#efe6d0; --muted:#a79fb4;
+  --gold:#e0b85a; --gold2:#f3d68a; --blood:#b8433c; --parch:#f1e6c8; --parch-ink:#2b2535; --stone:#cfc6b4; --dark:#0d0b12;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#2a2140 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-text-size-adjust:100%}
+a{color:var(--gold2)}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(20,17,27,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.logo{font-family:var(--serif);font-weight:700;letter-spacing:.28em;color:var(--gold);font-size:18px;background:none;border:0;cursor:pointer;padding:6px 4px}
+.top .sp{flex:1}
+.ib{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13px;cursor:pointer;min-height:36px}
+.ib[aria-pressed="true"]{border-color:var(--gold);color:var(--gold2)}
+main{max-width:780px;margin:0 auto;padding:20px 16px 80px}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;margin:0 0 .4em}
+h1{font-size:clamp(40px,11vw,76px);letter-spacing:.2em;color:var(--gold);text-align:center;margin-top:.3em}
+h2{font-size:26px;color:var(--gold2);margin-top:1.6em}
+h3{font-size:19px}
+.tag{text-align:center;font-family:var(--serif);font-size:clamp(18px,4.4vw,24px);font-style:italic;max-width:30em;margin:0 auto 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 22px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px 0}
+.btn{display:inline-block;background:linear-gradient(#f0cf7a,#d7a945);color:#2b2010;border:0;border-radius:10px;padding:14px 22px;font-size:17px;font-weight:700;font-family:var(--serif);cursor:pointer;text-decoration:none;min-height:48px}
+.btn.ghost{background:none;color:var(--gold2);border:1px solid var(--gold)}
+.btn.small{padding:9px 14px;font-size:15px;min-height:40px}
+.btn:disabled{opacity:.4;cursor:default}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card .n{font-family:var(--serif);color:var(--gold);font-size:14px;letter-spacing:.18em;text-transform:uppercase}
+.card p{margin:.3em 0 0;color:#d9d0e2;font-size:15px}
+.need{display:flex;gap:12px;align-items:center;margin:10px 0}
+.need svg{width:46px;height:46px;flex:none}
+.need b{display:block}
+.need span{color:var(--muted);font-size:14px}
+.sq{width:46px;height:46px;flex:none;border-radius:8px;background:var(--stone);color:var(--parch-ink);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:20px;border:3px solid #2b2535}
+.say{background:var(--parch);color:var(--parch-ink);border-radius:14px;padding:18px 20px;font-family:var(--serif);font-size:19px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.4);position:relative;margin:14px 0}
+.say:before{content:"";position:absolute;inset:5px;border:1px solid rgba(43,37,53,.25);border-radius:10px;pointer-events:none}
+.say p{margin:0 0 .6em}.say p:last-child{margin:0}
+.who{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#7a5a1c;font-family:var(--sans);font-weight:700;margin-bottom:6px}
+.todo{list-style:none;padding:0;margin:14px 0;counter-reset:t}
+.todo li{counter-increment:t;position:relative;padding:12px 14px 12px 52px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:8px 0;font-size:17px}
+.todo li:before{content:counter(t);position:absolute;left:12px;top:11px;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#2b2010;font-weight:700;display:grid;place-items:center;font-size:15px}
+.act{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
+.dots{display:flex;gap:4px;flex:1;justify-content:flex-end}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--gold)}
+.nav{display:flex;gap:10px;justify-content:space-between;margin-top:18px}
+.nav .btn{flex:1;text-align:center}
+.nav .btn.ghost{flex:0 0 auto}
+.boardwrap{margin:14px auto;max-width:340px;text-align:center}
+.board{width:100%;height:auto;display:block}
+.cap{color:var(--muted);font-size:13px;margin-top:4px}
+.t-up{fill:var(--stone);stroke:#2b2535;stroke-width:5}
+.t-dn{fill:#1a1524;stroke:#3a3150;stroke-width:3;stroke-dasharray:6 5}
+.t-hl{fill:#e3b7a8;stroke:var(--blood);stroke-width:6}
+.t-fin{fill:var(--gold2);stroke:var(--gold);stroke-width:6}
+.t-p0{fill:#d9cdb2;stroke:#2b2535;stroke-width:5}
+.t-p1{fill:#8fa3c4;stroke:#2b2535;stroke-width:5}
+.t-num{font-family:var(--serif);font-weight:700;font-size:40px;fill:#2b2535;text-anchor:middle;dominant-baseline:central}
+.players{display:flex;gap:10px;margin:10px 0 18px}
+.players button{flex:1;min-height:56px;font-size:22px;font-family:var(--serif);font-weight:700;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.players button[aria-pressed="true"]{background:var(--gold);color:#2b2010;border-color:var(--gold)}
+details{background:var(--bg2);border:1px dashed var(--line);border-radius:12px;padding:12px 14px;margin:16px 0}
+summary{cursor:pointer;color:var(--muted)}
+.seal{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.seal .q{flex:1;min-width:150px;font-family:var(--serif);font-size:18px}
+.seal .v{font-family:var(--serif);font-size:44px;font-weight:700;color:var(--gold2);min-width:2.2em;text-align:center}
+.seal.open{border-color:var(--gold);background:linear-gradient(#2e2540,#241e33)}
+.sealed-at{color:var(--muted);font-size:13px;text-align:center;margin:6px 0}
+table.add{border-collapse:collapse;margin:10px auto;font-family:var(--serif);font-size:20px}
+table.add td,table.add th{width:54px;height:46px;text-align:center;border:1px solid var(--line)}
+table.add th{color:var(--gold2);background:var(--bg2)}
+table.add td{background:var(--stone);color:var(--parch-ink);font-weight:700}
+.ex{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}
+.ex p{margin:.5em 0}
+.foot{color:var(--muted);font-size:13px;text-align:center;margin-top:40px}
+.dl{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+@media (prefers-reduced-motion:no-preference){.fade{animation:f .45s ease}@keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="logo" data-act="home" aria-label="FATUM">FATUM</button>
+  <span class="sp"></span>
+  <button class="ib" id="bSound" data-act="sound" aria-pressed="false">♪</button>
+  <button class="ib" id="bVoice" data-act="voice" aria-pressed="false">🗣</button>
+  <button class="ib" id="bLang" data-act="lang">EN</button>
+</div>
+<main id="app"></main>
+<script>
+(function(){
+'use strict';
+var PATHS = {"1": "M 0.29,9.07 L 0.57,8.99 L 0.83,8.85 L 1.06,8.66 L 1.25,8.43 L 1.39,8.17 L 1.47,7.89 L 1.5,7.6 L 1.47,7.31 L 1.39,7.03 L 1.25,6.77 L 1.06,6.54 L 0.9,6.41 L 0.9,4.6 L 4,4.6 L 4,2.8 L 1.1,2.8 L 1.1,-6 L 0,-8.2 L -1.1,-6 L -1.1,2.8 L -4,2.8 L -4,4.6 L -0.9,4.6 L -0.9,6.41 L -1.06,6.54 L -1.25,6.77 L -1.39,7.03 L -1.47,7.31 L -1.5,7.6 L -1.47,7.89 L -1.39,8.17 L -1.25,8.43 L -1.06,8.66 L -0.83,8.85 L -0.57,8.99 L -0.29,9.07 L 0,9.1 z", "2": "M 3.42,1.11 L 7.99,-2.6 L 2.12,-2.91 L 0,-8.4 L -2.12,-2.91 L -7.99,-2.6 L -3.42,1.11 L -4.94,6.8 L 0,3.6 L 4.94,6.8 z", "3": "M 3.3,-4 L 0,-8.6 L -3.3,-4 L -0.8,-4 L -0.8,3.8 L -3.6,5.4 L -3.6,8.6 L -0.8,7 L 0.8,7 L 3.6,8.6 L 3.6,5.4 L 0.8,3.8 L 0.8,-4 z", "4": "M 2.5,6.2 L 4.6,3.5 L 6,-0.5 L 6,-7 L -6,-7 L -6,-0.5 L -4.6,3.5 L -2.5,6.2 L 0,8 z M -0.8,5.2 L -0.8,-1.6 L -4.4,-1.6 L -4.4,-3.2 L -0.8,-3.2 L -0.8,-5.4 L 0.8,-5.4 L 0.8,-3.2 L 4.4,-3.2 L 4.4,-1.6 L 0.8,-1.6 L 0.8,5.2 z", "5": "M 2.9,5 L 2.9,3.3 L 0.9,3.3 L 0.9,-1.01 L 0.96,-1.03 L 1.42,-1.18 L 1.85,-1.4 L 2.25,-1.66 L 2.62,-1.98 L 2.94,-2.35 L 3.2,-2.75 L 3.42,-3.18 L 3.57,-3.64 L 3.67,-4.12 L 3.7,-4.6 L 3.67,-5.08 L 3.57,-5.56 L 3.42,-6.02 L 3.2,-6.45 L 2.94,-6.85 L 2.62,-7.22 L 2.25,-7.54 L 1.85,-7.8 L 1.42,-8.02 L 0.96,-8.17 L 0.48,-8.27 L 0,-8.3 L -0.48,-8.27 L -0.96,-8.17 L -1.42,-8.02 L -1.85,-7.8 L -2.25,-7.54 L -2.62,-7.22 L -2.94,-6.85 L -3.2,-6.45 L -3.42,-6.02 L -3.57,-5.56 L -3.67,-5.08 L -3.7,-4.6 L -3.67,-4.12 L -3.57,-3.64 L -3.42,-3.18 L -3.2,-2.75 L -2.94,-2.35 L -2.62,-1.98 L -2.25,-1.66 L -1.85,-1.4 L -1.42,-1.18 L -0.96,-1.03 L -0.9,-1.01 L -0.9,8 L 3.5,8 L 3.5,6.3 L 0.9,6.3 L 0.9,5 z M -0.35,-2.83 L -0.69,-2.94 L -1,-3.1 L -1.27,-3.33 L -1.5,-3.6 L -1.66,-3.91 L -1.77,-4.25 L -1.8,-4.6 L -1.77,-4.95 L -1.66,-5.29 L -1.5,-5.6 L -1.27,-5.87 L -1,-6.1 L -0.69,-6.26 L -0.35,-6.37 L 0,-6.4 L 0.35,-6.37 L 0.69,-6.26 L 1,-6.1 L 1.27,-5.87 L 1.5,-5.6 L 1.66,-5.29 L 1.77,-4.95 L 1.8,-4.6 L 1.77,-4.25 L 1.66,-3.91 L 1.5,-3.6 L 1.27,-3.33 L 1,-3.1 L 0.69,-2.94 L 0.35,-2.83 L 0,-2.8 z", "6": "M 0.5,4.99 L 0.99,4.95 L 1.49,4.88 L 1.98,4.79 L 2.46,4.68 L 2.94,4.54 L 3.4,4.37 L 3.86,4.18 L 4.31,3.96 L 4.75,3.73 L 5.17,3.47 L 5.58,3.19 L 5.98,2.88 L 6.36,2.56 L 6.72,2.22 L 7.06,1.86 L 7.38,1.48 L 7.69,1.08 L 7.97,0.67 L 8.23,0.25 L 8.36,-0 L 8.23,-0.25 L 7.97,-0.67 L 7.69,-1.08 L 7.38,-1.48 L 7.06,-1.86 L 6.72,-2.22 L 6.36,-2.56 L 5.98,-2.88 L 5.58,-3.19 L 5.17,-3.47 L 4.75,-3.73 L 4.31,-3.96 L 3.86,-4.18 L 3.4,-4.37 L 2.94,-4.54 L 2.46,-4.68 L 1.98,-4.79 L 1.49,-4.88 L 0.99,-4.95 L 0.5,-4.99 L 0,-5 L -0.5,-4.99 L -0.99,-4.95 L -1.49,-4.88 L -1.98,-4.79 L -2.46,-4.68 L -2.94,-4.54 L -3.4,-4.37 L -3.86,-4.18 L -4.31,-3.96 L -4.75,-3.73 L -5.17,-3.47 L -5.58,-3.19 L -5.98,-2.88 L -6.36,-2.56 L -6.72,-2.22 L -7.06,-1.86 L -7.38,-1.48 L -7.69,-1.08 L -7.97,-0.67 L -8.23,-0.25 L -8.36,-0 L -8.23,0.25 L -7.97,0.67 L -7.69,1.08 L -7.38,1.48 L -7.06,1.86 L -6.72,2.22 L -6.36,2.56 L -5.98,2.88 L -5.58,3.19 L -5.17,3.47 L -4.75,3.73 L -4.31,3.96 L -3.86,4.18 L -3.4,4.37 L -2.94,4.54 L -2.46,4.68 L -1.98,4.79 L -1.49,4.88 L -0.99,4.95 L -0.5,4.99 L 0,5 z M -0.42,3.59 L -0.85,3.56 L -1.27,3.5 L -1.68,3.42 L -2.1,3.32 L -2.5,3.2 L -2.9,3.06 L -3.29,2.9 L -3.68,2.72 L -4.05,2.51 L -4.41,2.29 L -4.76,2.05 L -5.1,1.79 L -5.42,1.52 L -5.73,1.23 L -6.02,0.92 L -6.29,0.6 L -6.55,0.26 L -6.73,-0 L -6.55,-0.26 L -6.29,-0.6 L -6.02,-0.92 L -5.73,-1.23 L -5.42,-1.52 L -5.1,-1.79 L -4.76,-2.05 L -4.41,-2.29 L -4.05,-2.51 L -3.68,-2.72 L -3.29,-2.9 L -2.9,-3.06 L -2.5,-3.2 L -2.1,-3.32 L -1.68,-3.42 L -1.27,-3.5 L -0.85,-3.56 L -0.42,-3.59 L 0,-3.6 L 0.42,-3.59 L 0.85,-3.56 L 1.27,-3.5 L 1.68,-3.42 L 2.1,-3.32 L 2.5,-3.2 L 2.9,-3.06 L 3.29,-2.9 L 3.68,-2.72 L 4.05,-2.51 L 4.41,-2.29 L 4.76,-2.05 L 5.1,-1.79 L 5.42,-1.52 L 5.73,-1.23 L 6.02,-0.92 L 6.29,-0.6 L 6.55,-0.26 L 6.73,-0 L 6.55,0.26 L 6.29,0.6 L 6.02,0.92 L 5.73,1.23 L 5.42,1.52 L 5.1,1.79 L 4.76,2.05 L 4.41,2.29 L 4.05,2.51 L 3.68,2.72 L 3.29,2.9 L 2.9,3.06 L 2.5,3.2 L 2.1,3.32 L 1.68,3.42 L 1.27,3.5 L 0.85,3.56 L 0.42,3.59 L 0,3.6 z M 0.31,1.98 L 0.62,1.9 L 0.91,1.78 L 1.18,1.62 L 1.41,1.41 L 1.62,1.18 L 1.78,0.91 L 1.9,0.62 L 1.98,0.31 L 2,-0 L 1.98,-0.31 L 1.9,-0.62 L 1.78,-0.91 L 1.62,-1.18 L 1.41,-1.41 L 1.18,-1.62 L 0.91,-1.78 L 0.62,-1.9 L 0.31,-1.98 L 0,-2 L -0.31,-1.98 L -0.62,-1.9 L -0.91,-1.78 L -1.18,-1.62 L -1.41,-1.41 L -1.62,-1.18 L -1.78,-0.91 L -1.9,-0.62 L -1.98,-0.31 L -2,-0 L -1.98,0.31 L -1.9,0.62 L -1.78,0.91 L -1.62,1.18 L -1.41,1.41 L -1.18,1.62 L -0.91,1.78 L -0.62,1.9 L -0.31,1.98 L 0,2 z"};
+var BASE = [[1,4,5],[8,11,12],[3,6,7]];
+// Einsturz-Reihenfolge nach Position (Zeile, Spalte); Endkammer ist immer unten links.
+var COLLAPSE = [[[0,0],[0,2]],[[0,1],[1,2]],[[1,1],[2,2]]];
+var KEY = 'fatum1';
+var S = {done:false, lang:'de', players:3, layout:BASE, k:[5,3,3], screen:'home', step:0, sealed:'', sound:false, voice:false, shown:[false,false,false]};
+var app = document.getElementById('app');
+
+function L(de,en){ return S.lang==='de' ? de : en; }
+function transform(g,t){
+  var out=[],r,c,rr,cc,x;
+  for(r=0;r<3;r++){ out.push([]); for(c=0;c<3;c++){ rr=r; cc=c; if(t&1) rr=2-rr; if(t&2) cc=2-cc; if(t&4){ x=rr; rr=cc; cc=x; } out[r].push(g[rr][cc]); } }
+  return out;
+}
+function rnd(n){ return Math.floor(Math.random()*n); }
+function newGame(){
+  S.layout = transform(BASE, rnd(8));
+  S.k = [[3,5,7][rnd(3)], [3,5][rnd(2)], [3,5][rnd(2)]];
+  S.step = 0; S.sealed = ''; S.done = false; S.shown = [false,false,false];
+}
+function rolls(){ return S.players>=4 ? 4 : 3; }
+function toll(){ return 7*rolls(); }
+function loot(){ return S.layout[0][0]+S.layout[1][1]+S.layout[2][2]; }
+function finalRoom(){ return S.layout[2][0]; }
+function room(p){ return S.layout[p[0]][p[1]]; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){
+  try{
+    var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if(o && o.layout && o.layout.length===3 && o.k && o.k.length===3 && o.shown){
+      for(var k in S){ if(Object.prototype.hasOwnProperty.call(o,k)) S[k]=o[k]; }
+      S.sound=false; S.voice=false; return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+/* ---------- Bilder ---------- */
+function coin(i){
+  return '<svg viewBox="-13 -13 26 26" aria-hidden="true"><circle r="12.5" fill="#2b2535" stroke="#0d0b12" stroke-width=".5"/>'+
+    '<circle r="10.7" fill="none" stroke="#e0b85a" stroke-width="1"/><path fill="#e0b85a" fill-rule="evenodd" d="'+PATHS[i]+'"/></svg>';
+}
+function has(list,r,c){ for(var i=0;i<list.length;i++){ if(list[i][0]===r && list[i][1]===c) return true; } return false; }
+function board(o){
+  o = o || {};
+  var down=o.down||[], hl=o.hl||[], fin=o.fin||[], seal=o.seal||[], s='<div class="boardwrap"><svg class="board" viewBox="0 0 318 318" role="img" aria-label="'+L('Lageplan','Map')+'">';
+  for(var r=0;r<3;r++){ for(var c=0;c<3;c++){
+    var x=9+c*100, y=9+r*100, cls='t-up', num=true;
+    if(o.parity) cls = ((r+c)%2===0) ? 't-p0' : 't-p1';
+    if(has(down,r,c)){ cls='t-dn'; num=false; }
+    if(has(hl,r,c)) cls='t-hl';
+    if(has(fin,r,c)) cls='t-fin';
+    s+='<g transform="translate('+x+','+y+')"><rect class="'+cls+'" x="3" y="3" width="94" height="94" rx="8"/>';
+    if(num) s+='<text class="t-num" x="50" y="'+(has(seal,r,c)?30:50)+'">'+S.layout[r][c]+'</text>';
+    if(has(seal,r,c)) s+='<g transform="translate(50,66) scale(1.9)"><circle r="12.5" fill="#2b2535"/><path fill="#e0b85a" fill-rule="evenodd" d="'+PATHS[5]+'"/></g>';
+    s+='</g>';
+  } }
+  s+='</svg>'+(o.cap?'<div class="cap">'+o.cap+'</div>':'')+'</div>';
+  return s;
+}
+
+/* ---------- Schritte ---------- */
+function steps(){
+  var k=S.k, c1=COLLAPSE[0], c2=COLLAPSE[1], c3=COLLAPSE[2], n=rolls();
+  var a1=L('Akt I · Die drei Siegel','Act I · The Three Seals'), a2=L('Akt II · Der Einsturz','Act II · The Collapse'), a3=L('Akt III · Der Wächter','Act III · The Guardian');
+  function fall(cs, steps_, first){
+    return {
+      act:a2,
+      say: (first
+        ? L('Der Boden zittert. Kammer '+room(cs[0])+' und Kammer '+room(cs[1])+' stürzen ein. Erschreckt nicht: Ich weiß, dass dort keiner von euch steht.',
+            'The floor trembles. Chamber '+room(cs[0])+' and chamber '+room(cs[1])+' cave in. Do not be afraid: I know that none of you is standing there.')
+        : L('Wieder bricht Stein. Diesmal trifft es Kammer '+room(cs[0])+' und Kammer '+room(cs[1])+'. Auch dort steht niemand. Ich weiß es.',
+            'Stone breaks again. This time it takes chamber '+room(cs[0])+' and chamber '+room(cs[1])+'. Nobody is standing there either. I know.')),
+      todo:[
+        L('Dreht die Kammern '+room(cs[0])+' und '+room(cs[1])+' um. Sie sind verschüttet.','Turn chambers '+room(cs[0])+' and '+room(cs[1])+' face down. They are buried.'),
+        L('Jeder Held geht genau <b>'+steps_+' Schritte</b>, nur durch offene Kammern. Hin und her ist erlaubt.','Every hero takes exactly <b>'+steps_+' steps</b>, through open chambers only. Going back and forth is allowed.')
+      ]
+    };
+  }
+  var st = [];
+  st.push({act:a1,
+    say:L('Willkommen im Gewölbe. Ich bin das Orakel. Ich habe euer Schicksal aufgeschrieben und versiegelt, bevor ihr den ersten Schritt getan habt. Entscheidet frei. Es wird nichts ändern.',
+          'Welcome to the vault. I am the Oracle. I wrote down your fate and sealed it before you took your first step. Choose freely. It will change nothing.'),
+    todo:[L('Legt die neun Kammern genau so aus wie im Bild, Kante an Kante.','Lay out the nine chambers exactly as shown, edge to edge.'),
+          L('Legt die drei Siegel-Münzen (Schlüssel), den Wächter (Auge) und einen Würfel bereit.','Put the three seal coins (key), the guardian (eye) and a die within reach.')],
+    board:{}});
+  st.push({act:a1,
+    say:L('In jeder Kammer liegt Gold, so viel wie ihre Zahl sagt. Drei Kammern dürft ihr plündern. Aber jedes Siegel verschließt die Gänge ringsum.',
+          'Every chamber holds gold, as much as its number says. You may plunder three chambers. But every seal locks the corridors around it.'),
+    todo:[L('Einigt euch auf <b>irgendeine</b> Kammer und legt ein Siegel hinein.','Agree on <b>any</b> chamber and place a seal in it.'),
+          L('Dreht die anderen Kammern in derselben Reihe und in derselben Spalte um. Vier Kammern liegen jetzt verdeckt.','Turn the other chambers in the same row and in the same column face down. Four chambers are now hidden.')],
+    board:{seal:[[1,2]], down:[[0,2],[2,2],[1,0],[1,1]], cap:L('Beispiel: Siegel in Kammer '+S.layout[1][2],'Example: seal in chamber '+S.layout[1][2])}});
+  st.push({act:a1,
+    say:L('Vier Kammern stehen noch offen. Wählt wieder. Lasst euch Zeit, streitet ruhig.','Four chambers are still open. Choose again. Take your time, argue if you like.'),
+    todo:[L('Legt das zweite Siegel in eine offene Kammer ohne Siegel.','Place the second seal in an open chamber that has no seal.'),
+          L('Dreht wieder die offenen Kammern in derselben Reihe und Spalte um.','Again turn the open chambers in the same row and column face down.'),
+          L('Eine einzige freie Kammer bleibt offen. Dorthin kommt das dritte Siegel.','A single free chamber remains open. The third seal goes there.')]});
+  st.push({act:a1,
+    say:L('Drei Siegel, drei Schätze. Zählt euer Gold.','Three seals, three treasures. Count your gold.'),
+    todo:[L('Addiert die Zahlen der drei Siegel-Kammern. Das ist eure <b>Beute</b>. Merkt sie euch oder schreibt sie auf.','Add up the numbers of the three sealed chambers. That is your <b>loot</b>. Remember it or write it down.')]});
+  st.push({act:a2,
+    say:L('Das Gold weckt das Gewölbe. Die Siegel springen auf, alle Gänge sind wieder frei. Trennt euch. Sucht jeder sein eigenes Versteck.',
+          'The gold wakes the vault. The seals burst, all corridors are free again. Split up. Each of you find a hiding place of your own.'),
+    todo:[L('Nehmt die Siegel weg und dreht alle neun Kammern wieder auf.','Remove the seals and turn all nine chambers face up again.'),
+          L('Jeder Held stellt seine Münze in eine Kammer seiner Wahl. Mehrere Helden dürfen in derselben Kammer stehen.','Every hero puts their coin into a chamber of their choice. Several heroes may share a chamber.')],
+    board:{}});
+  st.push({act:a2,
+    say:L('Lauft! Jeder so weit, wie die Zahl seiner Kammer es verlangt.','Run! Each of you as far as the number of your chamber demands.'),
+    todo:[L('Lies die Zahl deiner Kammer. Geh genau <b>so viele Schritte</b>.','Read the number of your chamber. Take exactly <b>that many steps</b>.'),
+          L('Ein Schritt führt durch eine Tür in die Nachbarkammer: nach oben, unten, links oder rechts, nie schräg. Hin und her ist erlaubt. Zählt laut mit.','One step leads through a door into the next chamber: up, down, left or right, never diagonally. Going back and forth is allowed. Count out loud.')]});
+  st.push(fall(c1,k[0],true));  st[st.length-1].board={hl:c1};
+  st.push(fall(c2,k[1],false)); st[st.length-1].board={down:c1, hl:c2};
+  st.push(fall(c3,k[2],false)); st[st.length-1].board={down:c1.concat(c2), hl:c3};
+  st.push({act:a3,
+    say:L('Seht euch um. '+(S.players>1?'Ihr seid nicht mehr allein, nicht wahr? ':'')+'Merkt euch die Zahl dieser Kammer. Und nun seht nach unten: Der Boden öffnet ein Auge.',
+          'Look around. '+(S.players>1?'You are no longer alone, are you? ':'')+'Remember the number of this chamber. And now look down: the floor opens an eye.'),
+    todo:[L('Legt die Wächter-Münze in die Kammer, in der ihr steht.','Place the guardian coin in the chamber you are standing in.'),
+          L('Nehmt den Würfel zur Hand.','Pick up the die.')]});
+  st.push({act:a3,
+    say:L('Der Wächter kämpft gerecht: Jeden Hieb zahlt er zurück. Der Kampf dauert '+n+' Würfe.','The guardian fights fair: he repays every blow. The fight lasts '+n+' rolls.'),
+    todo:[L('Reihum, insgesamt <b>'+n+' Würfe</b>: Würfle. Die Zahl oben ist dein Hieb gegen den Wächter.','In turn, <b>'+n+' rolls</b> in total: roll the die. The number on top is your blow against the guardian.'),
+          L('Heb den Würfel hoch. Die Zahl auf der Unterseite ist der Hieb, den du einsteckst.','Lift the die. The number on the bottom is the blow you take.'),
+          L('Zählt alle Hiebe zusammen, ausgeteilte und eingesteckte. Diese Summe ist der <b>Blutzoll</b>.','Add up all blows, dealt and taken. That sum is the <b>blood toll</b>.')]});
+  st.push({act:a3,
+    say:L('Der Wächter schließt sein Auge. Ihr habt drei Zahlen: eure Beute, die Kammer, in der ihr euch getroffen habt, und den Blutzoll. Sagt sie laut. Dann brecht mein Siegel.',
+          'The guardian closes his eye. You hold three numbers: your loot, the chamber where you met, and the blood toll. Say them out loud. Then break my seal.'),
+    todo:[], last:true});
+  return st;
+}
+
+/* ---------- Ton ---------- */
+var AC=null, master=null;
+function sound(on){
+  try{
+    if(on){
+      if(!AC){
+        var C = window.AudioContext || window.webkitAudioContext; if(!C) return;
+        AC = new C(); master = AC.createGain(); master.gain.value = 0;
+        var f = AC.createBiquadFilter(); f.type='lowpass'; f.frequency.value=420;
+        f.connect(master); master.connect(AC.destination);
+        [55,82.4,110.3,164.8].forEach(function(hz,i){
+          var o=AC.createOscillator(), g=AC.createGain(), l=AC.createOscillator(), lg=AC.createGain();
+          o.type = i%2 ? 'sine' : 'triangle'; o.frequency.value=hz; g.gain.value = i<2 ? 0.5 : 0.18;
+          l.frequency.value = 0.05+0.03*i; lg.gain.value = 0.15;
+          l.connect(lg); lg.connect(g.gain); o.connect(g); g.connect(f); o.start(); l.start();
+        });
+      }
+      AC.resume(); master.gain.setTargetAtTime(0.12, AC.currentTime, 1.5);
+    } else if(AC){ master.gain.setTargetAtTime(0, AC.currentTime, 0.4); }
+  }catch(e){}
+}
+function speak(html){
+  try{
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    if(!S.voice || !html) return;
+    var u = new SpeechSynthesisUtterance(String(html).replace(/<[^>]+>/g,' '));
+    u.lang = S.lang==='de' ? 'de-DE' : 'en-GB'; u.rate = 0.9; u.pitch = 0.7;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ---------- Seiten ---------- */
+function vHome(){
+  return '<div class="fade"><h1>FATUM</h1>'+
+  '<p class="tag">'+L('Ein Gewölbe, das euer Schicksal kennt, bevor ihr es betretet.','A vault that knows your fate before you set foot in it.')+'</p>'+
+  '<div class="chips"><span class="chip">'+L('Kein Spielleiter nötig','No game master needed')+'</span><span class="chip">'+L('1–4 Helden','1–4 heroes')+'</span><span class="chip">'+L('15 Minuten','15 minutes')+'</span><span class="chip">'+L('Null Vorbereitung','Zero prep')+'</span></div>'+
+  '<div class="cta"><button class="btn" data-act="setup">'+L('Abenteuer beginnen','Begin the adventure')+'</button><a class="btn ghost" href="fatum_material.pdf" target="_blank" rel="noopener">'+L('Kammern drucken (PDF)','Print the chambers (PDF)')+'</a></div>'+
+  '<div class="say"><div class="who">'+L('Das Orakel','The Oracle')+'</div><p>'+L('Dieses Gerät ist euer Spielleiter. Es erzählt, sagt euch, was auf dem Tisch geschieht, und es hat vor dem ersten Zug eine Prophezeiung versiegelt. Ihr tippt nichts ein. Ihr entscheidet auf dem Tisch, mit echten Kammern, Münzen und einem Würfel. Am Ende brecht ihr das Siegel.',
+    'This device is your game master. It tells the story, tells you what happens on the table, and it has sealed a prophecy before the first move. You enter nothing. You decide on the table, with real chambers, coins and a die. At the end you break the seal.')+'</p></div>'+
+  '<h2>'+L('Was auf den Tisch kommt','What goes on the table')+'</h2>'+
+  '<div class="need"><div class="sq">9</div><div><b>'+L('Neun Kammern','Nine chambers')+'</b><span>'+L('Kacheln 85 mm, zwei Seiten A4, einseitig gedruckt. Die leere Rückseite wird im Spiel gebraucht.','85 mm tiles, two A4 pages, printed single-sided. The blank back is used in play.')+'</span></div></div>'+
+  '<div class="need">'+coin(1)+'<div><b>'+L('Heldenmünzen','Hero coins')+'</b><span>'+L('Schwert, Stern, Pfeil, Schild: eine pro Held, 3D-gedruckt oder aus Papier.','Sword, star, arrow, shield: one per hero, 3D-printed or paper.')+'</span></div></div>'+
+  '<div class="need">'+coin(5)+'<div><b>'+L('Drei Siegel','Three seals')+'</b><span>'+L('Schlüsselmünzen für den ersten Akt.','Key coins for the first act.')+'</span></div></div>'+
+  '<div class="need">'+coin(6)+'<div><b>'+L('Der Wächter','The guardian')+'</b><span>'+L('Er erscheint im dritten Akt. Dazu ein gewöhnlicher Spielwürfel.','He appears in the third act. Plus one ordinary die.')+'</span></div></div>'+
+  '<div class="dl"><a class="btn small ghost" href="fatum_material.pdf" target="_blank" rel="noopener">'+L('Kammern + Papiermünzen (PDF)','Chambers + paper coins (PDF)')+'</a><a class="btn small ghost" href="fatum_tokens.3mf" download>'+L('Münzen 3D (Bambu 3MF)','Coins 3D (Bambu 3MF)')+'</a><a class="btn small ghost" href="fatum_tokens_stl.zip" download>'+L('Münzen 3D (STL + SCAD)','Coins 3D (STL + SCAD)')+'</a></div>'+
+  '<h2>'+L('Drei Akte','Three acts')+'</h2><div class="grid">'+
+  '<div class="card"><div class="n">'+L('Akt I','Act I')+'</div><h3>'+L('Die drei Siegel','The Three Seals')+'</h3><p>'+L('Ihr plündert drei Kammern eurer Wahl. Jedes Siegel versperrt Gänge.','You plunder three chambers of your choice. Every seal blocks corridors.')+'</p></div>'+
+  '<div class="card"><div class="n">'+L('Akt II','Act II')+'</div><h3>'+L('Der Einsturz','The Collapse')+'</h3><p>'+L('Jeder flieht auf eigenem Weg, während Kammern einstürzen.','Everyone flees on a path of their own while chambers cave in.')+'</p></div>'+
+  '<div class="card"><div class="n">'+L('Akt III','Act III')+'</div><h3>'+L('Der Wächter','The Guardian')+'</h3><p>'+L('Ein Kampf mit dem Würfel. Jeder Hieb hat seinen Preis.','A fight with the die. Every blow has its price.')+'</p></div></div>'+
+  '<h2>'+L('Und danach','And afterwards')+'</h2><p>'+L('Wenn das Siegel gebrochen ist, zeigt das Orakel, woher es alles wusste. Keine Tricktechnik, kein Mitlesen: nur Zahlen, Gerade und Ungerade. Staunen zuerst, verstehen danach.',
+    'Once the seal is broken, the Oracle shows how it knew everything. No sleight of hand, no eavesdropping: only numbers, odd and even. Wonder first, understanding second.')+'</p>'+
+  '<div class="cta"><button class="btn" data-act="setup">'+L('Abenteuer beginnen','Begin the adventure')+'</button></div>'+
+  '<p class="foot"><a href="/">wissenschaftundzauberkunst.de</a></p></div>';
+}
+function vSetup(){
+  var b='';
+  for(var i=1;i<=4;i++) b+='<button data-act="players" data-n="'+i+'" aria-pressed="'+(S.players===i)+'">'+i+'</button>';
+  return '<div class="fade"><h2>'+L('Wie viele Helden?','How many heroes?')+'</h2><div class="players">'+b+'</div>'+
+  '<ul class="todo"><li>'+L('Neun Kammern ausgeschnitten bereitlegen.','Have the nine cut-out chambers ready.')+'</li>'+
+  '<li>'+L('Jeder Held wählt eine Münze. Drei Siegel, der Wächter und ein Würfel liegen daneben.','Every hero picks a coin. Three seals, the guardian and a die lie next to them.')+'</li>'+
+  '<li>'+L('Stellt das Gerät so, dass alle es sehen. Einer liest vor oder ihr schaltet oben die Stimme ein.','Place the device where everyone can see it. One of you reads aloud, or switch on the voice above.')+'</li></ul>'+
+  '<details><summary>'+L('Nur für den Gastgeber (verrät die Prophezeiung)','For the host only (spoils the prophecy)')+'</summary><p>'+
+    L('Für den Zettel im Umschlag:','For the slip in the envelope:')+'<br>'+L('Beute','Loot')+': <b>'+loot()+'</b> · '+L('Kammer','Chamber')+': <b>'+finalRoom()+'</b> · '+L('Blutzoll','Blood toll')+': <b>'+toll()+'</b></p><p style="color:var(--muted);font-size:14px">'+
+    L('Die Werte gelten für diese Partie und die gewählte Heldenzahl. Erst die Heldenzahl wählen, dann ablesen.','The values hold for this game and the chosen number of heroes. Choose the number of heroes first, then read them.')+'</p></details>'+
+  '<div class="cta"><button class="btn" data-act="seal">'+L('Prophezeiung versiegeln und beginnen','Seal the prophecy and begin')+'</button></div></div>';
+}
+function vPlay(){
+  var st=steps(), i=Math.max(0,Math.min(S.step,st.length-1)), s=st[i], d='', t='';
+  for(var j=0;j<st.length;j++) d+='<i'+(j<=i?' class="on"':'')+'></i>';
+  for(j=0;j<s.todo.length;j++) t+='<li>'+s.todo[j]+'</li>';
+  return '<div class="fade"><div class="act"><span>'+s.act+'</span><span class="dots">'+d+'</span></div>'+
+  '<div class="say"><div class="who">'+L('Das Orakel','The Oracle')+'</div><p id="sayText">'+s.say+'</p></div>'+
+  (s.board?board(s.board):'')+(t?'<ol class="todo">'+t+'</ol>':'')+
+  '<div class="nav"><button class="btn ghost" data-act="prev">'+L('Zurück','Back')+'</button>'+
+  (s.last?'<button class="btn" data-act="reveal">'+L('Das Siegel brechen','Break the seal')+'</button>':'<button class="btn" data-act="next">'+L('Erledigt, weiter','Done, continue')+'</button>')+'</div>'+
+  '<p class="sealed-at">'+L('Prophezeiung versiegelt um ','Prophecy sealed at ')+S.sealed+'</p></div>';
+}
+function vReveal(){
+  var q=[L('Eure Beute, in Gold','Your loot, in gold'), L('Die Kammer, in der ihr euch trefft','The chamber where you meet'), L('Der Blutzoll des Kampfes','The blood toll of the fight')];
+  var v=[loot(), finalRoom(), toll()], s='', all=true;
+  for(var i=0;i<3;i++){
+    if(!S.shown[i]) all=false;
+    s+='<div class="seal'+(S.shown[i]?' open':'')+'"><div class="q">'+q[i]+'</div>'+
+      (S.shown[i] ? '<div class="v fade">'+v[i]+'</div>' : '<button class="btn small" data-act="show" data-n="'+i+'">'+L('Aufdecken','Reveal')+'</button>')+'</div>';
+  }
+  return '<div class="fade"><h2>'+L('Die Prophezeiung','The Prophecy')+'</h2><p class="sealed-at">'+L('Versiegelt um ','Sealed at ')+S.sealed+L(', bevor ihr gewählt habt.',', before you made a single choice.')+'</p>'+
+  '<div class="say"><div class="who">'+L('Das Orakel','The Oracle')+'</div><p>'+L('Sagt eure drei Zahlen laut. Dann deckt auf, was ich geschrieben habe.','Say your three numbers out loud. Then uncover what I wrote.')+'</p></div>'+s+
+  (all ? '<div class="say fade"><p>'+L('Ihr habt frei gewählt. Jeder von euch. Und doch stand alles fest. Wie kann das sein?','You chose freely. Every one of you. And still everything was settled. How can that be?')+'</p></div>'+
+    '<div class="cta"><button class="btn" data-act="explain">'+L('Hinter den Vorhang schauen','Look behind the curtain')+'</button><button class="btn ghost" data-act="again">'+L('Neue Partie','New game')+'</button></div>'+
+    '<p class="foot">'+L('Tipp: Erst selbst rätseln, dann nachsehen.','Tip: puzzle over it yourselves first, then look.')+'</p>' : '')+'</div>';
+}
+function vExplain(){
+  var g=S.layout, b=[], a=[], m=Math.min(g[0][0],g[0][1],g[0][2]), r, c, tb;
+  for(c=0;c<3;c++) b.push(g[0][c]-m);
+  for(r=0;r<3;r++) a.push(g[r][0]-b[0]);
+  tb='<table class="add"><tr><th>+</th><th>'+b[0]+'</th><th>'+b[1]+'</th><th>'+b[2]+'</th></tr>';
+  for(r=0;r<3;r++) tb+='<tr><th>'+a[r]+'</th><td>'+g[r][0]+'</td><td>'+g[r][1]+'</td><td>'+g[r][2]+'</td></tr>';
+  tb+='</table>';
+  return '<div class="fade"><h2>'+L('Hinter dem Vorhang','Behind the curtain')+'</h2>'+
+  '<p>'+L('Das Orakel hat nicht zugehört und nichts erraten. Jede der drei Vorhersagen folgt aus einem mathematischen Prinzip, das eure freie Wahl nicht berühren kann.','The Oracle did not listen and did not guess. Each of the three predictions follows from a mathematical principle your free choice cannot touch.')+'</p>'+
+  '<div class="ex"><h3>1 · '+L('Die Beute: eine versteckte Additionstafel','The loot: a hidden addition table')+'</h3>'+tb+
+  '<p>'+L('Jede Kammerzahl ist die Summe aus einer Randzahl ihrer Zeile und einer Randzahl ihrer Spalte. Die Randzahlen stehen nicht auf den Kacheln. Durch das Umdrehen von Reihe und Spalte liegt am Ende in jeder Zeile und in jeder Spalte genau ein Siegel. Also zählt ihr jede Randzahl genau einmal: ',
+        'Every chamber number is the sum of a border number of its row and a border number of its column. The border numbers are not printed on the tiles. Turning over row and column guarantees that in the end every row and every column holds exactly one seal. So you add every border number exactly once: ')+
+        a.join(' + ')+' + '+b.join(' + ')+' = <b>'+loot()+'</b>. '+L('Es gibt sechs Möglichkeiten, die Siegel zu legen, und alle sechs ergeben dieselbe Summe.','There are six ways to place the seals, and all six give the same sum.')+'</p></div>'+
+  '<div class="ex"><h3>2 · '+L('Der Treffpunkt: Gerade und Ungerade','The meeting point: odd and even')+'</h3>'+board({parity:true,fin:[[2,0]]})+
+  '<p>'+L('Färbt das Gewölbe wie ein Schachbrett. Auf den hellen Feldern stehen ungerade Zahlen, auf den blauen gerade. Jeder Schritt wechselt die Farbe. Wer auf einer ungeraden Zahl startet, geht ungerade viele Schritte und landet auf Blau. Wer auf einer geraden startet, geht gerade viele Schritte und bleibt auf Blau. Nach dem ersten Lauf stehen also alle auf Blau, egal wo sie begonnen haben.',
+        'Colour the vault like a chessboard. The light squares carry odd numbers, the blue ones even numbers. Every step changes colour. Start on an odd number and you take an odd number of steps and land on blue. Start on an even one and you take an even number of steps and stay on blue. After the first run everybody stands on blue, wherever they began.')+'</p>'+
+  '<p>'+L('Von da an lässt das Orakel euch immer ungerade viele Schritte gehen ('+S.k.join(', ')+'). Es weiß deshalb stets, auf welcher Farbe ihr steht, und lässt nur Kammern der anderen Farbe einstürzen. Zuletzt bleibt ein Gang aus drei Kammern. Ihr steht an seinen Enden, und ein ungerader Lauf führt von beiden Enden in die Mitte: Kammer <b>'+finalRoom()+'</b>.',
+        'From then on the Oracle always makes you take an odd number of steps ('+S.k.join(', ')+'). So it always knows which colour you are on, and it only collapses chambers of the other colour. In the end a corridor of three chambers remains. You stand at its ends, and an odd run leads from either end to the middle: chamber <b>'+finalRoom()+'</b>.')+'</p></div>'+
+  '<div class="ex"><h3>3 · '+L('Der Blutzoll: die Sieben im Würfel','The blood toll: the seven inside the die')+'</h3>'+
+  '<p>'+L('Bei jedem gewöhnlichen Würfel ergeben gegenüberliegende Seiten zusammen 7: 1 und 6, 2 und 5, 3 und 4. Oben plus unten ist immer 7, ganz gleich, was fällt. Bei '+rolls()+' Würfen sind das '+rolls()+' × 7 = <b>'+toll()+'</b>.',
+        'On every ordinary die opposite faces add up to 7: 1 and 6, 2 and 5, 3 and 4. Top plus bottom is always 7, whatever you roll. With '+rolls()+' rolls that makes '+rolls()+' × 7 = <b>'+toll()+'</b>.')+'</p></div>'+
+  '<div class="say"><div class="who">'+L('Zum Weiterdenken','To think further')+'</div><p>'+
+    L('Fühlte sich eure Wahl deshalb weniger frei an? Was hättet ihr prüfen müssen, um dem Orakel auf die Schliche zu kommen? Baut ein eigenes Gewölbe: Welche Zahlen dürfen auf den Kacheln stehen, damit beide Prinzipien zugleich gelten?',
+      'Did your choice feel any less free because of it? What would you have had to test to catch the Oracle out? Build a vault of your own: which numbers may stand on the tiles so that both principles hold at once?')+'</p></div>'+
+  '<div class="cta"><button class="btn" data-act="again">'+L('Neue Partie (anderes Gewölbe)','New game (different vault)')+'</button><button class="btn ghost" data-act="home">'+L('Zur Startseite','Home')+'</button></div></div>';
+}
+
+function render(quiet){
+  var h;
+  if(S.screen==='setup') h=vSetup();
+  else if(S.screen==='play') h=vPlay();
+  else if(S.screen==='reveal') h=vReveal();
+  else if(S.screen==='explain') h=vExplain();
+  else h=vHome();
+  app.innerHTML=h;
+  document.documentElement.lang=S.lang;
+  document.getElementById('bLang').textContent = S.lang==='de' ? 'EN' : 'DE';
+  var bs=document.getElementById('bSound'), bv=document.getElementById('bVoice');
+  bs.setAttribute('aria-pressed', String(S.sound)); bs.textContent='♪ '+L('Klang','Sound');
+  bv.setAttribute('aria-pressed', String(S.voice)); bv.textContent=L('Stimme','Voice');
+  save();
+  if(!quiet){
+    window.scrollTo(0,0);
+    var el=document.getElementById('sayText');
+    speak(el ? el.innerHTML : '');
+  }
+}
+function go(screen){ S.screen=screen; render(); }
+
+document.addEventListener('click', function(e){
+  var el = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
+  if(!el) return;
+  var a = el.getAttribute('data-act'), n = parseInt(el.getAttribute('data-n'),10);
+  if(a==='lang'){ S.lang = S.lang==='de' ? 'en' : 'de'; render(true); }
+  else if(a==='sound'){ S.sound=!S.sound; sound(S.sound); render(true); }
+  else if(a==='voice'){ S.voice=!S.voice; render(true); var t=document.getElementById('sayText'); speak(t ? t.innerHTML : ''); }
+  else if(a==='home'){ go('home'); }
+  else if(a==='setup'){ if(S.sealed && !S.done && S.step>0){ go('play'); } else { if(S.sealed) newGame(); go('setup'); } }
+  else if(a==='players'){ S.players=n; render(true); }
+  else if(a==='seal'){
+    var d=new Date(), mm=d.getMinutes();
+    S.sealed = d.getHours()+':'+(mm<10?'0':'')+mm; S.step=0; S.shown=[false,false,false]; go('play');
+  }
+  else if(a==='next'){ S.step++; go('play'); }
+  else if(a==='prev'){ if(S.step>0){ S.step--; go('play'); } else { go('setup'); } }
+  else if(a==='reveal'){ S.done=true; go('reveal'); }
+  else if(a==='show'){ S.shown[n]=true; render(true); }
+  else if(a==='explain'){ go('explain'); }
+  else if(a==='again'){ newGame(); go('setup'); }
+});
+
+if(!load()){
+  try{ S.lang = /^de/i.test(navigator.language||'de') ? 'de' : 'en'; }catch(e){}
+  newGame();
+}
+render(true);
+})();
+</script>
+</body>
+</html>

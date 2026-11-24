@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Neunerprobe">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Neunerprobe · Wissenschaft und Zauberkunst</title>
+  <style>
+    :root { --bg:#0b0f14; --panel:#151b23; --line:#2a3340; --text:#e8edf3; --muted:#9aa7b6; --gold:#d9b25f; --ok:#5fbf7f; --bad:#e0716b; }
+    * { box-sizing:border-box; }
+    html,body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+    #app { max-width:520px; margin:0 auto; padding:max(12px,env(safe-area-inset-top)) 16px 32px; }
+    header { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+    header a { color:var(--muted); text-decoration:none; font-size:1.4rem; }
+    h1 { font-size:1.3rem; margin:0; font-weight:600; letter-spacing:.02em; }
+    nav { display:flex; gap:6px; margin:12px 0 16px; }
+    nav button { flex:1; padding:10px 6px; border:1px solid var(--line); background:var(--panel); color:var(--muted); border-radius:10px; font-size:.95rem; }
+    nav button.on { color:var(--bg); background:var(--gold); border-color:var(--gold); font-weight:600; }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
+    .hidden { display:none !important; }
+    ol { padding-left:1.3em; margin:.4em 0; line-height:1.5; }
+    p { line-height:1.5; }
+    .muted { color:var(--muted); font-size:.9rem; }
+    #display { min-height:64px; font-size:2.2rem; letter-spacing:.25em; text-align:center; padding:10px; border-bottom:1px solid var(--line); margin-bottom:12px; font-variant-numeric:tabular-nums; word-break:break-all; }
+    .pad { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .pad button { padding:16px 0; font-size:1.5rem; border-radius:12px; border:1px solid var(--line); background:#1d2530; color:var(--text); }
+    .pad button:active { background:#2a3542; }
+    .pad .wide { grid-column:span 3; background:var(--gold); color:var(--bg); font-weight:600; font-size:1.15rem; }
+    #reveal { text-align:center; padding:28px 10px; }
+    #reveal .big { font-size:6rem; color:var(--gold); font-weight:700; line-height:1; margin:12px 0; opacity:0; transform:scale(.6); transition:all .9s ease; }
+    #reveal .big.show { opacity:1; transform:scale(1); }
+    .again { margin-top:18px; padding:12px 20px; border-radius:10px; border:1px solid var(--line); background:transparent; color:var(--text); font-size:1rem; }
+    label { display:block; font-size:.9rem; color:var(--muted); margin:10px 0 4px; }
+    input, select { width:100%; padding:12px; font-size:1.2rem; border-radius:10px; border:1px solid var(--line); background:#1d2530; color:var(--text); font-variant-numeric:tabular-nums; }
+    .row { display:grid; grid-template-columns:1fr 70px 1fr; gap:8px; align-items:end; }
+    table { width:100%; border-collapse:collapse; margin-top:12px; font-variant-numeric:tabular-nums; }
+    td { padding:6px 4px; border-bottom:1px solid var(--line); }
+    td:last-child { text-align:right; color:var(--gold); font-weight:600; }
+    .verdict { margin-top:12px; padding:12px; border-radius:10px; font-weight:600; }
+    .verdict.ok { background:rgba(95,191,127,.15); color:var(--ok); }
+    .verdict.bad { background:rgba(224,113,107,.15); color:var(--bad); }
+    footer { margin-top:24px; text-align:center; }
+    footer a { color:var(--muted); font-size:.85rem; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <a href="/werkzeuge/" aria-label="Zurück zu Werkzeuge">&#8592;</a>
+    <h1>Neunerprobe</h1>
+  </header>
+
+  <nav>
+    <button type="button" data-tab="trick" class="on">Gedankenleser</button>
+    <button type="button" data-tab="probe">Rechenprobe</button>
+    <button type="button" data-tab="warum">Warum?</button>
+  </nav>
+
+  <!-- Gedankenleser -->
+  <section id="tab-trick">
+    <div class="panel" id="anleitung">
+      <ol>
+        <li>Denk dir eine Zahl mit mindestens drei Ziffern und schreib sie auf.</li>
+        <li>Bilde ihre Quersumme und zieh sie von der Zahl ab.</li>
+        <li>Kreise im Ergebnis <strong>eine</strong> Ziffer ein, die keine Null ist.</li>
+        <li>Tipp die übrigen Ziffern ein, in beliebiger Reihenfolge. Die eingekreiste nicht.</li>
+      </ol>
+      <p class="muted">Statt Schritt 2 geht auch: die Ziffern beliebig umstellen und die kleinere Zahl von der größeren abziehen.</p>
+    </div>
+    <div class="panel" id="eingabe">
+      <div id="display" aria-live="polite"></div>
+      <div class="pad">
+        <button type="button" data-d="1">1</button><button type="button" data-d="2">2</button><button type="button" data-d="3">3</button>
+        <button type="button" data-d="4">4</button><button type="button" data-d="5">5</button><button type="button" data-d="6">6</button>
+        <button type="button" data-d="7">7</button><button type="button" data-d="8">8</button><button type="button" data-d="9">9</button>
+        <button type="button" id="del" aria-label="Löschen">&#9003;</button><button type="button" data-d="0">0</button><button type="button" id="clr" aria-label="Alles löschen">C</button>
+        <button type="button" class="wide" id="go">Fertig</button>
+      </div>
+    </div>
+    <div class="panel hidden" id="reveal">
+      <div class="muted">Deine eingekreiste Ziffer ist</div>
+      <div class="big" id="bigdigit">?</div>
+      <button type="button" class="again" id="again">Noch einmal</button>
+    </div>
+  </section>
+
+  <!-- Rechenprobe -->
+  <section id="tab-probe" class="hidden">
+    <div class="panel">
+      <p class="muted">Eine Rechnung eingeben, auch eine falsche. Die Neunerprobe prüft sie, ohne nachzurechnen.</p>
+      <div class="row">
+        <div><label for="a">Zahl a</label><input id="a" inputmode="numeric" value="347"></div>
+        <div><label for="op">Rechenart</label><select id="op"><option value="*">×</option><option value="+">+</option><option value="-">−</option></select></div>
+        <div><label for="b">Zahl b</label><input id="b" inputmode="numeric" value="58"></div>
+      </div>
+      <label for="c">Behauptetes Ergebnis</label><input id="c" inputmode="numeric" value="20126">
+      <table id="tbl"></table>
+      <div id="verdict" class="verdict"></div>
+      <p class="muted">Achtung: Die Probe findet nicht jeden Fehler. Probiert einen Zahlendreher im Ergebnis aus.</p>
+    </div>
+  </section>
+
+  <!-- Warum -->
+  <section id="tab-warum" class="hidden">
+    <div class="panel">
+      <p><strong>Jede Zehnerpotenz lässt beim Teilen durch 9 den Rest 1</strong>: 10 = 9 + 1, 100 = 99 + 1, 1000 = 999 + 1. Deshalb hat jede Zahl beim Teilen durch 9 denselben Rest wie ihre Quersumme.</p>
+      <p><strong>Gedankenleser:</strong> Zieht man von einer Zahl ihre Quersumme ab, bleibt der Rest 0: Das Ergebnis ist durch 9 teilbar, also auch seine Quersumme. Fehlt eine Ziffer, fehlt der Quersumme genau so viel bis zur nächsten Neunerzahl. Ist die Summe der übrigen Ziffern schon durch 9 teilbar, war die eingekreiste Ziffer 0 oder 9. Weil die 0 verboten ist, ist es die 9.</p>
+      <p><strong>Rechenprobe:</strong> Die Neunerreste rechnen sich wie die Zahlen selbst: Rest von a·b = Rest von (Rest a · Rest b). Stimmen die Reste nicht, ist die Rechnung sicher falsch. Stimmen sie, ist sie nur wahrscheinlich richtig: Vertauschte Ziffern oder ein Fehler um genau 9 bleiben unentdeckt.</p>
+    </div>
+  </section>
+
+  <footer><a href="/">Wissenschaft und Zauberkunst</a></footer>
+</div>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var digits = '';
+
+  // Tabs
+  document.querySelectorAll('nav button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('nav button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      ['trick', 'probe', 'warum'].forEach(function (t) { $('tab-' + t).classList.toggle('hidden', t !== b.dataset.tab); });
+    });
+  });
+
+  // Gedankenleser
+  function show() { $('display').textContent = digits; }
+  document.querySelectorAll('.pad [data-d]').forEach(function (b) {
+    b.addEventListener('click', function () { if (digits.length < 18) { digits += b.dataset.d; show(); } });
+  });
+  $('del').addEventListener('click', function () { digits = digits.slice(0, -1); show(); });
+  $('clr').addEventListener('click', function () { digits = ''; show(); });
+  $('go').addEventListener('click', function () {
+    if (digits.length < 1) return;
+    var s = 0;
+    for (var i = 0; i < digits.length; i++) s += +digits[i];
+    var m = (9 - (s % 9)) % 9;
+    if (m === 0) m = 9;            // 0 ist verboten, also 9
+    $('anleitung').classList.add('hidden');
+    $('eingabe').classList.add('hidden');
+    $('reveal').classList.remove('hidden');
+    var big = $('bigdigit');
+    big.classList.remove('show'); big.textContent = m;
+    setTimeout(function () { big.classList.add('show'); }, 1200);
+  });
+  $('again').addEventListener('click', function () {
+    digits = ''; show();
+    $('reveal').classList.add('hidden');
+    $('anleitung').classList.remove('hidden');
+    $('eingabe').classList.remove('hidden');
+  });
+
+  // Rechenprobe
+  function qs(n) { var s = 0; n = String(n).replace(/\D/g, ''); for (var i = 0; i < n.length; i++) s += +n[i]; return s; }
+  function rest(n) { return qs(n) % 9; }
+  function probe() {
+    var a = $('a').value.replace(/\D/g, ''), b = $('b').value.replace(/\D/g, ''), c = $('c').value.replace(/\D/g, ''), op = $('op').value;
+    if (!a || !b || !c) { $('tbl').innerHTML = ''; $('verdict').textContent = ''; $('verdict').className = 'verdict'; return; }
+    var ra = rest(a), rb = rest(b), rc = rest(c), sym = { '*': '·', '+': '+', '-': '−' }[op];
+    var rr = op === '*' ? (ra * rb) % 9 : op === '+' ? (ra + rb) % 9 : ((ra - rb) % 9 + 9) % 9;
+    $('tbl').innerHTML =
+      '<tr><td>Neunerrest von a (Quersumme ' + qs(a) + ')</td><td>' + ra + '</td></tr>' +
+      '<tr><td>Neunerrest von b (Quersumme ' + qs(b) + ')</td><td>' + rb + '</td></tr>' +
+      '<tr><td>Rest von ' + ra + ' ' + sym + ' ' + rb + '</td><td>' + rr + '</td></tr>' +
+      '<tr><td>Neunerrest des Ergebnisses (Quersumme ' + qs(c) + ')</td><td>' + rc + '</td></tr>';
+    var v = $('verdict');
+    if (rr === rc) { v.className = 'verdict ok'; v.textContent = 'Probe bestanden: Das Ergebnis ist wahrscheinlich richtig.'; }
+    else { v.className = 'verdict bad'; v.textContent = 'Probe nicht bestanden: Das Ergebnis ist sicher falsch.'; }
+  }
+  ['a', 'b', 'c', 'op'].forEach(function (id) { $(id).addEventListener('input', probe); $(id).addEventListener('change', probe); });
+  probe();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# Unverlinkte Downloads (z. B. Fortbildungsunterlagen): nicht in Suchmaschinen aufnehmen
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>

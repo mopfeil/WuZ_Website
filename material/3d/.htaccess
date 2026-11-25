@@ -1,0 +1,5 @@
+# 3MF als Download ausliefern (Server meldet sonst text/plain)
+AddType model/3mf .3mf
+<FilesMatch "\.(3mf|zip)$">
+  Header set Content-Disposition attachment
+</FilesMatch>
